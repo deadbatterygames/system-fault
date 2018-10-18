@@ -16,7 +16,7 @@ public class EnergyShard : MonoBehaviour, ICollectable {
     void Awake() {
         // Add rigidbody to scene
         rb = GetComponent<Rigidbody>();
-        SceneManager.instance.AddGravityBody(rb);
+        GameManager.instance.AddGravityBody(rb);
     }
 
     public void Pickup() {
@@ -38,7 +38,7 @@ public class EnergyShard : MonoBehaviour, ICollectable {
         Destroy(GetComponent<SphereCollider>());
         Destroy(GetComponent<MeshRenderer>());
         Destroy(GetComponent<MeshCollider>());
-        SceneManager.instance.RemoveGravityBody(rb);
+        GameManager.instance.RemoveGravityBody(rb);
         Destroy(rb);
 
         GetComponent<ParticleSystem>().Emit(50);

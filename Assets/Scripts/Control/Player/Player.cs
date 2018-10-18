@@ -74,7 +74,7 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
 
         if (ship) UpdateShipRadar(); else ship = FindObjectOfType<Ship>();
 
-        rb.velocity = Vector3.ClampMagnitude(rb.velocity, SceneManager.MAX_PLAYER_SPEED + 3f);
+        rb.velocity = Vector3.ClampMagnitude(rb.velocity, GameManager.MAX_PLAYER_SPEED + 3f);
     }
 
     void UpdateShipRadar() {
@@ -193,12 +193,16 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
 
         health -= amount;
 
-        if (health <= 0) {
-            PlayerControl.instance.RemoveControl();
-            Debug.LogWarning("Player: DEAD!");
-        }
+        if (health <= 0) KillPlayer();
 
         PlayerHUD.instance.ShowDamageSplash();
+    }
+
+    void KillPlayer() {
+        PlayerControl.instance.RemoveControl();
+        Time.timeScale = 0f;
+        Debug.LogWarning("Player: DEAD!");
+        GameManager.instance.StartCoroutine("ReloadScene");
     }
 
     IEnumerator WeaponTimer() {

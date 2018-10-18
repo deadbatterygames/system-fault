@@ -22,7 +22,7 @@ public class WeaponPickup : MonoBehaviour, IUsable {
             weaponSlot.EquipMultiCannon();
         }
 
-        SceneManager.instance.RemoveGravityBody(GetComponentInParent<Rigidbody>());
+        GameManager.instance.RemoveGravityBody(GetComponentInParent<Rigidbody>());
         Destroy(transform.parent.gameObject);
     }
 }

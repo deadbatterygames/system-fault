@@ -219,7 +219,7 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable {
                 break;
         }
 
-        if (assistMode != GameTypes.AssistMode.Quantum) rb.velocity = Vector3.ClampMagnitude(rb.velocity, SceneManager.MAX_PLAYER_SPEED);
+        if (assistMode != GameTypes.AssistMode.Quantum) rb.velocity = Vector3.ClampMagnitude(rb.velocity, GameManager.MAX_PLAYER_SPEED);
     }
 
     void ChangeAssistMode(GameTypes.AssistMode mode) {
@@ -313,7 +313,7 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable {
 
             if (!busy) StartCoroutine("EnterShip");
 
-            SceneManager.instance.DespawnPlayer();
+            GameManager.instance.DespawnPlayer();
         } else Debug.LogWarning("Ship: Please remove fuel pack before entering");
         
     }
@@ -411,7 +411,7 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable {
 
         yield return new WaitForSeconds(0.75f);
 
-        SceneManager.instance.SpawnPlayer(playerExit, rb.velocity);
+        GameManager.instance.SpawnPlayer(playerExit, rb.velocity);
         spaceParticles.Stop();
         spaceParticles.Clear();
         busy = false;

@@ -57,7 +57,7 @@ public class MatterManipulator : MonoBehaviour, IWeapon {
 
     void ConnectModule(ModuleSlot slot) {
         Rigidbody rb = heldObject.GetComponent<Rigidbody>();
-        SceneManager.instance.RemoveGravityBody(rb);
+        GameManager.instance.RemoveGravityBody(rb);
         Destroy(rb);
 
         heldObject.transform.SetParent(slot.transform);
@@ -89,7 +89,7 @@ public class MatterManipulator : MonoBehaviour, IWeapon {
     void DisconnectModule(ModuleSlot slot) {
         Rigidbody rb = heldObject.AddComponent<Rigidbody>();
         rb.mass = heldObject.GetComponent<ShipModule>().mass;
-        SceneManager.instance.AddGravityBody(rb);
+        GameManager.instance.AddGravityBody(rb);
 
         slot.connectedModule = null;
         heldObject.GetComponent<ShipModule>().connected = false;

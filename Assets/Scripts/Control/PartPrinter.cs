@@ -75,7 +75,7 @@ public class PartPrinter : MonoBehaviour {
         yield return new WaitForSeconds(0.2f);
 
         newPart = Instantiate(shipModule, printPoint.position, printPoint.rotation).GetComponent<ShipModule>();
-        SceneManager.instance.AddGravityBody(newPart.GetComponent<Rigidbody>());
+        GameManager.instance.AddGravityBody(newPart.GetComponent<Rigidbody>());
         newPart.Dematerialize(PartPrinterData.instance.printMaterial);
         meshRenderer = newPart.GetComponent<MeshRenderer>();
         SetPartOpacity(partOpacity);

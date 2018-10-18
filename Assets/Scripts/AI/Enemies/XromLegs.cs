@@ -31,7 +31,6 @@ public class XromLegs : MonoBehaviour {
     };
 
     LegPosition leftLegPosition = LegPosition.Idle;
-    LegPosition rightLegPosition = LegPosition.Idle;
 
     XromWalker walker;
 
@@ -64,7 +63,7 @@ public class XromLegs : MonoBehaviour {
                 rightLegComplete = MoveLeg(rightLegTransforms, legUpRotations);
                 if (leftLegComplete && rightLegComplete) {
                     leftLegPosition = LegPosition.Back;
-                    rightLegPosition = LegPosition.Forward;
+                    //rightLegPosition = LegPosition.Forward;
                 }
                 break;
             case LegPosition.Back:
@@ -72,7 +71,7 @@ public class XromLegs : MonoBehaviour {
                 rightLegComplete = MoveLeg(rightLegTransforms, legForwardRotations);
                 if (leftLegComplete && rightLegComplete) {
                     leftLegPosition = LegPosition.Up;
-                    rightLegPosition = LegPosition.Idle;
+                    //rightLegPosition = LegPosition.Idle;
                 }
                 break;
             case LegPosition.Up:
@@ -80,7 +79,7 @@ public class XromLegs : MonoBehaviour {
                 rightLegComplete = MoveLeg(rightLegTransforms, legIdleRotations);
                 if (leftLegComplete && rightLegComplete) {
                     leftLegPosition = LegPosition.Forward;
-                    rightLegPosition = LegPosition.Back;
+                    //rightLegPosition = LegPosition.Back;
                 }
                 break;
             case LegPosition.Forward:
@@ -88,7 +87,7 @@ public class XromLegs : MonoBehaviour {
                 rightLegComplete = MoveLeg(rightLegTransforms, legBackRotations);
                 if (leftLegComplete && rightLegComplete) {
                     leftLegPosition = LegPosition.Idle;
-                        rightLegPosition = LegPosition.Up;
+                    //rightLegPosition = LegPosition.Up;
                 }
                 break;
         }

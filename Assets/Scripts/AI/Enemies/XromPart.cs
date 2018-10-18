@@ -60,7 +60,7 @@ public class XromPart : MonoBehaviour, IDamageable {
         BoxCollider bc = GetComponent<BoxCollider>();
         if (bc) rb.centerOfMass = bc.center;
 
-        SceneManager.instance.AddGravityBody(rb);
+        GameManager.instance.AddGravityBody(rb);
 
         return rb;
     }

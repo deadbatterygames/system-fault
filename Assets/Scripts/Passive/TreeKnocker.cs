@@ -21,7 +21,7 @@ public class TreeKnocker : MonoBehaviour {
             Rigidbody treeRB = Instantiate(brokenTree, transform.position, transform.rotation).GetComponent<Rigidbody>();
             treeRB.velocity = collision.relativeVelocity;
             treeRB.transform.localScale = transform.localScale;
-            SceneManager.instance.AddGravityBody(treeRB);
+            GameManager.instance.AddGravityBody(treeRB);
 
             Destroy(gameObject);
         }

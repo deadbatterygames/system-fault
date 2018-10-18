@@ -29,21 +29,21 @@ public class XromWalker : MonoBehaviour, IGroundable {
     Rigidbody rb;
 
     // TODO: This will be passed by various discovery functions
-    Transform playerTransform;
+    Transform target;
 
     int heatSinks = 2;
     bool xromActive;
     bool grounded;
 
     public void Start() {
+        StartCoroutine("WaitAndFindPlayer");
         rb = GetComponent<Rigidbody>();
-        playerTransform = FindObjectOfType<Player>().transform;
         xromActive = true;
     }
 
     public void Update() {
-        if (xromActive) {
-            if (playerTransform) RotateToPlayer();
+        if (xromActive && grounded) {
+            if (target) RotateToPlayer();
             else ResetTorsoRotation();
 
             WalkInCircles();
@@ -67,7 +67,7 @@ public class XromWalker : MonoBehaviour, IGroundable {
 
     int GetTargetDirection() {
         // TODO: Make a utility function for this...
-        Vector3 xromToTarget = (playerTransform.position - transform.position).normalized;
+        Vector3 xromToTarget = (target.position - transform.position).normalized;
         float rightLeft = Vector3.Dot(-torso.transform.right, xromToTarget);
         float forwardBack = Vector3.Dot(torso.transform.up, xromToTarget);
 
@@ -110,13 +110,19 @@ public class XromWalker : MonoBehaviour, IGroundable {
 
     void DestroyRoot() {
         Rigidbody rb = GetComponent<Rigidbody>();
-        SceneManager.instance.RemoveGravityBody(rb);
+        GameManager.instance.RemoveGravityBody(rb);
         StopCoroutine("ExplodeXrom");
         Destroy(gameObject);
     }
 
     public bool IsXromActive() {
         return xromActive;
+    }
+
+    // TODO: FOR TESTING
+    IEnumerator WaitAndFindPlayer() {
+        yield return new WaitForSeconds(1f);
+        target = FindObjectOfType<Player>().transform;
     }
 
     IEnumerator ExplodeXrom() {

@@ -1,21 +1,23 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 //
-// SceneManager.cs
+// GameManager.cs
 //
 // Author: Eric Thompson (Dead Battery Games)
 // Purpose: Handles changes in the scene, such as AI clustering and gravity
 //
 
-public class SceneManager : MonoBehaviour {
+public class GameManager : MonoBehaviour {
 
-    public static SceneManager instance = null;
+    public static GameManager instance = null;
 
-    public List<Rigidbody> gravityBodies = new List<Rigidbody>();
+    [HideInInspector] public List<Rigidbody> gravityBodies = new List<Rigidbody>();
     public const float GRAVITY_CONSTANT = 100000f;
 
-    public Transform playerSpawn;
+    Transform playerSpawn;
 
     GravityWell currentWell = null;
     List<GravityWell> gravityWells = new List<GravityWell>();
@@ -34,10 +36,14 @@ public class SceneManager : MonoBehaviour {
     }
 
     void Start() {
-        if (playerPrefab == null) Debug.LogError("Scene Manager: No player prefab set in inspector");
+        if (!playerPrefab) Debug.LogError("GameManager: No player prefab set in inspector");
 
         playerCam = FindObjectOfType<PlayerCamera>();
-        if (playerCam == null) Debug.LogError("Scene Manager: No PlayerCam exists in the scene");
+        if (!playerCam) Debug.LogError("GameManager: No PlayerCam exists in the scene");
+
+        playerSpawn = GameObject.Find("PlayerSpawn").transform;
+        if (!playerSpawn) Debug.LogError("GameManager: No PlayerSpawn exists in the scene");
+
 
         GameObject[] spawnPoints = GameObject.FindGameObjectsWithTag("Respawn");
         foreach (GameObject spawnPoint in spawnPoints) spawnPoint.SetActive(false);
@@ -107,7 +113,7 @@ public class SceneManager : MonoBehaviour {
     }
 
     void ChangeGravityWell(GravityWell /*Gabe*/ newWell) {
-        Debug.Log("SceneManager: Gravity well changed");
+        Debug.Log("GameManager: Gravity well changed");
         foreach (GravityWell well in gravityWells) {
             if (well != newWell) well.enabled = false;
             else {
@@ -115,5 +121,20 @@ public class SceneManager : MonoBehaviour {
                 currentWell = well;
             }
         }
+    }
+
+    public IEnumerator ReloadScene() {
+        gravityBodies.Clear();
+        gravityWells.Clear();
+        currentWell = null;
+
+        AsyncOperation reloadScene = SceneManager.LoadSceneAsync("TestScene");
+        while (!reloadScene.isDone) {
+            Debug.LogWarning("GameManager: Loading...");
+            yield return null;
+        }
+
+        Time.timeScale = 1f;
+        Start();
     }
 }
