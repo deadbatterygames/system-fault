@@ -1,0 +1,12 @@
+fileFormatVersion: 2
+guid: 0563961eac7363847801909d66199919
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - shatteredCrystal: {fileID: 100000, guid: c4abfbff3b9d442f4b435849d2d2124c, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

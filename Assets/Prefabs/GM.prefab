@@ -1,0 +1,138 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1953795909229534}
+  m_IsPrefabAsset: 1
+--- !u!1 &1953795909229534
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4768603289265192}
+  - component: {fileID: 114154757021578126}
+  - component: {fileID: 114243553186129760}
+  - component: {fileID: 114910592584538962}
+  - component: {fileID: 114526494519534050}
+  m_Layer: 0
+  m_Name: GM
+  m_TagString: GameController
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 4294967295
+  m_IsActive: 1
+--- !u!4 &4768603289265192
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1953795909229534}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114154757021578126
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1953795909229534}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e97744a3c95703344a4c835291b8fad5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gravityBodies: []
+  playerSpawn: {fileID: 0}
+  playerPrefab: {fileID: 1518784200778558, guid: 0960e1f7d1235c74797431ef4b46b560,
+    type: 2}
+--- !u!114 &114243553186129760
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1953795909229534}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d41dae2c1e066e9418776b60d9ff740c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  control: 1
+--- !u!114 &114526494519534050
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1953795909229534}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed7266f3cc2e42648b5beb0aa35d7367, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  modulePrefabs:
+  - {fileID: 1103038458942422, guid: fe7050165b5689d47823e5222c3a19ed, type: 2}
+  - {fileID: 1600812260405230, guid: e6486dd0500773a4da4452babaef100b, type: 2}
+  - {fileID: 1281030228080080, guid: 5b39766ed21d8da4089a43b37fbebae8, type: 2}
+  - {fileID: 1989943118297548, guid: 980daf35d931292498138d70bd2654f6, type: 2}
+  - {fileID: 1234165902239256, guid: 2a9db78e84461c840b80d2f4b1ece5d8, type: 2}
+  - {fileID: 1891818750741206, guid: 2eb09d20d9e083e49b1b8a43f054f9fc, type: 2}
+  - {fileID: 1982866951862120, guid: 696baeef41bd67549b71e685977d539f, type: 2}
+  - {fileID: 1998741058838344, guid: ef3b5d11c49a6a84b86e14054b92a1bf, type: 2}
+  - {fileID: 1412612065402742, guid: db573b2b171cd17418bf4fdc68719e02, type: 2}
+  - {fileID: 1922991047996244, guid: c911e7a416045cb4a82b0fff245ad0f6, type: 2}
+  - {fileID: 1158391167112520, guid: 2ae166aadf8e827469e44489b35a7007, type: 2}
+  - {fileID: 1342895828528808, guid: 77e69298c67fa5040a2d6b9c6aef7971, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  printDrivePrefab: {fileID: 1062327865660682, guid: d7cd52ea10c2d9046a86abdb9ec7b3b6,
+    type: 2}
+  printMaterial: {fileID: 2100000, guid: 0f4058a2bca35a349a625027cb054b9d, type: 2}
+  printTime: 2
+  printCosts:
+  - 0
+  - 200
+  - 300
+  - 100
+  - 200
+  - 300
+  - 100
+  - 200
+  - 300
+  - 100
+  - 200
+  - 300
+  - 200
+  - 200
+  - 200
+  - 200
+--- !u!114 &114910592584538962
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1953795909229534}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51564d17e0aec15499c1f500896c16dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dematerializedShipPrefab: {fileID: 1194755046954562, guid: 9e6a95f597759c54aa150ff9f1bcec39,
+    type: 2}
+  shipTeleportTime: 2
+  teleporting: 0
+  hasMatterManipulator: 0
+  hasMultiCannon: 1
