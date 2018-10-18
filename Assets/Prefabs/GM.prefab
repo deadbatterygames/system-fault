@@ -135,4 +135,4 @@ MonoBehaviour:
   shipTeleportTime: 2
   teleporting: 0
   hasMatterManipulator: 0
-  hasMultiCannon: 1
+  hasMultiCannon: 0
