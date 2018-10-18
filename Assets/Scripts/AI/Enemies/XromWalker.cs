@@ -11,7 +11,7 @@ using System.Collections;
 public class XromWalker : MonoBehaviour, IGroundable {
 
     [Header("General")]
-    [SerializeField] float walkSpeed = 5f;
+    [SerializeField] float walkSpeed = 3f;
     [SerializeField] float torsoRotationSpeed = 100f;
 
     [Header("Parts")]
@@ -61,7 +61,7 @@ public class XromWalker : MonoBehaviour, IGroundable {
     void WalkInCircles() {
         transform.Rotate(Vector3.up, torsoRotationSpeed * Time.deltaTime);
         torso.transform.Rotate(transform.up, -torsoRotationSpeed * Time.deltaTime, Space.World);
-        rb.AddForce(transform.forward, ForceMode.VelocityChange);
+        rb.AddForce(transform.forward * walkSpeed, ForceMode.VelocityChange);
         rb.velocity = Vector3.ClampMagnitude(rb.velocity, walkSpeed);
     }
 

@@ -213,6 +213,13 @@ public class PlayerHUD : MonoBehaviour {
         fuel.fillAmount = fuelPercentage;
     }
 
+    public void ResetHUD() {
+        ToggleCrosshair(false);
+        DisableFuelPackHUD();
+        ToggleDematPrompt(false);
+        ToggleUsePrompt(false);
+    }
+
     IEnumerator ShowDamage() {
         animateDamage = false;
         yield return new WaitForSeconds(damageDelay);

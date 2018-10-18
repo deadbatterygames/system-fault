@@ -134,6 +134,8 @@ public class GameManager : MonoBehaviour {
             yield return null;
         }
 
+        PlayerHUD.instance.ResetHUD();
+
         Time.timeScale = 1f;
         Start();
     }

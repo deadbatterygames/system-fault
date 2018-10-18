@@ -3,7 +3,7 @@
 //
 // XromPart.cs
 //
-// Author: Eric Thompson & Gabriel Cimolino (Dead Battery Games)
+// Author: Eric Thompson (Dead Battery Games)
 // Purpose: Detaches parts of the Xrom model
 //
 
