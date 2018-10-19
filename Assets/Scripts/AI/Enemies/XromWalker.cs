@@ -20,11 +20,11 @@ public class XromWalker : MonoBehaviour, IGroundable {
     [SerializeField] XromPart legs;
 
     [Header("Explosion")]
-    [SerializeField] float explosionBaseDamage = 100f;
-    [SerializeField] float explosionRadius = 8f;
-    [SerializeField] float explosionForce = 1000f;
-    [SerializeField] float explosionDelay = 3f;
-    [SerializeField] int warningFlashes = 5;
+    [SerializeField] float explosionBaseDamage = 250f;
+    [SerializeField] float explosionRadius = 10f;
+    [SerializeField] float explosionForce = 30f;
+    [SerializeField] float explosionDelay = 2f;
+    [SerializeField] int warningFlashes = 10;
 
     Rigidbody rb;
 
@@ -150,13 +150,13 @@ public class XromWalker : MonoBehaviour, IGroundable {
         Collider[] colliders = Physics.OverlapSphere(transform.position, explosionRadius);
         foreach (Collider col in colliders) {
             Rigidbody rb = col.GetComponent<Rigidbody>();
-            if (rb) rb.AddExplosionForce(explosionForce, transform.position, explosionRadius);
+            if (rb) rb.AddExplosionForce(explosionForce, transform.position, explosionRadius, 0f, ForceMode.Impulse);
 
             IDamageable damageable = col.GetComponent<IDamageable>();
             if (damageable != null) {
                 Vector3 centerToObject = col.transform.position - transform.position;
 
-                Vector3 damageForce = centerToObject.normalized * explosionForce / centerToObject.magnitude;
+                Vector3 damageForce = centerToObject.normalized * explosionForce;
                 float damageAmount = explosionBaseDamage / centerToObject.magnitude;
 
                 damageable.Damage(damageAmount, damageForce);
