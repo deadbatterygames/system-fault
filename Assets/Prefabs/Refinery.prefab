@@ -1231,6 +1231,7 @@ GameObject:
   - component: {fileID: 114564595284995922}
   - component: {fileID: 64397342467345054}
   - component: {fileID: 135532325090522654}
+  - component: {fileID: 65420944891063922}
   m_Layer: 0
   m_Name: PartPrinter
   m_TagString: Untagged
@@ -5805,6 +5806,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.74920434, y: 0.8043014, z: 0.34721267}
   m_Center: {x: -0.0003841322, y: -0.015985634, z: 0.0358555}
+--- !u!65 &65420944891063922
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1622128869489030}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 6, y: 6, z: 1}
+  m_Center: {x: 0, y: 0, z: 3.07}
 --- !u!65 &65608258842872468
 BoxCollider:
   m_ObjectHideFlags: 1
