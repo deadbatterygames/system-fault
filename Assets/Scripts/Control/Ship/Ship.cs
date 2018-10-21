@@ -26,6 +26,7 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable {
 
     [Header("Camera")]
     [SerializeField] Transform playerExit;
+    [SerializeField] Transform playerExitAlt;
     [SerializeField] Transform cameraRig;
     [SerializeField] float cameraSensitivity = 1f;
     [SerializeField] float cameraResetSpeed = 1f;
@@ -35,6 +36,7 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable {
 
     ParticleSystem spaceParticles;
 
+    bool canopyClear = true;
     bool powered = false;
     bool busy = false;
     bool lightOn = false;
@@ -69,6 +71,13 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable {
         shipComputer.TogglePower(false);
     }
 
+    void OnCollisionEnter(Collision collision) {
+        if (collision.relativeVelocity.magnitude > 30f) {
+            IDamageable damageable = collision.collider.GetComponent<IDamageable>();
+            if (damageable != null) damageable.Damage(collision.relativeVelocity.magnitude, -collision.relativeVelocity);
+        }
+    }
+
     public void CheckInput(ControlObject controlObject) {
         // Toggle Power
         if (controlObject.jump && assistMode != GameTypes.AssistMode.Quantum) {
@@ -87,7 +96,7 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable {
                             fuelPack.DrainFuel(Mathf.Abs(thrusters.GetThrottle()) / thrusters.efficiency * Time.deltaTime);
                             break;
                         case GameTypes.AssistMode.Hover:
-                            thrusters.SetThrottle(controlObject.forwardBack/2f);
+                            thrusters.SetThrottle(controlObject.forwardBack / 2f);
                             shipComputer.UpdateThrottleGauge(thrusters.GetThrottle());
                             fuelPack.DrainFuel(Mathf.Abs(thrusters.GetThrottle() / thrusters.efficiency * Time.deltaTime));
                             break;
@@ -114,7 +123,7 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable {
                             break;
                         case GameTypes.AssistMode.Hover:
                             boosters.SetThrottle(controlObject.rightLeft / 2f, controlObject.upDown / 2f, torque);
-                            fuelPack.DrainFuel((Mathf.Abs(controlObject.rightLeft)/2f + Mathf.Abs(controlObject.upDown))/2f / boosters.efficiency * Time.deltaTime);
+                            fuelPack.DrainFuel((Mathf.Abs(controlObject.rightLeft) / 2f + Mathf.Abs(controlObject.upDown)) / 2f / boosters.efficiency * Time.deltaTime);
                             fuelPack.DrainFuel(1f / boosters.efficiency * Time.deltaTime); // Idle burn rate
                             break;
                     }
@@ -166,7 +175,7 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable {
                     }
                 }
             } else TogglePower(false);
-        } else if (controlObject.interact && !busy) StartCoroutine("ExitShip");
+        } else if (controlObject.interact && !busy)StartCoroutine("ExitShip");
 
         // Shield Cells
         if (controlObject.chargeShieldCell && fuelPack) fuelPack.ChargeShields();
@@ -387,6 +396,10 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable {
         }
     }
 
+    public void SetCanopyClear(bool exitClear) {
+        canopyClear = exitClear;
+    }
+
     IEnumerator EnterShip() {
         busy = true;
         spaceParticles.Play();
@@ -414,7 +427,9 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable {
 
         yield return new WaitForSeconds(0.75f);
 
-        GameManager.instance.SpawnPlayer(playerExit, rb.velocity);
+        if (canopyClear) GameManager.instance.SpawnPlayer(playerExit, rb.velocity);
+        else GameManager.instance.SpawnPlayer(playerExitAlt, rb.velocity);
+
         spaceParticles.Stop();
         spaceParticles.Clear();
         busy = false;

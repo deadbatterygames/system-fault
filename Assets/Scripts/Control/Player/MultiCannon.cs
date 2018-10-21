@@ -25,7 +25,6 @@ public class MultiCannon : MonoBehaviour, IWeapon {
     [SerializeField] Image[] weaponTypeIndicators;
 
     [Space]
-    [SerializeField] GameObject[] bullets;
     [SerializeField] float[] bulletVelocities;
 
     [Space]
@@ -82,7 +81,7 @@ public class MultiCannon : MonoBehaviour, IWeapon {
     }
 
     void FirePulse() {
-        SpawnBullet(bullets[0], GetFireDirection(), bulletVelocities[0]);
+        FireBullet(PlayerData.instance.GetBullet(GameTypes.DamageType.Pulse), GetFireDirection(), bulletVelocities[0]);
         particles[0].Play();
     }
 
@@ -95,8 +94,13 @@ public class MultiCannon : MonoBehaviour, IWeapon {
         }
     }
 
-    void SpawnBullet(GameObject bulletPrefab, Vector3 fireDirection, float bulletVelocity) {
-        Rigidbody bulletRB = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation).GetComponent<Rigidbody>();
+    void FireBullet(GameObject bullet, Vector3 fireDirection, float bulletVelocity) {
+        // Position
+        bullet.transform.position = firePoint.position;
+
+        // Rigidbody
+        Rigidbody bulletRB = bullet.GetComponent<Rigidbody>();
+        bulletRB.angularVelocity = Vector3.zero;
         bulletRB.velocity = GetComponentInParent<Rigidbody>().velocity + fireDirection * bulletVelocity;
     }
 }

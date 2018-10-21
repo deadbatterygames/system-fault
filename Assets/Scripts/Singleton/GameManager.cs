@@ -23,6 +23,8 @@ public class GameManager : MonoBehaviour {
     List<GravityWell> gravityWells = new List<GravityWell>();
 
     [SerializeField] GameObject playerPrefab;
+    [SerializeField] GameObject xromPrefab;
+
     public const float MAX_PLAYER_SPEED = 300f;
 
     PlayerCamera playerCam;
@@ -44,9 +46,6 @@ public class GameManager : MonoBehaviour {
         playerSpawn = GameObject.Find("PlayerSpawn").transform;
         if (!playerSpawn) Debug.LogError("GameManager: No PlayerSpawn exists in the scene");
 
-        GameObject[] spawnPoints = GameObject.FindGameObjectsWithTag("Respawn");
-        foreach (GameObject spawnPoint in spawnPoints) spawnPoint.SetActive(false);
-
         // Gravity
         gravityBodies.AddRange(FindObjectsOfType<Rigidbody>());
         gravityWells.AddRange(FindObjectsOfType<GravityWell>());
@@ -55,7 +54,11 @@ public class GameManager : MonoBehaviour {
 
         // Player Spawn
         SpawnPlayer(playerSpawn, Vector3.zero);
+        playerSpawn.gameObject.SetActive(false);
         PlayerCamera.instance.MoveCamToPlayer();
+
+        // Xrom Spawns
+        SpawnXroms();
 
         Time.timeScale = 1f;
     }
@@ -65,6 +68,13 @@ public class GameManager : MonoBehaviour {
             Rigidbody playerRB = Instantiate(playerPrefab, spawnPoint.position, spawnPoint.rotation).GetComponent<Rigidbody>();
             AddGravityBody(playerRB);
             playerRB.velocity = spawnVelocity;
+        }
+    }
+
+    public void SpawnXroms() {
+        foreach (GameObject spawn in GameObject.FindGameObjectsWithTag("XromSpawn")) {
+            AddGravityBody(Instantiate(xromPrefab, spawn.transform.position, spawn.transform.rotation).GetComponent<Rigidbody>());
+            Destroy(spawn.GetComponentInChildren<MeshRenderer>());
         }
     }
 
@@ -103,10 +113,12 @@ public class GameManager : MonoBehaviour {
         GravityWell closestWell = null;
 
         foreach (GravityWell well in gravityWells) {
-            float distanceSqr = (playerCam.transform.position - well.transform.position).sqrMagnitude;
-            if (distanceSqr < minimumDistanceSqr) {
-                minimumDistanceSqr = distanceSqr;
-                closestWell = well;
+            if (well) {
+                float distanceSqr = (playerCam.transform.position - well.transform.position).sqrMagnitude;
+                if (distanceSqr < minimumDistanceSqr) {
+                    minimumDistanceSqr = distanceSqr;
+                    closestWell = well;
+                }
             }
         }
 

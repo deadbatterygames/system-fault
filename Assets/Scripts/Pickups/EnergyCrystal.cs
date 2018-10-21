@@ -22,7 +22,7 @@ public class EnergyCrystal : MonoBehaviour, IDamageable {
         pieces.transform.localScale = transform.localScale;
 
         Rigidbody[] shards = pieces.GetComponentsInChildren<Rigidbody>();
-        foreach (Rigidbody shard in shards) shard.velocity = shatterForce;
+        foreach (Rigidbody shard in shards) shard.AddForce(shatterForce, ForceMode.Impulse);
 
         Destroy(gameObject);
     }

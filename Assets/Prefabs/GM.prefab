@@ -57,6 +57,7 @@ MonoBehaviour:
   gravityBodies: []
   playerPrefab: {fileID: 1518784200778558, guid: 0960e1f7d1235c74797431ef4b46b560,
     type: 2}
+  xromPrefab: {fileID: 1043445654264710, guid: f76b19da1eb45cd4e960c2e60bfb27ee, type: 2}
 --- !u!114 &114243553186129760
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -129,10 +130,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51564d17e0aec15499c1f500896c16dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bulletPrefabs:
+  - {fileID: 1182280151139152, guid: 050bf6e2a47d4ae48b26956868ff3b80, type: 2}
   dematerializedShipPrefab: {fileID: 1194755046954562, guid: 9e6a95f597759c54aa150ff9f1bcec39,
     type: 2}
-  shipTeleportTime: 2
+  shipTeleportTime: 3
   fallTolerance: 50
+  hasMatterManipulator: 1
+  hasMultiCannon: 1
+  maxBullets: 10
   teleporting: 0
-  hasMatterManipulator: 0
-  hasMultiCannon: 0

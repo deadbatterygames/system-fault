@@ -476,14 +476,14 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1587723312379974}
-  m_LocalRotation: {x: 0.16448607, y: 0.49850893, z: -0.096970566, w: 0.84559447}
-  m_LocalPosition: {x: 0.297, y: -0.681, z: -0.462}
+  m_LocalRotation: {x: 0.23493181, y: 0.46716055, z: 0.13055764, w: 0.8423318}
+  m_LocalPosition: {x: 0.247, y: -1.107, z: 0.183}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4355344184690326}
   m_Father: {fileID: 4676512548280076}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 22.016, y: 61.042004, z: 0}
+  m_LocalEulerAnglesHint: {x: 15.89, y: 61.892002, z: 27.188002}
 --- !u!4 &4294375803973714
 Transform:
   m_ObjectHideFlags: 1
@@ -618,7 +618,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1983393166391668}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.068, z: 0.112}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4676512548280076}
@@ -879,12 +879,11 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 921d086f1c69c5a44ac945f1d04c2cb6, type: 2}
+  - {fileID: 2100000, guid: 921d086f1c69c5a44ac945f1d04c2cb6, type: 2}
+  - {fileID: 2100000, guid: 921d086f1c69c5a44ac945f1d04c2cb6, type: 2}
+  - {fileID: 2100000, guid: 921d086f1c69c5a44ac945f1d04c2cb6, type: 2}
+  - {fileID: 2100000, guid: 921d086f1c69c5a44ac945f1d04c2cb6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1242,11 +1241,6 @@ MonoBehaviour:
   - {fileID: 114194583538077218}
   - {fileID: 114452503685372054}
   - {fileID: 114196796194738770}
-  bullets:
-  - {fileID: 1182280151139152, guid: 050bf6e2a47d4ae48b26956868ff3b80, type: 2}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   bulletVelocities:
   - 200
   - 10

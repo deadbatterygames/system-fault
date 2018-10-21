@@ -46,7 +46,7 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
 
     [HideInInspector] public Ship ship;
 
-    bool canEquip = false;
+    bool canEquip;
 
     void OnCollisionEnter(Collision collision) {
         float collisionVelocity = collision.relativeVelocity.magnitude;
@@ -212,6 +212,7 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
         SetSnapping(false);
         Destroy(GetComponent<CharacterSnap>());
 
+        StopCoroutine("WeaponTimer");
         weaponSlot.UnequipAll();
         canEquip = false;
 
@@ -221,7 +222,7 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
     }
 
     IEnumerator WeaponTimer() {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.8f);
 
         weaponSlot.SwitchWeapons();
         canEquip = true;

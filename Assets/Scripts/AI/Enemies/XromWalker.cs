@@ -38,7 +38,7 @@ public class XromWalker : MonoBehaviour, IGroundable {
     public void Start() {
         rb = GetComponent<Rigidbody>();
         xromActive = true;
-        StartCoroutine("SearchForPlayer");
+        SearchForPlayer();
     }
 
     public void Update() {
@@ -120,8 +120,7 @@ public class XromWalker : MonoBehaviour, IGroundable {
     }
 
     // TODO: FOR TESTING
-    IEnumerator SearchForPlayer() {
-        yield return new WaitForSeconds(1f);
+    void SearchForPlayer() {
         target = FindObjectOfType<Player>().transform;
     }
 
