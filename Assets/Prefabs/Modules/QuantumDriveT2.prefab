@@ -234,7 +234,8 @@ MonoBehaviour:
   quantumSpeed: 3000
   lockSpeed: 3
   stabilizerSpeed: 1
-  jumpRange: 200000
+  efficiency: 1
+  jumpRange: 100000
   dropRange: 1000
   searchPrecision: 100
   onMaterial: {fileID: 2100000, guid: 41dad9e2a3148924d85d47856a97e636, type: 2}

@@ -61,7 +61,7 @@ public class QuantumDrive : ShipModule {
                     }
                 } else {
                     ChangeStage(Stage.Idle);
-                    PlayerHUD.instance.SetInfoPrompt("No Quantum Drive target found");
+                    PlayerHUD.instance.SetInfoPrompt("No Quantum Drive target found in range");
                     Debug.Log("Quantum Drive: No target found in jump range");
                 }
                 break;
