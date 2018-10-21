@@ -52,11 +52,16 @@ public class QuantumDrive : ShipModule {
                 if (hit != null) {
                     if ((hit.Value.transform.position - transform.position).magnitude > dropRange) {
                         target = hit.Value.transform;
+                        PlayerHUD.instance.SetInfoPrompt("Quantum Drive target locked\nFace target to jump");
                         Debug.Log("Quantum Drive: Target found - " + hit.Value.transform.parent);
                         ChangeStage(Stage.Searching);
-                    } else Debug.Log("Quantum Drive: Target too close");
+                    } else {
+                        PlayerHUD.instance.SetInfoPrompt("Quantum Drive target too close");
+                        Debug.Log("Quantum Drive: Target too close");
+                    }
                 } else {
                     ChangeStage(Stage.Idle);
+                    PlayerHUD.instance.SetInfoPrompt("No Quantum Drive target found");
                     Debug.Log("Quantum Drive: No target found in jump range");
                 }
                 break;
@@ -170,12 +175,16 @@ public class QuantumDrive : ShipModule {
         Ship ship = GetComponentInParent<Ship>();
 
         ship.UpdateQuantumCountDown(3);
+        PlayerHUD.instance.SetInfoPrompt("Quantum Jump in 3");
         yield return new WaitForSeconds(1f);
         ship.UpdateQuantumCountDown(2);
+        PlayerHUD.instance.SetInfoPrompt("Quantum Jump in 2");
         yield return new WaitForSeconds(1f);
         ship.UpdateQuantumCountDown(1);
+        PlayerHUD.instance.SetInfoPrompt("Quantum Jump in 1");
         yield return new WaitForSeconds(1f);
         ship.UpdateQuantumCountDown(0);
+        PlayerHUD.instance.SetInfoPrompt("Jumping...");
 
         ChangeStage(Stage.Jumping);
     }

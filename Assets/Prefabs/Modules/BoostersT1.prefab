@@ -546,10 +546,10 @@ MonoBehaviour:
   mass: 0
   connected: 0
   shipRB: {fileID: 0}
-  acceleration: 45
-  torqueAcceleration: 5
-  maxHoverSpeed: 10
-  hoverDampaning: 1
+  acceleration: 10
+  torqueAcceleration: 2.5
+  maxHoverSpeed: 5
+  hoverDampaning: 0.5
   efficiency: 1
   onMaterial: {fileID: 2100000, guid: 5391b630dd73a1441b0938405fd29048, type: 2}
   offMaterial: {fileID: 2100000, guid: 196ea116280e07c47af39128ebf55eed, type: 2}

@@ -73,7 +73,7 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable {
         // Toggle Power
         if (controlObject.jump && assistMode != GameTypes.AssistMode.Quantum) {
             if (powered) TogglePower(false);
-            else if (!powered && FuelAvailable() && !busy) TogglePower(true);
+            else if (!powered && !busy && FuelAvailable()) TogglePower(true);
         }
 
         if (powered) {
@@ -314,8 +314,7 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable {
             if (!busy) StartCoroutine("EnterShip");
 
             GameManager.instance.DespawnPlayer();
-        } else Debug.LogWarning("Ship: Please remove fuel pack before entering");
-        
+        } else PlayerHUD.instance.SetInfoPrompt("Remove Fuel Pack before entering");
     }
 
     public void TogglePower(bool toggle) {
@@ -364,8 +363,12 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable {
     }
 
     bool FuelAvailable() {
-        if (fuelPack == null) return false;
+        if (fuelPack == null) {
+            PlayerHUD.instance.SetInfoPrompt("No Fuel Pack connected");
+            return false;
+        }
 
+        if (fuelPack.IsEmpty()) PlayerHUD.instance.SetInfoPrompt("Fuel Pack empty");
         return !fuelPack.IsEmpty();
     }
 

@@ -619,8 +619,8 @@ MonoBehaviour:
   mass: 0
   connected: 0
   shipRB: {fileID: 0}
-  acceleration: 100
-  maxAstroSpeed: 300
+  acceleration: 80
+  maxAstroSpeed: 150
   astroAcceleration: 1
   efficiency: 1
   onMaterial: {fileID: 2100000, guid: 5391b630dd73a1441b0938405fd29048, type: 2}

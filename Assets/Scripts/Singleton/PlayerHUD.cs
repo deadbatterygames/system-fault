@@ -15,8 +15,8 @@ public class PlayerHUD : MonoBehaviour {
 
     [Header("General")]
     [SerializeField] Image crosshair;
-    [SerializeField] Text usePrompt;
-    [SerializeField] Text dematPrompt;
+    [SerializeField] GameObject usePrompt;
+    [SerializeField] GameObject dematPrompt;
     [SerializeField] float damageDelay = 0.5f;
     [SerializeField] float damageDrainSpeed = 1f;
 
@@ -24,6 +24,9 @@ public class PlayerHUD : MonoBehaviour {
     [SerializeField] CanvasGroup energySplash;
     [SerializeField] CanvasGroup damageSplash;
     [SerializeField] float splashFadeSpeed = 1f;
+    [SerializeField] CanvasGroup infoPrompt;
+    [SerializeField] float infoDisplayTime = 3f;
+    [SerializeField] float infoFadeSpeed = 2f;
 
     [Header("Fuel Pack")]
     [SerializeField] GameObject fuelPackHUD;
@@ -44,8 +47,9 @@ public class PlayerHUD : MonoBehaviour {
     [SerializeField] Image planetDown;
 
     bool animateDamage;
-    bool showEnergySplash;
-    bool showDamageSplash;
+    bool fadeEnergySplash;
+    bool fadeDamageSplash;
+    bool fadeInfoPrompt;
 
     void Awake() {
         if (instance == null) instance = this;
@@ -56,12 +60,12 @@ public class PlayerHUD : MonoBehaviour {
 
     void Start () {
 		if (!crosshair) Debug.LogError("PlayerHUD: Crosshair not set");
-        if (!usePrompt) Debug.LogError("PlayerHUD: Use prompt not set");
-        if (!fuelPackHUD) Debug.LogError("PlayerHUD: Fuel pack HUD not set");
+        if (!usePrompt) Debug.LogError("PlayerHUD: Use Prompt not set");
+        if (!fuelPackHUD) Debug.LogError("PlayerHUD: Fuel Pack HUD not set");
+        if (!infoPrompt) Debug.LogError("PlayerHUD: Info Prompt not set");
 
-        DisableFuelPackHUD();
-        ToggleCrosshair(false);
-        TogglePlanetRadar(false);
+        ResetHUD();
+        infoPrompt.alpha = 0;
     }
 
     void Update() {
@@ -70,42 +74,50 @@ public class PlayerHUD : MonoBehaviour {
             if (damage.fillAmount == shields.fillAmount) animateDamage = false;
         }
 
-        if (showEnergySplash) {
+        if (fadeEnergySplash) {
             energySplash.alpha -= splashFadeSpeed * Time.deltaTime;
-            if (energySplash.alpha <= 0) showEnergySplash = false;
+            if (energySplash.alpha <= 0) fadeEnergySplash = false;
         }
-        if (showDamageSplash) {
+        if (fadeDamageSplash) {
             damageSplash.alpha -= splashFadeSpeed * Time.deltaTime;
-            if (damageSplash.alpha <= 0) showDamageSplash = false;
+            if (damageSplash.alpha <= 0) fadeDamageSplash = false;
+        }
+        if (fadeInfoPrompt) {
+            infoPrompt.alpha -= infoFadeSpeed * Time.deltaTime;
+            if (infoPrompt.alpha <= 0) fadeInfoPrompt = false;
         }
     }
 
     public void ShowEnergySplash() {
         energySplash.alpha = 1f;
-        showEnergySplash = true;
+        fadeEnergySplash = true;
     }
 
     public void ShowDamageSplash() {
         damageSplash.alpha = 1f;
-        showDamageSplash = true;
+        fadeDamageSplash = true;
     }
 
+    public void SetInfoPrompt(string prompt) {
+        infoPrompt.GetComponent<Text>().text = prompt;
+        fadeInfoPrompt = false;
+        StopCoroutine("ShowInfoPrompt");
+        StartCoroutine("ShowInfoPrompt");
+    } 
+
     public void ToggleCrosshair(bool show) {
-        if (show) {
-            crosshair.enabled = true;
-        } else {
-            crosshair.enabled = false;
-        }
+        if (show) crosshair.enabled = true;
+        else crosshair.enabled = false;
     }
 
     public void ToggleUsePrompt(bool show) {
-        if (show) usePrompt.enabled = true;
-        else usePrompt.enabled = false;
+        if (show) usePrompt.SetActive(true);
+        else usePrompt.SetActive(false);
     }
 
     public void ToggleDematPrompt(bool show) {
-        if (show) dematPrompt.enabled = true;
-        else dematPrompt.enabled = false;
+        if (show) dematPrompt.SetActive(true);
+        else dematPrompt.SetActive(false);
     }
 
     public void ToggleShipRadar(bool show) {
@@ -214,8 +226,9 @@ public class PlayerHUD : MonoBehaviour {
     }
 
     public void ResetHUD() {
-        ToggleCrosshair(false);
         DisableFuelPackHUD();
+        ToggleCrosshair(false);
+        TogglePlanetRadar(false);
         ToggleDematPrompt(false);
         ToggleUsePrompt(false);
     }
@@ -225,4 +238,10 @@ public class PlayerHUD : MonoBehaviour {
         yield return new WaitForSeconds(damageDelay);
         animateDamage = true;
     }
+
+    IEnumerator ShowInfoPrompt() {
+        infoPrompt.alpha = 1f;
+        yield return new WaitForSeconds(infoFadeSpeed);
+        fadeInfoPrompt = true;
+    } 
 }

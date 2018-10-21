@@ -546,9 +546,9 @@ MonoBehaviour:
   mass: 0
   connected: 0
   shipRB: {fileID: 0}
-  acceleration: 75
-  torqueAcceleration: 12
-  maxHoverSpeed: 50
+  acceleration: 45
+  torqueAcceleration: 5
+  maxHoverSpeed: 20
   hoverDampaning: 1
   efficiency: 1
   onMaterial: {fileID: 2100000, guid: 5391b630dd73a1441b0938405fd29048, type: 2}

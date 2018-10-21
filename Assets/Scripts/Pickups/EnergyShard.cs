@@ -26,13 +26,15 @@ public class EnergyShard : MonoBehaviour, ICollectable {
     }
 
     void OnTriggerEnter(Collider other) {
-        if (other.CompareTag("Player") && other.GetComponentInChildren<ModuleSlot>().connectedModule) {
-            FuelPack fuelPack = other.GetComponentInChildren<FuelPack>();
-            if (!fuelPack.IsFull()) {
-                fuelPack.AddFuel(energyUnits);
-                PlayerHUD.instance.ShowEnergySplash();
-                Pickup();
-            }
+        if (other.CompareTag("Player")) {
+            if (other.GetComponentInChildren<ModuleSlot>().connectedModule) {
+                FuelPack fuelPack = other.GetComponentInChildren<FuelPack>();
+                if (!fuelPack.IsFull()) {
+                    fuelPack.AddFuel(energyUnits);
+                    PlayerHUD.instance.ShowEnergySplash();
+                    Pickup();
+                } else PlayerHUD.instance.SetInfoPrompt("Fuel Pack full");
+            } else PlayerHUD.instance.SetInfoPrompt("Not wearing a Fuel Pack");
         }
     }
 

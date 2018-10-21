@@ -36,9 +36,9 @@ public class XromWalker : MonoBehaviour, IGroundable {
     bool grounded;
 
     public void Start() {
-        StartCoroutine("WaitAndFindPlayer");
         rb = GetComponent<Rigidbody>();
         xromActive = true;
+        StartCoroutine("SearchForPlayer");
     }
 
     public void Update() {
@@ -120,7 +120,7 @@ public class XromWalker : MonoBehaviour, IGroundable {
     }
 
     // TODO: FOR TESTING
-    IEnumerator WaitAndFindPlayer() {
+    IEnumerator SearchForPlayer() {
         yield return new WaitForSeconds(1f);
         target = FindObjectOfType<Player>().transform;
     }
