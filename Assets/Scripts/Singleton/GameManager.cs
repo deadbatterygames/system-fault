@@ -44,7 +44,6 @@ public class GameManager : MonoBehaviour {
         playerSpawn = GameObject.Find("PlayerSpawn").transform;
         if (!playerSpawn) Debug.LogError("GameManager: No PlayerSpawn exists in the scene");
 
-
         GameObject[] spawnPoints = GameObject.FindGameObjectsWithTag("Respawn");
         foreach (GameObject spawnPoint in spawnPoints) spawnPoint.SetActive(false);
 
@@ -58,6 +57,7 @@ public class GameManager : MonoBehaviour {
         SpawnPlayer(playerSpawn, Vector3.zero);
         PlayerCamera.instance.MoveCamToPlayer();
 
+        Time.timeScale = 1f;
     }
 
     public void SpawnPlayer(Transform spawnPoint, Vector3 spawnVelocity) {
@@ -87,7 +87,8 @@ public class GameManager : MonoBehaviour {
     // TODO: Remove
     public void Update() {
         if (Input.GetKeyDown(KeyCode.P)) {
-            FindObjectOfType<Player>().Damage(21.276f, Vector3.zero);
+            Player p = FindObjectOfType<Player>();
+            if (p) p.Damage(21.276f, Vector3.zero);
         }
     }
 
@@ -124,9 +125,10 @@ public class GameManager : MonoBehaviour {
     }
 
     public IEnumerator ReloadScene() {
+        yield return new WaitForSecondsRealtime(3f);
+
         gravityBodies.Clear();
         gravityWells.Clear();
-        currentWell = null;
 
         AsyncOperation reloadScene = SceneManager.LoadSceneAsync("TestScene");
         while (!reloadScene.isDone) {
@@ -134,9 +136,9 @@ public class GameManager : MonoBehaviour {
             yield return null;
         }
 
+        Resources.UnloadUnusedAssets();
         PlayerHUD.instance.ResetHUD();
 
-        Time.timeScale = 1f;
         Start();
     }
 }

@@ -26,7 +26,7 @@ public class PlayerHUD : MonoBehaviour {
     [SerializeField] float splashFadeSpeed = 1f;
     [SerializeField] CanvasGroup infoPrompt;
     [SerializeField] float infoDisplayTime = 3f;
-    [SerializeField] float infoFadeSpeed = 2f;
+    [SerializeField] float infoFadeSpeed = 0.5f;
 
     [Header("Fuel Pack")]
     [SerializeField] GameObject fuelPackHUD;
@@ -241,7 +241,7 @@ public class PlayerHUD : MonoBehaviour {
 
     IEnumerator ShowInfoPrompt() {
         infoPrompt.alpha = 1f;
-        yield return new WaitForSeconds(infoFadeSpeed);
+        yield return new WaitForSeconds(infoDisplayTime);
         fadeInfoPrompt = true;
     } 
 }

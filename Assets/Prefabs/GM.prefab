@@ -55,7 +55,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gravityBodies: []
-  playerSpawn: {fileID: 0}
   playerPrefab: {fileID: 1518784200778558, guid: 0960e1f7d1235c74797431ef4b46b560,
     type: 2}
 --- !u!114 &114243553186129760
@@ -133,6 +132,7 @@ MonoBehaviour:
   dematerializedShipPrefab: {fileID: 1194755046954562, guid: 9e6a95f597759c54aa150ff9f1bcec39,
     type: 2}
   shipTeleportTime: 2
+  fallTolerance: 50
   teleporting: 0
   hasMatterManipulator: 0
   hasMultiCannon: 0

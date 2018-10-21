@@ -52,7 +52,7 @@ public class QuantumDrive : ShipModule {
                 if (hit != null) {
                     if ((hit.Value.transform.position - transform.position).magnitude > dropRange) {
                         target = hit.Value.transform;
-                        PlayerHUD.instance.SetInfoPrompt("Quantum Drive target locked\nFace target to jump");
+                        PlayerHUD.instance.SetInfoPrompt("Quantum Drive target locked\nAlign ship to jump");
                         Debug.Log("Quantum Drive: Target found - " + hit.Value.transform.parent);
                         ChangeStage(Stage.Searching);
                     } else {

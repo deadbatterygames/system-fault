@@ -8,7 +8,6 @@ using System.Collections;
 // Purpose: Controls the player
 //
 
-[RequireComponent(typeof(CharacterSnap))]
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(CapsuleCollider))]
 
@@ -48,6 +47,11 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
     [HideInInspector] public Ship ship;
 
     bool canEquip = false;
+
+    void OnCollisionEnter(Collision collision) {
+        float collisionVelocity = collision.relativeVelocity.magnitude;
+        if (collisionVelocity > PlayerData.instance.fallTolerance) Damage(collisionVelocity, Vector3.zero);
+    }
 
     void Awake() {
         health = maxHealth;
@@ -127,7 +131,9 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
         }
 
         // TODO: REMOVE
-        if (Input.GetKeyDown(KeyCode.L) && fuelSlot.connectedModule) GetComponentInChildren<FuelPack>().AddFuel(500f);
+        if (Input.GetKeyDown(KeyCode.L) && fuelSlot.connectedModule) {
+            GetComponentInChildren<FuelPack>().AddFuel(10000000000f);
+        }
     }
 
     public void ResetPlayer(Transform location) {
@@ -175,8 +181,8 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
     }
 
     public void SetSnapping(bool snap) {
-        if (snap) rb.constraints = RigidbodyConstraints.FreezeRotation;
-        else rb.constraints = RigidbodyConstraints.None;
+        if (snap) rb.freezeRotation = true;
+        else rb.freezeRotation = false;
         snapping = snap;
     }
 
@@ -186,6 +192,8 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
     }
 
     public void Damage(float amount, Vector3 damageForce) {
+        PlayerHUD.instance.ShowDamageSplash();
+
         // Check if player has shields
         if (fuelSlot.connectedModule != null) {
             amount = fuelSlot.connectedModule.GetComponent<FuelPack>().AbsorbDamage(amount);
@@ -193,14 +201,21 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
 
         health -= amount;
 
-        if (health <= 0) KillPlayer();
+        rb.AddForce(damageForce, ForceMode.VelocityChange);
 
-        PlayerHUD.instance.ShowDamageSplash();
+        if (health <= 0) KillPlayer();
     }
 
     void KillPlayer() {
         PlayerControl.instance.RemoveControl();
-        Time.timeScale = 0f;
+
+        SetSnapping(false);
+        Destroy(GetComponent<CharacterSnap>());
+
+        weaponSlot.UnequipAll();
+        canEquip = false;
+
+        Time.timeScale = 0.25f;
         Debug.LogWarning("Player: DEAD!");
         GameManager.instance.StartCoroutine("ReloadScene");
     }

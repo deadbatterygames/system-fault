@@ -17,7 +17,7 @@ public class GravityWell : MonoBehaviour {
 
     void PullObjects() {
         foreach (Rigidbody rb in GameManager.instance.gravityBodies) {
-            if (rb.useGravity) {
+            if (rb && rb.useGravity) {
                 Vector3 gravity = (transform.position - rb.transform.position).normalized
                     / Mathf.Pow(Vector3.Distance(transform.position, rb.transform.position), 2f);
                 rb.AddForce(gravity * gravityStrength * GameManager.GRAVITY_CONSTANT, ForceMode.Acceleration);
