@@ -68,6 +68,7 @@ public class GameManager : MonoBehaviour {
             Rigidbody playerRB = Instantiate(playerPrefab, spawnPoint.position, spawnPoint.rotation).GetComponent<Rigidbody>();
             AddGravityBody(playerRB);
             playerRB.velocity = spawnVelocity;
+            PlayerControl.instance.TakeControl(playerRB.GetComponent<IControllable>());
         }
     }
 
@@ -128,10 +129,12 @@ public class GameManager : MonoBehaviour {
     void ChangeGravityWell(GravityWell /*Gabe*/ newWell) {
         Debug.Log("GameManager: Gravity well changed");
         foreach (GravityWell well in gravityWells) {
-            if (well != newWell) well.enabled = false;
-            else {
-                well.enabled = true;
-                currentWell = well;
+            if (well) {
+                if (well != newWell) well.enabled = false;
+                else {
+                    well.enabled = true;
+                    currentWell = well;
+                }
             }
         }
     }
@@ -141,6 +144,7 @@ public class GameManager : MonoBehaviour {
 
         gravityBodies.Clear();
         gravityWells.Clear();
+        PlayerData.instance.ClearBulletLists();
 
         AsyncOperation reloadScene = SceneManager.LoadSceneAsync("TestScene");
         while (!reloadScene.isDone) {

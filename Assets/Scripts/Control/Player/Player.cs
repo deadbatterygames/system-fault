@@ -47,13 +47,16 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
     [HideInInspector] public Ship ship;
 
     bool canEquip;
+    bool alive = true;
 
     void OnCollisionEnter(Collision collision) {
-        float collisionVelocity = collision.relativeVelocity.magnitude;
-        if (collisionVelocity > PlayerData.instance.fallTolerance) Damage(collisionVelocity, Vector3.zero);
+        if (alive) {
+            float collisionVelocity = collision.relativeVelocity.magnitude;
+            if (collisionVelocity > PlayerData.instance.fallTolerance) Damage(collisionVelocity, Vector3.zero);
+        }
     }
 
-    void Awake() {
+    void Start() {
         health = maxHealth;
 
         rb = GetComponent<Rigidbody>();
@@ -65,8 +68,6 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
         if (weaponSlot == null) Debug.LogError("Player: No weapon slot set as child");
 
         if (cameraRig == null)  Debug.LogError("Player: No camera rig set in inspector");
-
-        PlayerControl.instance.TakeControl(this);
 
         StartCoroutine("WeaponTimer");
     }
@@ -208,6 +209,7 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
 
     void KillPlayer() {
         PlayerControl.instance.RemoveControl();
+        alive = false;
 
         SetSnapping(false);
         Destroy(GetComponent<CharacterSnap>());

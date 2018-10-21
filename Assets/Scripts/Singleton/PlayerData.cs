@@ -64,4 +64,10 @@ public class PlayerData : MonoBehaviour {
         else bulletIndicies[(int)bulletType]++;
         return bulletIndicies[(int)bulletType];
     }
+
+    public void ClearBulletLists() {
+        pulseBullets.Clear();
+
+        bulletIndicies = new int[4];
+    }
 }

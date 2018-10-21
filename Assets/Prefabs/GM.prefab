@@ -136,7 +136,7 @@ MonoBehaviour:
     type: 2}
   shipTeleportTime: 3
   fallTolerance: 50
-  hasMatterManipulator: 1
-  hasMultiCannon: 1
+  hasMatterManipulator: 0
+  hasMultiCannon: 0
   maxBullets: 10
   teleporting: 0
