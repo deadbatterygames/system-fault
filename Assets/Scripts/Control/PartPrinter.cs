@@ -17,6 +17,7 @@ public class PartPrinter : MonoBehaviour {
 
     ShipModule newPart = null;
     bool printSurfaceClear = true;
+    bool printing;
     float partOpacity = 0f;
 
     private void Start() {
@@ -48,18 +49,20 @@ public class PartPrinter : MonoBehaviour {
 
         float printCost = PartPrinterData.instance.printCosts[prefabIndex];
 
-        if (printSurfaceClear) {
-            if (printCost > 0f) {
-                Player player = FindObjectOfType<Player>();
-                if (player.GetComponentInChildren<ModuleSlot>().connectedModule) {
-                    FuelPack fuelPack = player.GetComponentInChildren<FuelPack>();
-                    if (fuelPack.GetFuel() >= printCost) {
-                        fuelPack.DrainFuel(printCost);
-                        StartCoroutine(PrintPart(PartPrinterData.instance.modulePrefabs[prefabIndex]));
-                    } else Debug.LogWarning("PartPrinter: Not enough energy");
-                } else Debug.LogWarning("PartPrinter: Not wearing Fuel Pack");
-            } else StartCoroutine(PrintPart(PartPrinterData.instance.modulePrefabs[prefabIndex]));
-        } else Debug.LogWarning("PartPrinter: Print surface obstructed");
+        if (!printing) {
+            if (printSurfaceClear) {
+                if (printCost > 0f) {
+                    Player player = FindObjectOfType<Player>();
+                    if (player.GetComponentInChildren<ModuleSlot>().connectedModule) {
+                        FuelPack fuelPack = player.GetComponentInChildren<FuelPack>();
+                        if (fuelPack.GetFuel() >= printCost) {
+                            fuelPack.DrainFuel(printCost);
+                            StartCoroutine(PrintPart(PartPrinterData.instance.modulePrefabs[prefabIndex]));
+                        } else PlayerHUD.instance.SetInfoPrompt("Not enough energy in Fuel Pack");
+                    } else PlayerHUD.instance.SetInfoPrompt("Not wearing Fuel Pack");
+                } else StartCoroutine(PrintPart(PartPrinterData.instance.modulePrefabs[prefabIndex]));
+            } else PlayerHUD.instance.SetInfoPrompt("Print surface obstructed");
+        }
     }
 
     void OnTriggerStay(Collider other) {
@@ -71,6 +74,8 @@ public class PartPrinter : MonoBehaviour {
     }
 
     IEnumerator PrintPart(GameObject shipModule) {
+        printing = true;
+
         foreach (ParticleSystem particleSystem in printParticles) particleSystem.Play();
         yield return new WaitForSeconds(0.2f);
 
@@ -87,5 +92,7 @@ public class PartPrinter : MonoBehaviour {
         newPart.Materialize();
         newPart = null;
         partOpacity = 0f;
+
+        printing = false;
     }
 }

@@ -75,7 +75,7 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
     void FixedUpdate() {
         Move();
         if (!snapping) Rotate();
-        if (snapping) Look();
+        //if (snapping) Look();
 
         if (ship) UpdateShipRadar(); else ship = FindObjectOfType<Ship>();
 
@@ -103,7 +103,8 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
         else moveDirection = (controlObject.rightLeft * transform.right + controlObject.forwardBack * transform.forward + controlObject.upDown * transform.up).normalized;
 
         // Look/Rotate
-        lookRotation += new Vector3(-controlObject.verticalLook, controlObject.horizontalLook, controlObject.roll);
+        lookRotation = new Vector3(-controlObject.verticalLook, controlObject.horizontalLook, controlObject.roll);
+        if (snapping) Look(lookRotation);
 
         // Jump
         if (controlObject.jump && grounded) Jump();
@@ -154,23 +155,19 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
         else rb.AddForce(moveDirection * airForce, ForceMode.Acceleration);
     }
 
-    void Look() {
+    void Look(Vector3 rotation) {
         // Horizontal
-        Quaternion deltaRot = Quaternion.AngleAxis(lookRotation.y * lookSensitivity, Vector3.up);
-        rb.MoveRotation(rb.rotation * deltaRot);
+        Quaternion deltaRot = Quaternion.AngleAxis(rotation.y * lookSensitivity, Vector3.up);
+        transform.localRotation = transform.localRotation * deltaRot;
 
         // Vertical
-        yAngle = Mathf.Clamp(yAngle + -lookRotation.x * lookSensitivity, minYAngle, maxYAngle);
+        yAngle = Mathf.Clamp(yAngle + -rotation.x * lookSensitivity, minYAngle, maxYAngle);
         cameraRig.transform.localEulerAngles = new Vector3(-yAngle, 0f, 0f);
-
-        lookRotation = Vector3.zero;
     }
 
     // TODO: This should probably call a function in fuel pack
     void Rotate() {
         rb.AddRelativeTorque(lookRotation * airTorque, ForceMode.Acceleration);
-
-        lookRotation = Vector3.zero;
     }
 
     void Jump() {
@@ -196,9 +193,7 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
         PlayerHUD.instance.ShowDamageSplash();
 
         // Check if player has shields
-        if (fuelSlot.connectedModule != null) {
-            amount = fuelSlot.connectedModule.GetComponent<FuelPack>().AbsorbDamage(amount);
-        }
+        if (fuelSlot.connectedModule != null) amount = fuelSlot.connectedModule.GetComponent<FuelPack>().AbsorbDamage(amount);
 
         health -= amount;
 

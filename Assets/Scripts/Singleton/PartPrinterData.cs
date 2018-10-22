@@ -43,7 +43,7 @@ public class PartPrinterData : MonoBehaviour {
 
     public void UnlockModule(GameTypes.ModuleType moduleType, int tier) {
         unlockedModules[(int)moduleType, tier-1] = true;
-        Debug.LogWarning("PartPrinterData: " + moduleType + " tier " + tier + " unlocked");
+        PlayerHUD.instance.SetInfoPrompt("Tier " + tier  + " " + GameManager.instance.GetModuleTypeString(moduleType) + " unlocked");
     }
 
     public bool IsUnlocked(GameTypes.ModuleType moduleType, int tier) {

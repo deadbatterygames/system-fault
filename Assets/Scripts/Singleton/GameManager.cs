@@ -157,4 +157,19 @@ public class GameManager : MonoBehaviour {
 
         Start();
     }
+
+    public string GetModuleTypeString(GameTypes.ModuleType moduleType) {
+        switch (moduleType) {
+            case GameTypes.ModuleType.FuelPack:
+                return "Fuel Pack";
+            case GameTypes.ModuleType.Boosters:
+                return "Boosters";
+            case GameTypes.ModuleType.Thrusters:
+                return "Thrusters";
+            case GameTypes.ModuleType.QuantumDrive:
+                return "Quantum Drive";
+            default:
+                return "Unknown module type";
+        }
+    }
 }
