@@ -104,9 +104,7 @@ public class GameManager : MonoBehaviour {
     }
 
     void FixedUpdate() {
-        if (FindClosestWell() != currentWell) {
-            ChangeGravityWell(FindClosestWell());
-        }
+        if (PlayerControl.instance.InControl() && FindClosestWell() != currentWell) ChangeGravityWell(FindClosestWell());
     }
 
     GravityWell FindClosestWell() {
@@ -139,7 +137,12 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    public IEnumerator ReloadScene() {
+    public IEnumerator PlayerDeath() {
+        Time.timeScale = 0.25f;
+        Debug.LogWarning("Player: DEAD!");
+        PlayerHUD.instance.ResetHUD();
+        PlayerHUD.instance.ToggleShipRadar(false);
+
         yield return new WaitForSecondsRealtime(3f);
 
         gravityBodies.Clear();
@@ -153,7 +156,6 @@ public class GameManager : MonoBehaviour {
         }
 
         Resources.UnloadUnusedAssets();
-        PlayerHUD.instance.ResetHUD();
 
         Start();
     }

@@ -16,6 +16,7 @@ public class PlayerData : MonoBehaviour {
 
     public GameObject dematerializedShipPrefab;
     public float shipTeleportTime = 2f;
+    public float shipDamageTolerance = 30f;
     public float fallTolerance = 50f;
 
     public bool hasMatterManipulator;
@@ -25,8 +26,8 @@ public class PlayerData : MonoBehaviour {
     int[] bulletIndicies = new int[4];
     List<GameObject> pulseBullets;
 
+    [HideInInspector] public bool alive;
     [HideInInspector] public bool teleporting;
-
 
     void Awake() {
         if (instance == null) instance = this;

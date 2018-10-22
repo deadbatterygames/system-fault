@@ -59,7 +59,7 @@ public class PartPrinter : MonoBehaviour {
                             fuelPack.DrainFuel(printCost);
                             StartCoroutine(PrintPart(PartPrinterData.instance.modulePrefabs[prefabIndex]));
                         } else PlayerHUD.instance.SetInfoPrompt("Not enough energy in Fuel Pack");
-                    } else PlayerHUD.instance.SetInfoPrompt("Not wearing Fuel Pack");
+                    } else PlayerHUD.instance.SetInfoPrompt("Not wearing a Fuel Pack");
                 } else StartCoroutine(PrintPart(PartPrinterData.instance.modulePrefabs[prefabIndex]));
             } else PlayerHUD.instance.SetInfoPrompt("Print surface obstructed");
         }

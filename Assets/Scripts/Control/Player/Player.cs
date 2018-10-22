@@ -47,16 +47,18 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
     [HideInInspector] public Ship ship;
 
     bool canEquip;
-    bool alive = true;
 
     void OnCollisionEnter(Collision collision) {
-        if (alive) {
+        if (PlayerData.instance.alive) {
             float collisionVelocity = collision.relativeVelocity.magnitude;
             if (collisionVelocity > PlayerData.instance.fallTolerance) Damage(collisionVelocity, Vector3.zero);
         }
     }
 
     void Start() {
+        PlayerData.instance.alive = true;
+        PlayerHUD.instance.ToggleShipRadar(true);
+
         health = maxHealth;
 
         rb = GetComponent<Rigidbody>();
@@ -75,7 +77,6 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
     void FixedUpdate() {
         Move();
         if (!snapping) Rotate();
-        //if (snapping) Look();
 
         if (ship) UpdateShipRadar(); else ship = FindObjectOfType<Ship>();
 
@@ -134,7 +135,7 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
 
         // TODO: REMOVE
         if (Input.GetKeyDown(KeyCode.L) && fuelSlot.connectedModule) {
-            GetComponentInChildren<FuelPack>().AddFuel(10000000000f);
+            GetComponentInChildren<FuelPack>().AddFuel(1000000f);
         }
     }
 
@@ -165,7 +166,6 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
         cameraRig.transform.localEulerAngles = new Vector3(-yAngle, 0f, 0f);
     }
 
-    // TODO: This should probably call a function in fuel pack
     void Rotate() {
         rb.AddRelativeTorque(lookRotation * airTorque, ForceMode.Acceleration);
     }
@@ -192,11 +192,8 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
     public void Damage(float amount, Vector3 damageForce) {
         PlayerHUD.instance.ShowDamageSplash();
 
-        // Check if player has shields
         if (fuelSlot.connectedModule != null) amount = fuelSlot.connectedModule.GetComponent<FuelPack>().AbsorbDamage(amount);
-
         health -= amount;
-
         rb.AddForce(damageForce, ForceMode.VelocityChange);
 
         if (health <= 0) KillPlayer();
@@ -204,7 +201,7 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
 
     void KillPlayer() {
         PlayerControl.instance.RemoveControl();
-        alive = false;
+        PlayerData.instance.alive = false;
 
         SetSnapping(false);
         Destroy(GetComponent<CharacterSnap>());
@@ -212,10 +209,8 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
         StopCoroutine("WeaponTimer");
         weaponSlot.UnequipAll();
         canEquip = false;
-
-        Time.timeScale = 0.25f;
-        Debug.LogWarning("Player: DEAD!");
-        GameManager.instance.StartCoroutine("ReloadScene");
+        
+        GameManager.instance.StartCoroutine("PlayerDeath");
     }
 
     IEnumerator WeaponTimer() {

@@ -32,7 +32,14 @@ public class PrintDrivePort : MonoBehaviour, IUsable {
             printDrive = Instantiate(PartPrinterData.instance.printDrivePrefab, transform.position + transform.up / 2f, transform.rotation, transform).GetComponent<PrintDrive>();
             printDrive.AssignPort(this);
 
-            if (!blueprint) FindObjectOfType<WeaponSlot>().UnequipAll();
+            if (blueprint) gameObject.layer = LayerMask.GetMask("Default");
+            else {
+                FindObjectOfType<WeaponSlot>().UnequipAll();
+                PlayerHUD.instance.ToggleShipRadar(false);
+                PlayerHUD.instance.ToggleUsePrompt(false);
+                PlayerCamera.instance.checkForUsable = false;
+            }
+            
             desiredLocation = Vector3.zero;
         }
     }
@@ -47,7 +54,6 @@ public class PrintDrivePort : MonoBehaviour, IUsable {
                 Destroy(printDrive.gameObject);
                 printDrive = null;
                 if (blueprint) {
-                    gameObject.layer = LayerMask.GetMask("Default");
                     Destroy(blueprint);
                     Destroy(this);
                 } else FindObjectOfType<WeaponSlot>().SwitchWeapons();
@@ -62,8 +68,7 @@ public class PrintDrivePort : MonoBehaviour, IUsable {
             blueprint.Unlock(printDrive);
             StartCoroutine("BlueprintTimer");
         } else {
-            PlayerHUD.instance.ToggleShipRadar(false);
-            PlayerHUD.instance.ToggleUsePrompt(false);
+            
 
             PlayerControl.instance.TakeControl(printDrive.GetComponent<IControllable>());
 

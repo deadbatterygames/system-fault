@@ -671,8 +671,8 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1593011597609602}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0.59089476, y: -0.19836381, z: -0.6289319, w: -0.46469343}
+  m_LocalPosition: {x: -413.24, y: -238.36, z: -156.14}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4585364276975686}
@@ -1509,6 +1509,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   yawMultiplier: 0.2
   astroThrottleSensitivity: 0.5
+  shipStrength: 5
+  maxHull: 50
   playerExit: {fileID: 4232486490169208}
   playerExitAlt: {fileID: 4546916195216874}
   cameraRig: {fileID: 4585364276975686}

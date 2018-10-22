@@ -52,8 +52,6 @@ public class PlayerControl : MonoBehaviour {
 
     IControllable controlActor = null;
 
-    public bool control = true;
-
     void Awake() {
         if (instance == null) instance = this;
         else if (instance != this) Destroy(gameObject);
@@ -78,7 +76,7 @@ public class PlayerControl : MonoBehaviour {
     }
 
     void Update() {
-        if (control && controlActor != null) {
+        if (controlActor != null) {
             currentInput.forwardBack = Input.GetAxis("Move Forward/Back");
             currentInput.rightLeft = Input.GetAxis("Move Right/Left");
             currentInput.upDown = Input.GetAxis("Move Up/Down");
@@ -122,5 +120,13 @@ public class PlayerControl : MonoBehaviour {
 
     public void RemoveControl() {
         controlActor = null;
+    }
+
+    public bool InControl() {
+        return controlActor != null;
+    }
+
+    public IControllable GetControllingActor() {
+        return controlActor;
     }
 }

@@ -10,7 +10,7 @@ using System.Collections;
 
 [RequireComponent(typeof(Rigidbody))]
 
-public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable {
+public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable, IDamageable {
 
     ModuleSlot[] moduleSlots;
     FuelPack fuelPack = null;
@@ -23,6 +23,11 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable {
     [Header("Flight")]
     [SerializeField] float yawMultiplier = 0.5f;
     [SerializeField] float astroThrottleSensitivity = 0.5f;
+
+    [Header("Damage")]
+    [SerializeField] float shipStrength = 5f;
+    [SerializeField] float maxHull = 50f;
+    float hull;
 
     [Header("Camera")]
     [SerializeField] Transform playerExit;
@@ -68,13 +73,21 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable {
         if (cameraRig == null) Debug.LogError("Ship: No camera rig set in inspector");
         if (playerExit == null) Debug.LogError("Ship: No player exit set in inspector");
 
+        hull = maxHull;
+
         shipComputer.TogglePower(false);
     }
 
     void OnCollisionEnter(Collision collision) {
-        if (collision.relativeVelocity.magnitude > 30f) {
-            IDamageable damageable = collision.collider.GetComponent<IDamageable>();
-            if (damageable != null) damageable.Damage(collision.relativeVelocity.magnitude, -collision.relativeVelocity);
+        float collisionMagnitude = collision.relativeVelocity.magnitude;
+        if (PlayerData.instance.alive && PlayerControl.instance.GetControllingActor() == GetComponent<IControllable>()) {
+            if (collisionMagnitude > PlayerData.instance.shipDamageTolerance) {
+                IDamageable otherDamageable = collision.collider.GetComponent<IDamageable>();
+                if (otherDamageable != null) otherDamageable.Damage(collision.relativeVelocity.magnitude, -collision.relativeVelocity);
+            }
+
+            if (collisionMagnitude > PlayerData.instance.fallTolerance && !collision.gameObject.GetComponent<Rigidbody>())
+                Damage(collisionMagnitude / shipStrength, Vector3.zero);
         }
     }
 
@@ -326,6 +339,27 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable {
         } else PlayerHUD.instance.SetInfoPrompt("Remove Fuel Pack before entering");
     }
 
+    public void Damage(float amount, Vector3 damageForce) {
+        PlayerHUD.instance.ShowDamageSplash();
+
+        if (fuelPack) amount = fuelPack.AbsorbDamage(amount);
+        hull -= amount;
+        rb.AddForce(damageForce, ForceMode.Impulse);
+
+        if (hull <= 0) KillPlayer();
+    }
+
+    void KillPlayer() {
+        TogglePower(false);
+
+        if (PlayerCamera.instance.IsThirdPerson()) PlayerCamera.instance.transform.parent = null;
+        PlayerControl.instance.RemoveControl();
+
+        PlayerData.instance.alive = false;
+
+        GameManager.instance.StartCoroutine("PlayerDeath");
+    }
+
     public void TogglePower(bool toggle) {
         if (toggle) {
             powered = true;
@@ -408,6 +442,8 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable {
 
         Canopy canopy = GetComponentInChildren<Canopy>();
         if (canopy.IsOpen()) canopy.Use();
+
+        SetCanopyClear(true);
 
         if (fuelPack) PlayerHUD.instance.EnableFuelPackHUD(fuelPack);
 

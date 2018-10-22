@@ -99,7 +99,7 @@ public class PlayerHUD : MonoBehaviour {
     }
 
     public void SetInfoPrompt(string prompt) {
-        infoPrompt.GetComponent<Text>().text = prompt;
+        infoPrompt.GetComponentInChildren<Text>().text = prompt;
         fadeInfoPrompt = false;
         StopCoroutine("ShowInfoPrompt");
         StartCoroutine("ShowInfoPrompt");
