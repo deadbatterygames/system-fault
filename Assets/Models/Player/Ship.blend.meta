@@ -15,6 +15,17 @@ ModelImporter:
     100018: LandingGear
     100020: Light
     100022: QuantumDrive
+    100024: Missile1
+    100026: Missile1_002
+    100028: Missile1_005
+    100030: Missile2
+    100032: Missile3
+    100034: Missile6
+    100036: MissileRack
+    100038: RailGun
+    100040: RailGunL
+    100042: RailGunR
+    100044: LaserCannon
     400000: //RootNode
     400002: Canopy
     400004: Ship
@@ -27,6 +38,17 @@ ModelImporter:
     400018: LandingGear
     400020: Light
     400022: QuantumDrive
+    400024: Missile1
+    400026: Missile1_002
+    400028: Missile1_005
+    400030: Missile2
+    400032: Missile3
+    400034: Missile6
+    400036: MissileRack
+    400038: RailGun
+    400040: RailGunL
+    400042: RailGunR
+    400044: LaserCannon
     2100000: RedPaint
     2100002: Metal
     2100004: Cushion
@@ -45,6 +67,15 @@ ModelImporter:
     2300016: Boosters
     2300018: LandingGear
     2300020: QuantumDrive
+    2300022: Missile1
+    2300024: Missile1_002
+    2300026: Missile1_005
+    2300028: Missile2
+    2300030: Missile3
+    2300032: Missile6
+    2300034: MissileRack
+    2300036: RailGun
+    2300038: LaserCannon
     3300000: //RootNode
     3300002: Canopy
     3300004: Ship
@@ -56,6 +87,15 @@ ModelImporter:
     3300016: Boosters
     3300018: LandingGear
     3300020: QuantumDrive
+    3300022: Missile1
+    3300024: Missile1_002
+    3300026: Missile1_005
+    3300028: Missile2
+    3300030: Missile3
+    3300032: Missile6
+    3300034: MissileRack
+    3300036: RailGun
+    3300038: LaserCannon
     4300000: Ship
     4300002: Canopy
     4300004: FuelPack
@@ -67,11 +107,25 @@ ModelImporter:
     4300016: LandingGear
     4300018: Light
     4300020: QuantumDrive
+    4300022: MissileRack
+    4300024: Missile2
+    4300026: Missile1_005
+    4300028: Missile6
+    4300030: Missile3
+    4300032: Missile1_002
+    4300034: Missile1
+    4300036: RailGun
+    4300038: RailGunR
+    4300040: RailGunL
+    4300042: LaserCannon
     7400000: Default Take
     9500000: //RootNode
     13700000: LandingGear
     13700002: Body
     13700004: Light
+    13700006: RailGun
+    13700008: RailGunL
+    13700010: RailGunR
     2186277476908879412: ImportLogs
   externalObjects: {}
   materials:
@@ -145,7 +199,6 @@ ModelImporter:
     legStretch: 0.05
     feetSpacing: 0
     rootMotionBoneName: 
-    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
     hasTranslationDoF: 0
     hasExtraRoot: 1
     skeletonHasParents: 1

@@ -11,8 +11,10 @@ public class GameTypes {
         Thrusters,
         Boosters,
         QuantumDrive,
-        PulseWeapon,
-        KineticWeapon
+        LaserCannon,
+        PulseCannon,
+        Railgun,
+        MissileRack
     };
 
     public enum AssistMode {

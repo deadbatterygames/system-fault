@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 //
@@ -8,54 +9,78 @@ using UnityEngine;
 // Purpose: Making shit go zooooooooooooom
 //
 
-public class Xrom : MonoBehaviour, IFlocker {
+public class Xrom : Boid {
 
-	float maxVelocity = 50;
 	float rotationSpeed = 5;
-	[SerializeField] Rigidbody rb;
-	List<Attractor> attractors;
 	bool landing = false;
-	GameObject landingBody = null;
-	GameObject landingPad = null;
-	void Awake(){
-		rb = transform.GetComponent<Rigidbody>();
-		attractors = new List<Attractor>();
+	bool landed = false;
+	bool landingPermission = false;
+
+	void Update(){
+		if(landing){
+			List<Attractor> landingPads = attractors.Where(x => x.type == Attractor.Type.LandingPad).ToList();
+
+			foreach(Attractor landingPad in landingPads){
+				Vector3 differenceVector = landingPad.GetPosition() - transform.position;
+				if(differenceVector.magnitude < 0.5f){
+					landing = false;
+					landed = true;
+				}
+			}
+		}
 	}
 
-	public void Move(Vector3 heading, bool debug){
+	public override void Move(Vector3 heading, bool debug){
 		rb.velocity += heading.normalized;
-		if(rb.velocity.magnitude > maxVelocity) rb.velocity = rb.velocity.normalized * maxVelocity;
+		if(rb.velocity.magnitude > flock.Speed(this)) rb.velocity = rb.velocity.normalized * flock.Speed(this);
 		if(debug) Debug.DrawLine(transform.position, transform.position + rb.velocity, Color.white);
 
 		Quaternion targetRotation = Quaternion.FromToRotation(transform.forward, rb.velocity) * transform.rotation;
 		transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.fixedDeltaTime * rotationSpeed);
 	}
 
-	public void Rotate(Vector3 rotation){
+	public override void Rotate(Vector3 rotation){
 		transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(rotation), Time.fixedDeltaTime);
 		// transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(Vector3.down), Time.fixedDeltaTime);
 	}
 
-	public Vector3 GetPosition(){return transform.position;}
-	public Vector3 GetRotation(){return transform.rotation.eulerAngles;}
-	public Vector3 GetVelocity(){return rb.velocity;}
-	public void AddAttractor(Attractor attractor){
-		attractors.Add(attractor);
+	public void OnTriggerEnter(Collider col){
+		//Debug.Log("Xrom collided with " + col.gameObject.name);
+		// if(col.gameObject.name == "LandingPad" && landing){
+		// 	Debug.Log("Xrom is landing");
+
+		// 	landing = false;
+		// 	land = true;
+
+		// 	Vector3 differenceVector = landingPad.transform.position - transform.position;
+
+		// 	landingOrigin = transform.position + differenceVector / 2;
+		// 	landingVector = transform.position - landingOrigin;
+		// 	landingPlane = Linear.CrossProduct(rb.velocity.normalized, differenceVector.normalized);
+		// 	landingRadius = differenceVector.magnitude / 2;
+		// 	landingTime = 0.0f;
+
+		// 	rb.velocity = Vector3.zero;
+		// }
 	}
-	public void Land(GameObject landingPad, GameObject landingBody){
-		this.landing = true;
-		AddAttractor(new Attractor(landingPad, float.PositiveInfinity));
-		this.landingBody = landingBody;
-		this.landingPad = landingPad;
+
+	public void SetLandingPad(LandingPad lp){
+		landing = true;
+		AddAttractor(lp.GetLandingPad());
 	}
-	public bool GetLanding(){
-		return this.landing;
+	public bool Landing(){
+		return landing;
 	}
-	public GameObject GetLandingBody(){
-		return landing ? landingBody : null;
+	public bool HasLanded(){
+		return landed;
 	}
-	public Vector3 GetLandingPosition(){
-		return landingPad != null ? landingPad.transform.position : Vector3.zero;
+	public void SetLandingPermission(bool value){
+		landingPermission = value;
 	}
-	public List<Attractor> GetAttractors(){return attractors;}
+	public bool HasLandingPermission(){
+		return landingPermission;
+	}
+	public bool RequestLanding(){
+		return landing;
+	}
 }

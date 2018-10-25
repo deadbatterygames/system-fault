@@ -17,6 +17,8 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable, IDamageab
     Thrusters thrusters = null;
     Boosters boosters = null;
     QuantumDrive quantumDrive = null;
+    IWeapon pulseWeapon;
+    IWeapon kineticWeapon;
 
     LandingGear landingGear;
 
@@ -174,6 +176,9 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable, IDamageab
                     } else ChangeAssistMode(previousAssistMode);
                 }
 
+                // Weapons
+                if (pulseWeapon != null && controlObject.fire) pulseWeapon.Fire();
+
                 // Speedometer
                 shipComputer.UpdateSpeedometer(rb.velocity.magnitude, transform.InverseTransformDirection(rb.velocity).z < -0.5f);
 
@@ -323,6 +328,15 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable, IDamageab
                 } else {
                     quantumDrive = null;
                     Debug.Log("Ship: Quantum Drive disconnected");
+                }
+                break;
+            case GameTypes.ModuleType.LaserCannon:
+                if (connected) {
+                    pulseWeapon = module.GetComponent<IWeapon>();
+                    Debug.Log("Ship: Laser Cannon connected");
+                } else {
+                    pulseWeapon = null;
+                    Debug.Log("Ship: Laser Cannon disconnected");
                 }
                 break;
         }

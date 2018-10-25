@@ -20,7 +20,7 @@ public class ModuleSlot : MonoBehaviour {
 
     Material[] defaultMaterials;
     Material[] reservedMaterials;
-    [SerializeField] Material reservedMaterial;
+    [SerializeField] Material reservedMaterial; // TODO: This should be stored somewhere else...
     MeshRenderer meshRenderer;
 
     void Awake() {

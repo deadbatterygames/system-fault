@@ -8,12 +8,14 @@
 //
 
 public class Atmosphere : MonoBehaviour {
-
+    [SerializeField] Planet planet;
     void OnTriggerEnter(Collider other) {
         // Character Snap
         if (other.GetComponent<CharacterSnap>() != null) {
             other.GetComponent<CharacterSnap>().SetSnapPoint(transform);
         }
+
+        //planet.OnTriggerEnter(other);
     }
 
     void OnTriggerExit(Collider other) {
