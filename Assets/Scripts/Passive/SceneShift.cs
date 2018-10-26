@@ -19,6 +19,7 @@ public class SceneShift : MonoBehaviour {
     ParticleSystem.Particle[] parts = null;
 
     TrailRenderer[] trails;
+    LineRenderer[] lines;
 
     void FixedUpdate() {
         Vector3 currentPos = transform.position;
@@ -65,11 +66,20 @@ public class SceneShift : MonoBehaviour {
                 Vector3[] trailPositions = new Vector3[trails[i].positionCount];
                 trails[i].GetPositions(trailPositions);
 
-                for (int j = 0; j < trailPositions.Length; j++) {
-                    trailPositions[j] -= currentPos;
-                }
+                for (int j = 0; j < trailPositions.Length; j++) trailPositions[j] -= currentPos;
 
                 trails[i].SetPositions(trailPositions);
+            }
+
+            // Lines
+            lines = FindObjectsOfType<LineRenderer>();
+            for (int i = 0; i < lines.Length; i++) {
+                Vector3[] linePositions = new Vector3[lines[i].positionCount];
+                lines[i].GetPositions(linePositions);
+
+                for (int j = 0; j < linePositions.Length; j++) linePositions[j] -= currentPos;
+
+                lines[i].SetPositions(linePositions);
             }
 
             Debug.LogWarning("Scene shifted");
