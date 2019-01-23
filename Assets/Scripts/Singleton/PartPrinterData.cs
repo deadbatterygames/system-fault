@@ -17,7 +17,7 @@ public class PartPrinterData : MonoBehaviour {
     public float printTime = 2f;
     public float[] printCosts;
 
-    public const int MODULE_TYPES = 6;
+    public const int MODULE_TYPES = 5;
     public const int MODULE_TIERS = 3;
 
     bool[,] unlockedModules = new bool[MODULE_TYPES, MODULE_TIERS];
@@ -27,10 +27,12 @@ public class PartPrinterData : MonoBehaviour {
         else if (instance != this) Destroy(gameObject);
 
         if (!printMaterial) Debug.LogError("PartPrinterData: No print material set");
+        if (printCosts.Length != modulePrefabs.Length) Debug.LogError("PartPrinterData: modulePrefabs and printCosts sizes do not match");
 
         DontDestroyOnLoad(gameObject);
 
-        //UnlockAllModules();
+        if (GameManager.instance.TestMode()) UnlockAllModules();
+        else UnlockModule(GameTypes.ModuleType.EnergyPack, 1);
     }
 
     void UnlockAllModules() {
@@ -43,7 +45,14 @@ public class PartPrinterData : MonoBehaviour {
 
     public void UnlockModule(GameTypes.ModuleType moduleType, int tier) {
         unlockedModules[(int)moduleType, tier-1] = true;
-        PlayerHUD.instance.SetInfoPrompt("Tier " + tier  + " " + GameManager.instance.GetModuleTypeString(moduleType) + " unlocked");
+        string tierString;
+        switch (tier) {
+            case 1: tierString = "Bronze "; break;
+            case 2: tierString = "Silver "; break;
+            case 3: tierString = "Gold "; break;
+            default: tierString = "Unknown Tier "; break;
+        }
+        PlayerHUD.instance.SetInfoPrompt(tierString + GameManager.instance.GetModuleTypeString(moduleType) + " unlocked");
     }
 
     public bool IsUnlocked(GameTypes.ModuleType moduleType, int tier) {

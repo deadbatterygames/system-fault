@@ -63,8 +63,8 @@ public class AICluster : Flock {
 		//boids[8].AddAttractor(lp.GetLandingPad());
 		//boids[9].AddAttractor(lp.GetLandingPad());
 
-		((Xrom) boids[7]).SetLandingPad(lp);
-		((Xrom) boids[8]).SetLandingPad(lp);
+		//((Xrom) boids[7]).SetLandingPad(lp);
+		//((Xrom) boids[8]).SetLandingPad(lp);
 		((Xrom) boids[9]).SetLandingPad(lp);
 
 		//attractorPositions.Add(transform.position);

@@ -9,10 +9,14 @@
 
 public class Blueprint : MonoBehaviour {
 
-    [SerializeField] GameTypes.ModuleType moduleType;
-    [SerializeField] [Range(1, 3)] int moduleTier;
-
+    GameTypes.ModuleType moduleType;
+    int moduleTier;
     bool unlocked;
+
+    public void SetBlueprintType(GameTypes.ModuleType type, int tier) {
+        moduleType = type;
+        moduleTier = tier;
+    }
 
     public void Unlock(PrintDrive drive) {
         if (!unlocked) {

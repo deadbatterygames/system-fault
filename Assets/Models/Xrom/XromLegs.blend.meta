@@ -1,0 +1,225 @@
+fileFormatVersion: 2
+guid: b306f1630f0365d4aa0aa30e77f3259f
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: LeftFoot
+    100002: LeftFootBone
+    100004: LeftLowerLeg
+    100006: LeftLowerLegBone
+    100008: LeftPoleTarget
+    100010: LeftUpperLeg
+    100012: LeftUpperLegBone
+    100014: Pelvis
+    100016: PelvisBone
+    100018: RightFoot
+    100020: RightFootBone
+    100022: RightLowerLeg
+    100024: RightLowerLegBone
+    100026: RightPoleTarget
+    100028: RightUpperLeg
+    100030: RightUpperLegBone
+    100032: Skeleton
+    100034: //RootNode
+    400000: LeftFoot
+    400002: LeftFootBone
+    400004: LeftLowerLeg
+    400006: LeftLowerLegBone
+    400008: LeftPoleTarget
+    400010: LeftUpperLeg
+    400012: LeftUpperLegBone
+    400014: Pelvis
+    400016: PelvisBone
+    400018: RightFoot
+    400020: RightFootBone
+    400022: RightLowerLeg
+    400024: RightLowerLegBone
+    400026: RightPoleTarget
+    400028: RightUpperLeg
+    400030: RightUpperLegBone
+    400032: Skeleton
+    400034: //RootNode
+    2100000: Metal
+    2100002: Rubber
+    2100004: BluePaint
+    2100006: RedHot
+    4300000: LeftFoot
+    4300002: LeftLowerLeg
+    4300004: LeftUpperLeg
+    4300006: Pelvis
+    4300008: RightFoot
+    4300010: RightLowerLeg
+    4300012: RightUpperLeg
+    7400000: Walk
+    7400002: Idle
+    9500000: //RootNode
+    13700000: LeftFoot
+    13700002: LeftLowerLeg
+    13700004: LeftUpperLeg
+    13700006: Pelvis
+    13700008: RightFoot
+    13700010: RightLowerLeg
+    13700012: RightUpperLeg
+    2186277476908879412: ImportLogs
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BluePaint
+    second: {fileID: 2100000, guid: 00d6ab50c44bcf54699c7da04b3b6e56, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Metal
+    second: {fileID: 2100000, guid: 47e76139f8a743a479871152357ad14f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: RedHot
+    second: {fileID: 2100000, guid: 3efc12d8d1ba4ba41b59207138fcc352, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Rubber
+    second: {fileID: 2100000, guid: b43751fb8d810884da2bced69096bdd5, type: 2}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 0
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Idle
+      takeName: Idle
+      firstFrame: 0
+      lastFrame: 60
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Walk
+      takeName: Walk
+      firstFrame: 0
+      lastFrame: 60
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 1
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 1
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

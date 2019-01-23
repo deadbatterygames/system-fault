@@ -6,7 +6,8 @@ public class Separator {
 
 	public enum Type {
 		None,
-		LandingBarrier
+		LandingBarrier,
+		Obstacle
 	}
 	public GameObject go;
 	public float radius;

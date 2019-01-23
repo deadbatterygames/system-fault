@@ -21,6 +21,7 @@ public class PlayerCamera : MonoBehaviour {
     [SerializeField] Vector3 shipOffset;
 
     [Header("Raycasting")]
+    [SerializeField] LayerMask targetMask;
     [SerializeField] float usableUIPromptRange = 5f;
     [SerializeField] float dematUIPromptRange = 5f;
 
@@ -54,7 +55,7 @@ public class PlayerCamera : MonoBehaviour {
 	}
 
     public RaycastHit? GetPhysicalTarget(float range) {
-        return targetingSystem.Target(range);
+        return targetingSystem.Target(range, targetMask);
     }
 
     public RaycastHit? GetUsableTarget(float range) {
@@ -72,13 +73,13 @@ public class PlayerCamera : MonoBehaviour {
     void FixedUpdate() {
         if (checkForUsable) {
             RaycastHit? hit = GetUsableTarget(usableUIPromptRange);
-            if (hit != null) PlayerHUD.instance.ToggleUsePrompt(true);
+            if (hit != null) PlayerHUD.instance.ToggleUsePrompt(true, hit.Value.collider.GetComponent<IUsable>().GetName());
             else PlayerHUD.instance.ToggleUsePrompt(false);
         }
 
         if (checkForMaterializable) {
             RaycastHit? hit = GetMaterializableTarget(dematUIPromptRange);
-            if (hit != null) PlayerHUD.instance.ToggleDematPrompt(true);
+            if (hit != null) PlayerHUD.instance.ToggleDematPrompt(true, hit.Value.collider.GetComponent<IMaterializeable>().GetName());
             else PlayerHUD.instance.ToggleDematPrompt(false);
         }
 
@@ -92,20 +93,20 @@ public class PlayerCamera : MonoBehaviour {
 
     public void TogglePerspective() {
         if (thirdPerson) {
-            FirstPerson();
+            SetFirstPerson();
         } else {
-            ThirdPerson();
+            SetThirdPerson();
         }
 
         transform.localRotation = Quaternion.identity;
     }
 
-    public void FirstPerson() {
+    public void SetFirstPerson() {
         transform.localPosition = Vector3.zero;
         thirdPerson = false;
     }
 
-    public void ThirdPerson() {
+    public void SetThirdPerson() {
         transform.localPosition = shipOffset;
         thirdPerson = true;
     }

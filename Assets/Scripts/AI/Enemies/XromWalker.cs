@@ -26,7 +26,7 @@ public class XromWalker : MonoBehaviour, IGroundable {
     [SerializeField] float explosionDelay = 2f;
     [SerializeField] int warningFlashes = 10;
 
-    Rigidbody rb;
+    [SerializeField] Xrom xrom;
 
     // TODO: This will be passed by various discovery functions
     Transform target;
@@ -36,34 +36,40 @@ public class XromWalker : MonoBehaviour, IGroundable {
     bool grounded;
 
     public void Start() {
-        rb = GetComponent<Rigidbody>();
         xromActive = true;
-        SearchForPlayer();
+        //SearchForPlayer();
     }
 
     public void Update() {
         if (xromActive && grounded) {
-            if (target) RotateToPlayer();
+            if (target) RotateToTarget(target);
             else ResetTorsoRotation();
 
-            WalkInCircles();
+            //WalkInCircles();
         }
     }
 
     public void ResetTorsoRotation() {
     }
 
-    public void RotateToPlayer() {
+    public void RotateToTarget(Transform target) {
         Vector3 torsoEulerAngles = transform.localEulerAngles;
         torso.transform.Rotate(transform.up, GetTargetDirection() * torsoRotationSpeed * Time.deltaTime, Space.World);
     }
 
-    void WalkInCircles() {
-        transform.Rotate(Vector3.up, torsoRotationSpeed * Time.deltaTime);
-        torso.transform.Rotate(transform.up, -torsoRotationSpeed * Time.deltaTime, Space.World);
-        rb.AddForce(transform.forward * walkSpeed, ForceMode.VelocityChange);
-        rb.velocity = Vector3.ClampMagnitude(rb.velocity, walkSpeed);
+    public void Rotate(float theta){
+        transform.Rotate(Vector3.up, theta * 10f * torsoRotationSpeed * Time.deltaTime);
+        torso.transform.Rotate(transform.up, theta * 10f * (-torsoRotationSpeed) * Time.deltaTime, Space.World);
+        // Vector3 extensionForward = Vector3.Dot(rb.velocity, transform.forward) * transform.forward;
+        // transform.LookAt(transform.position + extensionForward);
     }
+
+    // void WalkInCircles() {
+    //     transform.Rotate(Vector3.up, torsoRotationSpeed * Time.deltaTime);
+    //     torso.transform.Rotate(transform.up, -torsoRotationSpeed * Time.deltaTime, Space.World);
+    //     rb.AddForce(transform.forward * walkSpeed, ForceMode.VelocityChange);
+    //     rb.velocity = Vector3.ClampMagnitude(rb.velocity, walkSpeed);
+    // }
 
     int GetTargetDirection() {
         // TODO: Make a utility function for this...
@@ -90,6 +96,8 @@ public class XromWalker : MonoBehaviour, IGroundable {
     }
 
     public void DisableXrom() {
+        Destroy(GetComponent<Animator>());
+
         // Rotation
         GetComponent<Rigidbody>().freezeRotation = false;
         Destroy(GetComponent<CharacterSnap>());
@@ -99,6 +107,7 @@ public class XromWalker : MonoBehaviour, IGroundable {
         foreach (XromHeatSink heatSink in heatSinks) heatSink.DisableHeatSink();
 
         head.EyeOff();
+        //xrom.DestroyXrom();
 
         xromActive = false;
     }
@@ -112,17 +121,17 @@ public class XromWalker : MonoBehaviour, IGroundable {
         Rigidbody rb = GetComponent<Rigidbody>();
         GameManager.instance.RemoveGravityBody(rb);
         StopCoroutine("ExplodeXrom");
-        Destroy(gameObject);
+        Destroy(this);
     }
 
     public bool IsXromActive() {
         return xromActive;
     }
 
-    // TODO: FOR TESTING
-    void SearchForPlayer() {
-        target = FindObjectOfType<Player>().transform;
-    }
+    //// TODO: FOR TESTING
+    //void SearchForPlayer() {
+    //    target = FindObjectOfType<Player>().transform;
+    //}
 
     IEnumerator ExplodeXrom() {
         // Warning Flash
@@ -158,7 +167,7 @@ public class XromWalker : MonoBehaviour, IGroundable {
                 Vector3 damageForce = centerToObject.normalized * explosionForce;
                 float damageAmount = explosionBaseDamage / centerToObject.magnitude;
 
-                damageable.Damage(damageAmount, damageForce);
+                damageable.Damage(damageAmount, GameTypes.DamageType.Physical, damageForce);
             }
         }
 

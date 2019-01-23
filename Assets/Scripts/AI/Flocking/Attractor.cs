@@ -7,6 +7,8 @@ public class Attractor {
 	public enum Type
 	{
 		None,
+		PlayerShip,
+		Destination,
 		LandingPoint,
 		LandingPad
 	}
@@ -31,6 +33,8 @@ public class Attractor {
 	public Vector3 GetPosition(){
 
 		switch((int) type){
+			case (int) Attractor.Type.PlayerShip:
+				return go.transform.position - (go.transform.forward * GameManager.instance.ship.GetSpeed());
 			case (int) Attractor.Type.LandingPad:
 				return go.transform.position + (landingPad.transform.position - landingBody.transform.position).normalized * landingPadOffset;
 			default:

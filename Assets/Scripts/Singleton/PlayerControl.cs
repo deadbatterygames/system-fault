@@ -28,7 +28,6 @@ public struct ControlObject {
     public bool fire;
     public bool aim;
     public bool interact;
-    public bool attachShieldCell;
     public bool chargeShieldCell;
     public bool light;
 
@@ -37,7 +36,6 @@ public struct ControlObject {
     public bool weapon0;
     public bool weapon1;
     public bool weapon2;
-    public bool weapon3;
 
     // UI
     public bool menuRight;
@@ -82,8 +80,8 @@ public class PlayerControl : MonoBehaviour {
             currentInput.upDown = Input.GetAxis("Move Up/Down");
             currentInput.roll = Input.GetAxis("Roll");
             currentInput.jump = Input.GetButtonDown("Jump");
-            currentInput.run = Input.GetButton("Run/Change Assist Mode");
-            currentInput.changeAssist = Input.GetButtonDown("Run/Change Assist Mode");
+            currentInput.run = Input.GetButton("Change Assist Mode");
+            currentInput.changeAssist = Input.GetButtonDown("Change Assist Mode");
             currentInput.toggleAssist = Input.GetButtonDown("Toggle Flight Assist");
             currentInput.quantumJump = Input.GetButtonDown("Quantum Jump");
 
@@ -92,17 +90,15 @@ public class PlayerControl : MonoBehaviour {
             currentInput.changeCamera = Input.GetButtonDown("Change Camera");
 
             currentInput.fire = Input.GetButtonDown("Fire");
-            currentInput.aim = Input.GetButtonDown("Aim/Equip Fuel Pack");
+            currentInput.aim = Input.GetButtonDown("Equip Energy Pack/Freelook");
             currentInput.interact = Input.GetButtonDown("Interact");
-            currentInput.attachShieldCell = Input.GetButtonDown("Attach Shield Cell");
             currentInput.chargeShieldCell = Input.GetButton("Charge Shield Cell");
             currentInput.light = Input.GetButtonDown("Light");
 
             currentInput.matterManipilator = Input.GetButtonDown("Matter Manipulator");
-            currentInput.weapon0 = Input.GetButtonDown("Pulse Cannon/Energy Weapon");
-            currentInput.weapon1 = Input.GetButtonDown("Foam Cannon/Kinetic Weapon");
-            currentInput.weapon2 = Input.GetButtonDown("Flame Cannon");
-            currentInput.weapon3 = Input.GetButtonDown("Ice Cannon");
+            currentInput.weapon0 = Input.GetButtonDown("Multicannon Yellow/Energy Weapon");
+            currentInput.weapon1 = Input.GetButtonDown("Multicannon Blue/Kinetic Weapon");
+            currentInput.weapon2 = Input.GetButtonDown("Multicannon Red");
 
             currentInput.menuRight = Input.GetButtonDown("Menu Right");
             currentInput.menuLeft = Input.GetButtonDown("Menu Left");

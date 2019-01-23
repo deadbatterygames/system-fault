@@ -1074,6 +1074,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0597e66b7a45df34ca05bb045b07cb2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxSpeed: 0
+  boundingRadius: 0
+  debug: 1
+  debugHeading: 1
+  debugCohesion: 1
+  debugSeparation: 1
+  debugAlignment: 1
+  debugAttraction: 1
+  debugBounding: 1
+  cohesion: 1
+  alignment: 1
+  separation: 1
   pads:
   - {fileID: 1654079352}
   - {fileID: 1428001357}
@@ -1084,6 +1096,7 @@ MonoBehaviour:
   - {fileID: 567492489}
   - {fileID: 121648101}
   padEmpty: 
+  planet: {fileID: 0}
 --- !u!135 &1139884225
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -1241,11 +1254,6 @@ Prefab:
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 94ccd1aae71ed7d428739b67c714c3a0, type: 2}
   m_IsPrefabAsset: 0
---- !u!135 &1365673636 stripped
-SphereCollider:
-  m_CorrespondingSourceObject: {fileID: 135946271238391830, guid: ff6c4404ff64c814b93b3ec7d1e54d45,
-    type: 2}
-  m_PrefabInternal: {fileID: 1514910618}
 --- !u!1 &1428001357 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1994365822698334, guid: fa18b4ea39844ac43a45c5a6c43ff5a4,
@@ -1413,6 +1421,9 @@ MonoBehaviour:
   debugAlignment: 1
   debugAttraction: 1
   debugBounding: 1
+  cohesion: 1
+  alignment: 1
+  separation: 1
   xromShipPrefab: {fileID: 1938750279755538, guid: c5f7d2008375f114da3da7080a9fede3,
     type: 2}
   planetMesh: {fileID: 1514910620}
@@ -1454,8 +1465,23 @@ MonoBehaviour:
   debugAlignment: 0
   debugAttraction: 0
   debugBounding: 0
+  cohesion: 1
+  alignment: 1
+  separation: 1
   planetMesh: {fileID: 1514910620}
-  atmosphereCollider: {fileID: 1365673636}
+  atmosphereCollider: {fileID: 1514910623}
+--- !u!135 &1514910623
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1514910619}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!4 &1514910627 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4159125793400814, guid: ff6c4404ff64c814b93b3ec7d1e54d45,

@@ -8,6 +8,11 @@ TagManager:
   - Tree
   - XromSpawn
   - Ship
+  - PlayerShipSpawn
+  - IPEarth
+  - IPMoon
+  - IPGas
+  - UIHelp
   layers:
   - Default
   - TransparentFX
@@ -20,12 +25,12 @@ TagManager:
   - Usable
   - Materializable
   - Foliage
-  - Energy
+  - Ignore Projectile
   - Celestial
-  - PlayerBullet
-  - 
-  - 
-  - 
+  - PlayerProjectile
+  - Ignore Player
+  - Shield
+  - Flocking
   - 
   - 
   - 

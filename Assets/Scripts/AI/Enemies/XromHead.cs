@@ -15,10 +15,10 @@ public class XromHead : MonoBehaviour {
     [SerializeField] Material warnMaterial;
     [SerializeField] Material offMaterial;
 
-    MeshRenderer headLightMesh;
+    SkinnedMeshRenderer headLightMesh;
 
     void Start() {
-        headLightMesh = GetComponent<MeshRenderer>();
+        headLightMesh = GetComponent<SkinnedMeshRenderer>();
     }
 
     public void EyeOn() {

@@ -7,7 +7,7 @@
 
 public class GameTypes {
 	public enum ModuleType {
-        FuelPack,
+        EnergyPack,
         Thrusters,
         Boosters,
         QuantumDrive,
@@ -25,15 +25,15 @@ public class GameTypes {
     };
 
     public enum DamageType {
-        Pulse,
-        Gel,
-        Fire,
-        Ice
+        Yellow,
+        Blue,
+        Red,
+        Physical
     };
 
     public enum PlayerWeaponType {
         MatterManipulator,
-        MultiCannon,
+        Multicannon,
         None
     };
 
@@ -42,4 +42,10 @@ public class GameTypes {
         Vital,
         Separator
     };
+
+    public enum SpawnLocation {
+        Moon,
+        Earth,
+        Gas
+    }
 }

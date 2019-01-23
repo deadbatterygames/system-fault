@@ -49,21 +49,23 @@ public class XromLegs : MonoBehaviour {
         }
     }
 	
-	void Update () {
-        if (walker && walker.IsXromActive()) Walk();
+	void FixedUpdate () {
+        //if (walker && walker.IsXromActive()) Walk(walker.rb.velocity.magnitude);
 	}
 
-    void Walk() {
+    void Walk(float speed) {
         bool leftLegComplete;
         bool rightLegComplete;
 
         switch (leftLegPosition) {
             case LegPosition.Idle:
-                leftLegComplete = MoveLeg(leftLegTransforms, legIdleRotations);
-                rightLegComplete = MoveLeg(rightLegTransforms, legUpRotations);
-                if (leftLegComplete && rightLegComplete) {
-                    leftLegPosition = LegPosition.Back;
-                    //rightLegPosition = LegPosition.Forward;
+                if(speed > 0.5f){
+                    leftLegComplete = MoveLeg(leftLegTransforms, legIdleRotations);
+                    rightLegComplete = MoveLeg(rightLegTransforms, legUpRotations);
+                    if (leftLegComplete && rightLegComplete) {
+                        leftLegPosition = LegPosition.Back;
+                        //rightLegPosition = LegPosition.Forward;
+                    }
                 }
                 break;
             case LegPosition.Back:
@@ -97,9 +99,14 @@ public class XromLegs : MonoBehaviour {
         bool complete = true;
 
         for (int i = 0; i < leg.Length; i++) {
-            leg[i].transform.localRotation = Quaternion.Lerp(leg[i].transform.localRotation, desiredRotations[i], animationSpeed * Time.deltaTime);
+            leg[i].transform.localRotation = Quaternion.Lerp(leg[i].transform.localRotation, desiredRotations[i], animationSpeed /* multiply by xrom velocity */ * Time.fixedDeltaTime);
 
             if (Quaternion.Angle(leg[i].transform.localRotation, desiredRotations[i]) > 1f) complete = false;
+            //float projection = Vector3.Dot(leg[i].transform.localRotation.eulerAngles.normalized, desiredRotations[i].eulerAngles.normalized);
+
+            //Debug.Log("Projection is " + projection.ToString());
+
+            //if (projection < 0.9f) complete = false;
         }
 
         return complete;

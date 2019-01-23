@@ -1,0 +1,286 @@
+fileFormatVersion: 2
+guid: dabbb8d1e39a981429d9a57a7401c9b5
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: Armature
+    100002: Body
+    100004: Foot
+    100006: Foot_001
+    100008: Head
+    100010: HeatSinkLeft
+    100012: HeatSinkRight
+    100014: LeftArm
+    100016: LeftFoot
+    100018: LeftForearm
+    100020: LeftHand
+    100022: LeftLeg
+    100024: LeftLowerLeg
+    100026: Legs
+    100028: PoleTarget
+    100030: PoleTarget_001
+    100032: RightArm
+    100034: RightFoot
+    100036: RightForearm
+    100038: RightHand
+    100040: RightLeg
+    100042: RightLowerLeg
+    100044: RightLowerLeg_0
+    100046: RightLowerLeg_001
+    100048: RightUpperLeg
+    100050: RightUpperLeg_001
+    100052: Root
+    100054: Torso
+    100056: //RootNode
+    100058: Bone
+    100060: Bone_001
+    100062: Bone_002
+    100064: LeftHand_0
+    100066: LeftHandBone
+    100068: LeftLowerArmBone
+    100070: LeftUpperArmBone
+    100072: MultiCannon
+    100074: RightHandBone
+    100076: RightLowerArmBone
+    100078: RightUpperArmBone
+    100080: Torso_0
+    100082: TorsoBone
+    100084: Skeleton
+    100086: Skull
+    400000: Armature
+    400002: Body
+    400004: Foot
+    400006: Foot_001
+    400008: Head
+    400010: HeatSinkLeft
+    400012: HeatSinkRight
+    400014: LeftArm
+    400016: LeftFoot
+    400018: LeftForearm
+    400020: LeftHand
+    400022: LeftLeg
+    400024: LeftLowerLeg
+    400026: Legs
+    400028: PoleTarget
+    400030: PoleTarget_001
+    400032: RightArm
+    400034: RightFoot
+    400036: RightForearm
+    400038: RightHand
+    400040: RightLeg
+    400042: RightLowerLeg
+    400044: RightLowerLeg_0
+    400046: RightLowerLeg_001
+    400048: RightUpperLeg
+    400050: RightUpperLeg_001
+    400052: Root
+    400054: Torso
+    400056: //RootNode
+    400058: Bone
+    400060: Bone_001
+    400062: Bone_002
+    400064: LeftHand_0
+    400066: LeftHandBone
+    400068: LeftLowerArmBone
+    400070: LeftUpperArmBone
+    400072: MultiCannon
+    400074: RightHandBone
+    400076: RightLowerArmBone
+    400078: RightUpperArmBone
+    400080: Torso_0
+    400082: TorsoBone
+    400084: Skeleton
+    400086: Skull
+    2100000: Metal
+    2100002: Rubber
+    2100004: BluePaint
+    2100006: RedHot
+    2100008: Screen
+    2300000: Head
+    2300002: HeatSinkLeft
+    2300004: HeatSinkRight
+    2300006: LeftArm
+    2300008: LeftForearm
+    2300010: LeftHand
+    2300012: RightArm
+    2300014: RightForearm
+    2300016: RightHand
+    2300018: Torso
+    2300020: //RootNode
+    2300022: MultiCannon
+    3300000: Head
+    3300002: HeatSinkLeft
+    3300004: HeatSinkRight
+    3300006: LeftArm
+    3300008: LeftForearm
+    3300010: LeftHand
+    3300012: RightArm
+    3300014: RightForearm
+    3300016: RightHand
+    3300018: Torso
+    3300020: //RootNode
+    3300022: MultiCannon
+    4300000: RightFoot
+    4300002: RightLowerLeg
+    4300004: RightLeg
+    4300006: LeftLowerLeg
+    4300008: LeftFoot
+    4300010: LeftLeg
+    4300012: Legs
+    4300014: Torso
+    4300016: Head
+    4300018: LeftArm
+    4300020: LeftForearm
+    4300022: LeftHand
+    4300024: RightArm
+    4300026: RightForearm
+    4300028: RightHand
+    4300030: HeatSinkRight
+    4300032: HeatSinkLeft
+    4300034: MultiCannon
+    7400000: Default Take
+    9500000: //RootNode
+    13700000: LeftFoot
+    13700002: LeftLeg
+    13700004: LeftLowerLeg
+    13700006: Legs
+    13700008: RightFoot
+    13700010: RightLeg
+    13700012: RightLowerLeg
+    13700014: Head
+    13700016: HeatSinkLeft
+    13700018: HeatSinkRight
+    13700020: LeftArm
+    13700022: LeftForearm
+    13700024: LeftHand
+    13700026: Torso
+    13700028: RightArm
+    13700030: RightForearm
+    13700032: RightHand
+    13700034: MultiCannon
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BluePaint
+    second: {fileID: 2100000, guid: 00d6ab50c44bcf54699c7da04b3b6e56, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DamageType
+    second: {fileID: 2100000, guid: 42d0b79151847b144972315c1df89c3a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Light
+    second: {fileID: 2100000, guid: 30e030cb910c4fd44a82926bd31a8b60, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Metal
+    second: {fileID: 2100000, guid: 47e76139f8a743a479871152357ad14f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Paint
+    second: {fileID: 2100000, guid: 00d6ab50c44bcf54699c7da04b3b6e56, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: RedHot
+    second: {fileID: 2100000, guid: 3efc12d8d1ba4ba41b59207138fcc352, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Rubber
+    second: {fileID: 2100000, guid: b43751fb8d810884da2bced69096bdd5, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Screen
+    second: {fileID: 2100000, guid: fb51979e17055b44ab1256b212712d03, type: 2}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 3
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 1
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -12,22 +12,26 @@ public class PlayerData : MonoBehaviour {
 
     public static PlayerData instance = null;
 
-    [SerializeField] GameObject[] bulletPrefabs;
-
+    [Header("Ship")]
     public GameObject dematerializedShipPrefab;
     public float shipTeleportTime = 2f;
     public float shipDamageTolerance = 30f;
-    public float fallTolerance = 50f;
+    public float playerDamageTolerance = 50f;
 
-    public bool hasMatterManipulator;
-    public bool hasMultiCannon;
-
+    [Header("Bullets")]
+    public GameObject[] bulletPrefabs;
     [SerializeField] int maxBullets = 10;
     int[] bulletIndicies = new int[4];
-    List<GameObject> pulseBullets;
+    List<GameObject> yellowBullets = new List<GameObject>();
+    List<GameObject> blueBullets = new List<GameObject>();
+    List<GameObject> redBullets = new List<GameObject>();
 
     [HideInInspector] public bool alive;
-    [HideInInspector] public bool teleporting;
+    [HideInInspector] public bool teleportingShip;
+    [HideInInspector] public bool hasMatterManipulator;
+    [HideInInspector] public bool hasMulticannon;
+    [HideInInspector] public bool blueUnlocked;
+    [HideInInspector] public bool redUnlocked;
 
     void Awake() {
         if (instance == null) instance = this;
@@ -36,22 +40,46 @@ public class PlayerData : MonoBehaviour {
         DontDestroyOnLoad(gameObject);
     }
 
-    void Start() {
-        pulseBullets = new List<GameObject>();
+    public bool IsTypeUnlocked(GameTypes.DamageType type) {
+        switch (type) {
+            case GameTypes.DamageType.Yellow:
+                return true;
+            case GameTypes.DamageType.Blue:
+                return blueUnlocked;
+            case GameTypes.DamageType.Red:
+                return redUnlocked;
+            default:
+                return false;
+        }
     }
 
     public GameObject GetBullet(GameTypes.DamageType bulletType) {
+        int index = CycleBulletIndex(bulletType);
+
         switch (bulletType) {
-            case GameTypes.DamageType.Pulse:
-                if (pulseBullets.Count >= maxBullets) {
-                    // Recycle bullet
-                    int index = CycleBulletIndex(bulletType);
-                    pulseBullets[index].GetComponent<Bullet>().RecycleBullet();
-                    return pulseBullets[index];
-                } else {
+            case GameTypes.DamageType.Yellow:
+                if (yellowBullets.Count >= maxBullets) return yellowBullets[index];
+                else {
                     // Make new bullet
                     GameObject newBullet = Instantiate(bulletPrefabs[0]);
-                    pulseBullets.Add(newBullet);
+                    yellowBullets.Add(newBullet);
+                    return newBullet;
+                }
+            case GameTypes.DamageType.Blue:
+                if (blueBullets.Count >= maxBullets) return blueBullets[index];
+                else {
+                    // Make new bullet
+                    GameObject newBullet = Instantiate(bulletPrefabs[1]);
+                    blueBullets.Add(newBullet);
+                    GameManager.instance.AddGravityBody(newBullet.GetComponent<Rigidbody>());
+                    return newBullet;
+                }
+            case GameTypes.DamageType.Red:
+                if (redBullets.Count >= maxBullets) return redBullets[index];
+                else {
+                    // Make new bullet
+                    GameObject newBullet = Instantiate(bulletPrefabs[2]);
+                    redBullets.Add(newBullet);
                     return newBullet;
                 }
             default:
@@ -61,13 +89,16 @@ public class PlayerData : MonoBehaviour {
     }
 
     int CycleBulletIndex(GameTypes.DamageType bulletType) {
-        if (bulletIndicies[(int)bulletType] >= maxBullets - 1) bulletIndicies[(int)bulletType] = 0;
-        else bulletIndicies[(int)bulletType]++;
-        return bulletIndicies[(int)bulletType];
+        int typeIndex = (int)bulletType;
+        if (bulletIndicies[typeIndex] >= maxBullets - 1) bulletIndicies[typeIndex] = 0;
+        else bulletIndicies[typeIndex]++;
+        return bulletIndicies[typeIndex];
     }
 
     public void ClearBulletLists() {
-        pulseBullets.Clear();
+        yellowBullets.Clear();
+        blueBullets.Clear();
+        redBullets.Clear();
 
         bulletIndicies = new int[4];
     }

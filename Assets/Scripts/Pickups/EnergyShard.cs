@@ -11,7 +11,10 @@ using System.Collections;
 public class EnergyShard : MonoBehaviour, ICollectable {
 
     Rigidbody rb;
-    static float energyUnits = 10f;
+    const float ENERGY_UNITS = 1f;
+
+    bool magnetizeToShip = false;
+    const float SQR_MAGNETIZE_DISTANCE = 22500f;
 
     void Awake() {
         // Add rigidbody to scene
@@ -28,13 +31,33 @@ public class EnergyShard : MonoBehaviour, ICollectable {
     void OnTriggerEnter(Collider other) {
         if (other.CompareTag("Player")) {
             if (other.GetComponentInChildren<ModuleSlot>().connectedModule) {
-                FuelPack fuelPack = other.GetComponentInChildren<FuelPack>();
-                if (!fuelPack.IsFull()) {
-                    fuelPack.AddFuel(energyUnits);
-                    PlayerHUD.instance.ShowEnergySplash();
-                    Pickup();
-                } else PlayerHUD.instance.SetInfoPrompt("Fuel Pack full");
-            } else PlayerHUD.instance.SetInfoPrompt("Not wearing a Fuel Pack");
+                EnergyPack fp = other.GetComponentInChildren<EnergyPack>();
+                AddEnergyToPack(fp);
+            } else PlayerHUD.instance.SetInfoPrompt("Equip an Energy Pack to collect energy");
+        }
+
+        if (other.CompareTag("Ship")) {
+            EnergyPack fp = GameManager.instance.ship.GetEnergyPack();
+            if (fp) {
+                AddEnergyToPack(fp);
+                if (fp.IsFull()) Pickup();
+            }
+        }
+    }
+
+    void AddEnergyToPack(EnergyPack energyPack) {
+        if (!energyPack.IsFull()) {
+            energyPack.AddEnergy(ENERGY_UNITS);
+            PlayerHUD.instance.ShowEnergySplash();
+            Pickup();
+        } else PlayerHUD.instance.SetInfoPrompt("Energy Pack full");
+    }
+
+    void FixedUpdate() {
+        if (magnetizeToShip && GameManager.instance.ship.IsPowered()) {
+            Vector3 toShip = GameManager.instance.ship.transform.position - transform.position;
+            float sqrDistance = toShip.sqrMagnitude;
+            if (sqrDistance < SQR_MAGNETIZE_DISTANCE) transform.Translate(toShip.normalized * Time.fixedDeltaTime * Mathf.Clamp(SQR_MAGNETIZE_DISTANCE / sqrDistance, 10f, 150f), Space.World);
         }
     }
 
@@ -45,6 +68,8 @@ public class EnergyShard : MonoBehaviour, ICollectable {
         GameManager.instance.RemoveGravityBody(rb);
         Destroy(rb);
         Destroy(GetComponent<MeshCollider>());
+
+        magnetizeToShip = true;
     }
 
     IEnumerator Vapourize() {

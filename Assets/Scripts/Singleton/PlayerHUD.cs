@@ -28,11 +28,11 @@ public class PlayerHUD : MonoBehaviour {
     [SerializeField] float infoDisplayTime = 3f;
     [SerializeField] float infoFadeSpeed = 0.5f;
 
-    [Header("Fuel Pack")]
-    [SerializeField] GameObject fuelPackHUD;
+    [Header("Energy Pack")]
+    [SerializeField] GameObject energyPackHUD;
     [SerializeField] Image shields;
     [SerializeField] Image damage;
-    [SerializeField] Image fuel;
+    [SerializeField] Image energy;
     [SerializeField] Image[] availableCells;
     [SerializeField] Image[] chargedCells;
 
@@ -46,10 +46,20 @@ public class PlayerHUD : MonoBehaviour {
     [SerializeField] Image planetUp;
     [SerializeField] Image planetDown;
 
+    [Header("Help")]
+    [SerializeField] bool showHelp;
+    [SerializeField] GameObject playerHelp;
+    [SerializeField] GameObject shipHelp;
+    [SerializeField] GameObject printerHelp;
+    GameObject[] helpObjects;
+
     bool animateDamage;
     bool fadeEnergySplash;
     bool fadeDamageSplash;
     bool fadeInfoPrompt;
+
+    Text useText;
+    Text dematText;
 
     void Awake() {
         if (instance == null) instance = this;
@@ -61,10 +71,15 @@ public class PlayerHUD : MonoBehaviour {
     void Start () {
 		if (!crosshair) Debug.LogError("PlayerHUD: Crosshair not set");
         if (!usePrompt) Debug.LogError("PlayerHUD: Use Prompt not set");
-        if (!fuelPackHUD) Debug.LogError("PlayerHUD: Fuel Pack HUD not set");
+        if (!energyPackHUD) Debug.LogError("PlayerHUD: Energy Pack HUD not set");
         if (!infoPrompt) Debug.LogError("PlayerHUD: Info Prompt not set");
 
-        ResetHUD();
+        useText = usePrompt.GetComponentInChildren<Text>();
+        dematText = dematPrompt.GetComponentInChildren<Text>();
+
+        helpObjects = GameObject.FindGameObjectsWithTag("UIHelp");
+
+        ClearHUD();
         infoPrompt.alpha = 0;
     }
 
@@ -86,6 +101,11 @@ public class PlayerHUD : MonoBehaviour {
             infoPrompt.alpha -= infoFadeSpeed * Time.deltaTime;
             if (infoPrompt.alpha <= 0) fadeInfoPrompt = false;
         }
+
+        if (Input.GetKeyDown(KeyCode.Slash)) {
+            showHelp = !showHelp;
+            foreach (GameObject helpObject in helpObjects) helpObject.SetActive(showHelp);
+        }
     }
 
     public void ShowEnergySplash() {
@@ -105,29 +125,38 @@ public class PlayerHUD : MonoBehaviour {
         StartCoroutine("ShowInfoPrompt");
     } 
 
-    public void ToggleCrosshair(bool show) {
-        if (show) crosshair.enabled = true;
-        else crosshair.enabled = false;
+    public void ToggleCrosshair(bool toggle) {
+        crosshair.enabled = toggle;
     }
 
-    public void ToggleUsePrompt(bool show) {
-        if (show) usePrompt.SetActive(true);
-        else usePrompt.SetActive(false);
+    public void ToggleUsePrompt(bool toggle, string message = "") {
+        if (toggle) useText.text = "Use " + message;
+        usePrompt.SetActive(toggle);
     }
 
-    public void ToggleDematPrompt(bool show) {
-        if (show) dematPrompt.SetActive(true);
-        else dematPrompt.SetActive(false);
+    public void ToggleDematPrompt(bool toggle, string message = "") {
+        if (toggle) dematText.text = "Dematerialize\n" + message;
+        dematPrompt.SetActive(toggle);
     }
 
-    public void ToggleShipRadar(bool show) {
-        if (show) shipRadar.SetActive(true);
-        else shipRadar.SetActive(false);
+    public void ToggleShipRadar(bool toggle) {
+        shipRadar.SetActive(toggle);
     }
 
-    public void TogglePlanetRadar(bool show) {
-        if (show) planetRadar.SetActive(true);
-        else planetRadar.SetActive(false);
+    public void TogglePlanetRadar(bool toggle) {
+        planetRadar.SetActive(toggle);
+    }
+
+    public void TogglePlayerHelp(bool toggle) {
+        playerHelp.SetActive(toggle);
+    }
+
+    public void ToggleShipHelp(bool toggle) {
+        shipHelp.SetActive(toggle);
+    }
+
+    public void TogglePrinterHelp(bool toggle) {
+        printerHelp.SetActive(toggle);
     }
 
     public void UpdateShipRadar(int direction) {
@@ -182,21 +211,21 @@ public class PlayerHUD : MonoBehaviour {
         }
     }
 
-    public void EnableFuelPackHUD(FuelPack fuelPack) {
-        fuel.fillAmount = fuelPack.GetFuelPercentage();
-        shields.fillAmount = fuelPack.GetShieldPercentage();
+    public void EnableEnergyPackHUD(EnergyPack energyPack) {
+        energy.fillAmount = energyPack.GetEnergyPercentage();
+        shields.fillAmount = energyPack.GetShieldPercentage();
         damage.fillAmount = shields.fillAmount;
-        for (int i = 0; i < fuelPack.GetChargedCells(); i++) chargedCells[i].enabled = true;
-        for (int i = 0; i < fuelPack.GetAvailableCells(); i++) availableCells[i].enabled = true;
+        for (int i = 0; i < energyPack.GetChargedCells(); i++) chargedCells[i].enabled = true;
+        for (int i = 0; i < energyPack.GetAvailableCells(); i++) availableCells[i].enabled = true;
 
-        fuelPackHUD.SetActive(true);
+        energyPackHUD.SetActive(true);
     }
 
-    public void DisableFuelPackHUD() {
+    public void DisableEnergyPackHUD() {
         foreach (Image cell in chargedCells) cell.enabled = false;
         foreach (Image cell in availableCells) cell.enabled = false;
 
-        fuelPackHUD.SetActive(false);
+        energyPackHUD.SetActive(false);
     }
 
     public void AddShields(float shieldPercentage) {
@@ -221,16 +250,20 @@ public class PlayerHUD : MonoBehaviour {
         for (int i = cells; i < 3; i++) chargedCells[i].enabled = false;
     }
 
-    public void UpdateFuelGauge(float fuelPercentage) {
-        fuel.fillAmount = fuelPercentage;
+    public void UpdateEnergyGauge(float energyPercentage) {
+        energy.fillAmount = energyPercentage;
     }
 
-    public void ResetHUD() {
-        DisableFuelPackHUD();
+    public void ClearHUD() {
+        DisableEnergyPackHUD();
         ToggleCrosshair(false);
         TogglePlanetRadar(false);
         ToggleDematPrompt(false);
         ToggleUsePrompt(false);
+        TogglePrinterHelp(false);
+        ToggleShipHelp(false);
+        TogglePlayerHelp(false);
+        infoPrompt.alpha = 0f;
     }
 
     IEnumerator ShowDamage() {

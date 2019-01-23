@@ -20,13 +20,15 @@ public static class FlockingManager {
 		Vector3[] cohesionVectors = new Vector3[]{};
 		if(cohesion) cohesionVectors = Cohesion(boids, flockSize, debug && debugCohesion);
 		Vector3[] flockSeparationVectors = new Vector3[]{};
-		if(separation) flockSeparationVectors = FlockSeparation(boids, debug && debugSeparation);
+		if(separation) flockSeparationVectors = FlockSeparation(boids, flockSize, debug && debugSeparation);
 		Vector3[] separationVectors = new Vector3[]{};
 		separationVectors = Separation(boids, separators, debug && debugSeparation);
 		Vector3[] alignmentVectors = new Vector3[]{};
 		if(alignment) alignmentVectors = Alignment(boids, flockSize, debug && debugAlignment);
 		Vector3[] attractionVectors = Attraction(boids, attractors, debug && debugAttraction);
 		Vector3[] boundingVectors = Bounding(boids, boundingOrigin, boundingScale, debug && debugBounding);
+
+		//if(debug) DrawPerceptiveDistance(boids);
 
 		for(int i = 0; i < Mathf.Max(cohesionVectors.Length, flockSeparationVectors.Length, separationVectors.Length, alignmentVectors.Length, attractionVectors.Length, boundingVectors.Length); i++){
 			//Debug.Log("FlockingManager::Headings ~ Creating heading from cohesion vector " + Vector3ToString(cohesionVectors[i]));
@@ -38,8 +40,14 @@ public static class FlockingManager {
 
 			Vector3 vector = Vector3.zero;
 
-			if(i < cohesionVectors.Length && boids[i].flocking) vector += cohesionVectors[i];
-			if(i < flockSeparationVectors.Length && boids[i].flocking) vector += flockSeparationVectors[i];
+			if(i < cohesionVectors.Length && boids[i].flocking){
+				//if(debug && debugCohesion) Debug.Log("FlockingManager::Headings ~ Adding cohesion vector " + cohesionVectors[i].ToString() + " to boid " + boids[i].name);
+				vector += cohesionVectors[i];
+			}
+			if(i < flockSeparationVectors.Length && boids[i].flocking){
+				//if(debug && debugSeparation) Debug.Log("FlockingManager::Headings ~ Adding flocking separation vector " + flockSeparationVectors[i].ToString() + " to boid " + boids[i].name);
+				vector += flockSeparationVectors[i];
+			}
 			if(i < separationVectors.Length) vector += separationVectors[i];
 			if(i < alignmentVectors.Length && boids[i].flocking) vector += alignmentVectors[i];
 			if(i < attractionVectors.Length) vector += attractionVectors[i];
@@ -65,6 +73,12 @@ public static class FlockingManager {
 		}
 
 		return newHeadings.ToArray();
+	}
+
+	public static void DrawPerceptiveDistance(Boid[] boids){
+		foreach(Boid boid in boids){
+			Debug.DrawLine(boid.GetPosition(), boid.GetPosition() + (boid.transform.forward * boid.PerceptiveDistance()), Color.cyan);
+		}
 	}
 
 	public static Vector3 Rotation(Boid[] boids){
@@ -107,10 +121,11 @@ public static class FlockingManager {
 
 			if(neighbours > 0) {
 				vector = (vector / neighbours) - boids[i].GetPosition();
-				vector = vector * Happiness(neighbours, flockSize);
-				if(debug) Debug.DrawLine(boids[i].GetPosition(), boids[i].GetPosition() + vector, Color.green);
+				//vector = vector.normalized * Mathf.Log(vector.magnitude * Happiness(neighbours, flockSize));
+				//vector = vector * Happiness(neighbours, flockSize);
 			}
 
+			if(debug) Debug.DrawLine(boids[i].GetPosition(), boids[i].GetPosition() + vector, Color.green);
 			cohesionVectors.Add(vector);
 			//Debug.Log("FlockingManager::Cohesion ~ Calculated cohesion vector of " + Vector3ToString(cohesionVectors[i]));
 		}
@@ -122,11 +137,12 @@ public static class FlockingManager {
 		return (1 / (Mathf.Sqrt(0.2f * Mathf.PI))) * Mathf.Exp(-Mathf.Pow(x, 2) / 0.2f);
 	}
 
-	private static Vector3[] FlockSeparation(Boid[] boids, bool debug){
+	private static Vector3[] FlockSeparation(Boid[] boids, int flockSize, bool debug){
 		List<Vector3> separationVectors = new List<Vector3>();
 
 		for(int i = 0; i < boids.Length; i++){
 			Vector3 vector = Vector3.zero;
+			int neighbours = 0;
 
 			for(int j = 0; j < boids.Length; j++){
 				if(i != j && boids[j].flocking){
@@ -134,10 +150,16 @@ public static class FlockingManager {
 
 					if(Mathf.Abs(differenceVector.magnitude) < boids[i].PerceptiveDistance()){
 
-						vector -= differenceVector;
+						vector -= differenceVector.normalized * (boids[i].PerceptiveDistance() - differenceVector.magnitude);
+						neighbours++;
+						//vector -= Separate(differenceVector.magnitude, boids[i].PerceptiveDistance()) * differenceVector.normalized;
 					}
 				}
 			}
+
+			// if(neighbours > 0){
+			// 	vector = vector * Happiness(neighbours, flockSize);
+			// }
 
 			if(debug) Debug.DrawLine(boids[i].GetPosition(), boids[i].GetPosition() + vector, Color.red);
 			separationVectors.Add(vector);
@@ -160,9 +182,10 @@ public static class FlockingManager {
 
 					//Debug.Log("FlockingManager::Separation ~ A flock member has entered the influence of a separator");
 
-					Vector3 avoidanceVector = differenceVector * Separate(differenceVector.magnitude, separators[j].radius);//Avoid(Mathf.Abs(differenceVector.magnitude / separators[j].radius));//Mathf.Pow(1 + (separatorScales[j] - Mathf.Abs(differenceVector.magnitude) / separatorScales[j]), 2);
-					if(debug) Debug.DrawLine(boids[i].GetPosition(), boids[i].GetPosition() - avoidanceVector, Color.magenta);
-					vector -= avoidanceVector;
+					//Vector3 avoidanceVector = differenceVector * Separate(differenceVector.magnitude, separators[j].radius);//Avoid(Mathf.Abs(differenceVector.magnitude / separators[j].radius));//Mathf.Pow(1 + (separatorScales[j] - Mathf.Abs(differenceVector.magnitude) / separatorScales[j]), 2);
+					float depth = separators[j].radius - differenceVector.magnitude;
+					//if(debug) Debug.DrawLine(boids[i].GetPosition(), boids[i].GetPosition() - differenceVector.normalized * depth, Color.magenta);
+					vector -= differenceVector.normalized * depth;
 				}
 			}
 
@@ -173,9 +196,10 @@ public static class FlockingManager {
 				if(debug) Debug.DrawLine(localSeparators[j].GetPosition(), localSeparators[j].GetPosition() + Vector3.down * localSeparators[j].radius, Color.red);
 
 				if(Mathf.Abs(differenceVector.magnitude) < localSeparators[j].radius){
-					Vector3 avoidanceVector = differenceVector * Separate(differenceVector.magnitude, localSeparators[j].radius);
-					if(debug) Debug.DrawLine(boids[i].GetPosition(), boids[i].GetPosition() - avoidanceVector, Color.magenta);
-					vector -= avoidanceVector;
+					//Vector3 avoidanceVector = differenceVector * Separate(differenceVector.magnitude, localSeparators[j].radius);
+					float depth = localSeparators[j].radius - differenceVector.magnitude;
+					//if(debug) Debug.DrawLine(boids[i].GetPosition(), boids[i].GetPosition() - differenceVector.normalized * depth, Color.magenta);
+					vector -= differenceVector.normalized * depth;
 				}
 			}
 
@@ -204,9 +228,11 @@ public static class FlockingManager {
 					}
 				}
 			}
+		
+			//vector = vector.normalized * Mathf.Log(vector.magnitude);
 
-			//if(neighbours > 0) vector = vector / neighbours;
-			if(debug) Debug.DrawLine(boids[i].GetPosition(), boids[i].GetPosition() + vector.normalized * boids[i].PerceptiveDistance(), Color.blue);
+			if(neighbours > 0) vector = vector / neighbours;
+			if(debug) Debug.DrawLine(boids[i].GetPosition(), boids[i].GetPosition() + vector, Color.blue);
 			//Debug.Log("FlockingManager::Alignment ~ Adding aligment vector " + Vector3ToString(vector));
 			alignmentVectors.Add(vector);
 		}
@@ -215,6 +241,7 @@ public static class FlockingManager {
 	}
 
 	private static float Attract(float distance, float radius){
+		//if(radius == float.PositiveInfinity) return 0.01f;
 		return (radius - distance) / radius;
 	}
 
@@ -255,7 +282,7 @@ public static class FlockingManager {
 				}
 			}
 
-			attractionVectors.Add(vector);
+			attractionVectors.Add(vector.normalized * Mathf.Sqrt(vector.magnitude));
 		}
 
 		return attractionVectors.ToArray();
@@ -270,7 +297,7 @@ public static class FlockingManager {
 			Vector3 differenceVector = boundingOrigin - boids[i].GetPosition();
 			Vector3 vector = Vector3.zero;
 			if(Mathf.Abs(differenceVector.magnitude) > boundingScale){
-				vector = differenceVector.normalized * (Mathf.Abs(differenceVector.magnitude) - boundingScale/ boundingScale);
+				vector = differenceVector.normalized * ((Mathf.Abs(differenceVector.magnitude) - boundingScale) / boundingScale);
 				if(debug){
 					Debug.DrawLine(boids[i].GetPosition(), boids[i].GetPosition() + vector, Color.yellow);
 					//Debug.Log("FlockingManager")

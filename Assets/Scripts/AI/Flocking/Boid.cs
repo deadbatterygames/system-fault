@@ -6,21 +6,25 @@ using UnityEngine;
 public class Boid : MonoBehaviour {
 
 	protected Rigidbody rb;
-	protected float perceptiveDistance = 50.0f;
+	[SerializeField] protected float perceptiveDistance;
 	protected List<Attractor> attractors;
 	protected List<Separator> separators;
-	protected Flock flock;
+	[SerializeField] protected Flock flock;
 	public bool flocking;
+	public bool grounded;
 	void Awake(){
 		rb = transform.GetComponent<Rigidbody>();
 		attractors = new List<Attractor>();
 		separators = new List<Separator>();
-		flocking = true;
+		//flocking = true;
 	}
 	public virtual void Move(Vector3 heading, bool debug){}
 	public virtual void Rotate(Vector3 rotation){}
 	public void SetFlock(Flock flock){
 		this.flock = flock;
+	}
+	public void RemoveFromFlock(){
+		if(this.flock != null) this.flock.RemoveBoid(this);
 	}
 	public Flock GetFlock(){
 		return flock;
@@ -35,7 +39,11 @@ public class Boid : MonoBehaviour {
 		return rb.velocity;
 	}
 	public float PerceptiveDistance(){
+		//Debug.Log(gameObject.name + " has perceptive distance " + perceptiveDistance.ToString());
 		return perceptiveDistance;
+	}
+	public void SetPerceptiveDistance(float perceptiveDistance){
+		this.perceptiveDistance = perceptiveDistance;
 	}
 	// public void Land(GameObject landingPad, GameObject landingBody){
 	// 	AddAttractor(new Attractor(landingPad, float.PositiveInfinity, Attractor.Type.LandingPoint));

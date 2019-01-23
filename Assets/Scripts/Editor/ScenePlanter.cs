@@ -19,7 +19,7 @@ public class ScenePlanter : Editor {
 
     void OnSceneGUI() {
         Event e = Event.current;
-        if (e.keyCode == KeyCode.P && e.type == EventType.KeyDown) Plant();
+        if (e.keyCode == KeyCode.L && e.type == EventType.KeyDown) Plant();
     }
 
     void Plant() {

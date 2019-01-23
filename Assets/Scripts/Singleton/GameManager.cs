@@ -19,15 +19,34 @@ public class GameManager : MonoBehaviour {
 
     Transform playerSpawn;
 
+    List<GameObject> earthInterestPoints = new List<GameObject>();
+    List<GameObject> moonInterestPoints = new List<GameObject>();
+    List<GameObject> gasInterestPoints = new List<GameObject>();
+
     GravityWell currentWell = null;
     List<GravityWell> gravityWells = new List<GravityWell>();
 
+    [Header("Prefabs")]
     [SerializeField] GameObject playerPrefab;
+    [SerializeField] GameObject playerShipPrefab;
+    [SerializeField] GameObject crystalPrefab;
+    [SerializeField] GameObject blueprintPrefab;
+    [SerializeField] GameObject matterManipulatorPrefab;
+    [SerializeField] GameObject multicannonPrefab;
     [SerializeField] GameObject xromPrefab;
+
+    [Header("Testing")]
+    [SerializeField] GameTypes.SpawnLocation spawnLocation;
+    [SerializeField] bool testMode;
+    [SerializeField] float equipmentSpawnHeight = 10f;
+    [SerializeField] float equipmentSpawnSeparation = 5f;
+    [SerializeField][Range(0,2)] int equipmentTier;
 
     public const float MAX_PLAYER_SPEED = 300f;
 
+    [HideInInspector] public Ship ship;
     PlayerCamera playerCam;
+
 
     void Awake() {
         if (instance == null) instance = this;
@@ -43,8 +62,32 @@ public class GameManager : MonoBehaviour {
         playerCam = FindObjectOfType<PlayerCamera>();
         if (!playerCam) Debug.LogError("GameManager: No PlayerCam exists in the scene");
 
-        playerSpawn = GameObject.Find("PlayerSpawn").transform;
-        if (!playerSpawn) Debug.LogError("GameManager: No PlayerSpawn exists in the scene");
+        // Interest Points
+        moonInterestPoints.AddRange(GameObject.FindGameObjectsWithTag("IPMoon"));
+        earthInterestPoints.AddRange(GameObject.FindGameObjectsWithTag("IPEarth"));
+        gasInterestPoints.AddRange(GameObject.FindGameObjectsWithTag("IPGas"));
+
+        if (moonInterestPoints.Count < PartPrinterData.MODULE_TYPES + 2) Debug.LogError("GameManager: Not enough Moon interest points");
+        if (earthInterestPoints.Count < PartPrinterData.MODULE_TYPES + 2) Debug.LogError("GameManager: Not enough Earth interest points");
+        if (gasInterestPoints.Count < PartPrinterData.MODULE_TYPES + 2) Debug.LogError("GameManager: Not enough Gas interest points");
+
+        ShuffleInterestPoints();
+
+        switch (spawnLocation) {
+            case GameTypes.SpawnLocation.Moon: playerSpawn = moonInterestPoints[0].transform; break;
+            case GameTypes.SpawnLocation.Earth: playerSpawn = earthInterestPoints[0].transform; break;
+            case GameTypes.SpawnLocation.Gas: playerSpawn = gasInterestPoints[0].transform; break;
+        }
+
+        // Blueprints
+        SpawnBlueprints(moonInterestPoints, 1);
+        SpawnBlueprints(earthInterestPoints, 2);
+        SpawnBlueprints(gasInterestPoints, 3);
+        
+        // Energy
+        SpawnEnergy(earthInterestPoints);
+        SpawnEnergy(moonInterestPoints);
+        SpawnEnergy(gasInterestPoints);
 
         // Gravity
         gravityBodies.AddRange(FindObjectsOfType<Rigidbody>());
@@ -52,37 +95,116 @@ public class GameManager : MonoBehaviour {
         currentWell = FindClosestWell();
         ChangeGravityWell(currentWell);
 
-        // Player Spawn
-        SpawnPlayer(playerSpawn, Vector3.zero);
-        playerSpawn.gameObject.SetActive(false);
-        PlayerCamera.instance.MoveCamToPlayer();
+        // DELETE DIS ###########################
+        PlayerData.instance.blueUnlocked = true;
+        PlayerData.instance.redUnlocked = true;
+        // DELETE DIS ###########################
 
-        // Xrom Spawns
-        SpawnXroms();
+        // Starting Spawn
+        SpawnPlayer(playerSpawn, Vector3.zero);
+        if (testMode) {
+            PlayerData.instance.hasMatterManipulator = true;
+            PlayerData.instance.hasMulticannon = true;
+            PlayerData.instance.blueUnlocked = true;
+            PlayerData.instance.redUnlocked = true;
+
+            GiveEquipment(PartPrinterData.instance.modulePrefabs[0 + equipmentTier], 0f);
+            GiveEquipment(PartPrinterData.instance.modulePrefabs[3 + equipmentTier], 0f);
+            GiveEquipment(PartPrinterData.instance.modulePrefabs[6 + equipmentTier], 0f);
+            GiveEquipment(PartPrinterData.instance.modulePrefabs[9 + equipmentTier], 0f);
+            GiveEquipment(PartPrinterData.instance.modulePrefabs[12 + equipmentTier], 0f);
+
+        } else {
+            GiveEquipment(PartPrinterData.instance.modulePrefabs[0], 0f);
+            GiveEquipment(matterManipulatorPrefab, 0f);
+            GiveEquipment(multicannonPrefab, 0f);
+        }
+
+        // Ship
+        SpawnShip(moonInterestPoints[1].transform);
+        if (testMode) {
+            ship.transform.position = playerSpawn.position + playerSpawn.forward * 20f + playerSpawn.up * 20f;
+            ship.transform.rotation = playerSpawn.rotation;
+        }
+
+        // Camera
+        PlayerCamera.instance.MoveCamToPlayer();
+        PlayerHUD.instance.ClearHUD();
 
         Time.timeScale = 1f;
     }
 
-    public void SpawnPlayer(Transform spawnPoint, Vector3 spawnVelocity) {
-        if (FindObjectOfType<Player>() == null) {
-            Rigidbody playerRB = Instantiate(playerPrefab, spawnPoint.position, spawnPoint.rotation).GetComponent<Rigidbody>();
-            AddGravityBody(playerRB);
-            playerRB.velocity = spawnVelocity;
-            PlayerControl.instance.TakeControl(playerRB.GetComponent<IControllable>());
+    public void ShuffleInterestPoints() {
+        earthInterestPoints = ShuffleList(earthInterestPoints);
+        moonInterestPoints = ShuffleList(moonInterestPoints);
+        gasInterestPoints = ShuffleList(gasInterestPoints);
+    }
+
+    public List<GameObject> ShuffleList(List<GameObject> list) {
+        for (int i = 0; i < list.Count; i++) {
+            int rnd = Random.Range(i, list.Count);
+
+            GameObject temp = list[i];
+            list[i] = list[rnd];
+            list[rnd] = temp;
+        }
+
+        return list;
+    }
+
+    public void SpawnBlueprints(List<GameObject> ipList, int tier) {
+        for (int i = 2; i < PartPrinterData.MODULE_TYPES + 2; i++) {
+            Blueprint bp = Instantiate(blueprintPrefab, ipList[i].transform.position +
+                ipList[i].transform.up * 1.75f,
+                ipList[i].transform.rotation,
+                ipList[i].transform.parent).GetComponent<Blueprint>();
+
+            if (i == 2 && tier != 3) bp.SetBlueprintType((GameTypes.ModuleType)i-2, tier+1);
+            else bp.SetBlueprintType((GameTypes.ModuleType)i-2, tier);
         }
     }
 
-    public void SpawnXroms() {
-        foreach (GameObject spawn in GameObject.FindGameObjectsWithTag("XromSpawn")) {
-            AddGravityBody(Instantiate(xromPrefab, spawn.transform.position, spawn.transform.rotation).GetComponent<Rigidbody>());
-            Destroy(spawn.GetComponentInChildren<MeshRenderer>());
+    public void SpawnEnergy(List<GameObject> ipList) {
+        for (int i = PartPrinterData.MODULE_TYPES+2; i < ipList.Count; i++) {
+            Instantiate(crystalPrefab, ipList[i].transform.position, ipList[i].transform.rotation, ipList[i].transform.parent);
         }
+    }
+
+    public void SpawnShip(Transform spawnPoint) {
+        if (FindObjectOfType<Ship>() == null) {
+            ship = Instantiate(playerShipPrefab, spawnPoint.position + spawnPoint.up, spawnPoint.rotation).GetComponent<Ship>();
+            AddGravityBody(ship.GetComponent<Rigidbody>());
+        }
+    }
+
+    public void SpawnPlayer(Transform spawnPoint, Vector3 spawnVelocity) {
+        if (FindObjectOfType<Player>() == null) {
+            GameObject player = Instantiate(playerPrefab, spawnPoint.position, spawnPoint.rotation);
+            Rigidbody playerRB = player.GetComponent<Rigidbody>();
+            AddGravityBody(playerRB);
+            playerRB.velocity = spawnVelocity;
+            PlayerControl.instance.TakeControl(playerRB.GetComponent<IControllable>());
+            FlockingController.CreateSeparator(new Separator(player, 10f));
+        }
+    }
+
+    public void GiveEquipment(GameObject equipment, float horizontalOffset) {
+        equipmentSpawnHeight += equipmentSpawnSeparation;
+
+        Rigidbody rb = Instantiate(equipment,
+            playerSpawn.position + playerSpawn.up * equipmentSpawnHeight + playerSpawn.forward * 10f + playerSpawn.right * horizontalOffset,
+            playerSpawn.rotation, null).GetComponent<Rigidbody>();
+
+        AddGravityBody(rb);
     }
 
     public void DespawnPlayer() {
         Player player = FindObjectOfType<Player>();
         if (player) {
-            RemoveGravityBody(player.GetComponent<Rigidbody>());
+            Rigidbody playerRB = player.GetComponent<Rigidbody>();
+            foreach (Fluid fluid in FindObjectsOfType<Fluid>()) fluid.RemoveFluidBody(playerRB);
+            RemoveGravityBody(playerRB);
+            FlockingController.DestroySeparator(player.gameObject);
             Destroy(player.gameObject);
         }
     }
@@ -93,14 +215,6 @@ public class GameManager : MonoBehaviour {
 
     public void RemoveGravityBody(Rigidbody rb) {
         gravityBodies.Remove(rb);
-    }
-
-    // TODO: Remove
-    public void Update() {
-        if (Input.GetKeyDown(KeyCode.P)) {
-            Player p = FindObjectOfType<Player>();
-            if (p) p.Damage(21.276f, Vector3.zero);
-        }
     }
 
     void FixedUpdate() {
@@ -140,38 +254,45 @@ public class GameManager : MonoBehaviour {
     public IEnumerator PlayerDeath() {
         Time.timeScale = 0.25f;
         Debug.LogWarning("Player: DEAD!");
-        PlayerHUD.instance.ResetHUD();
+        PlayerHUD.instance.ClearHUD();
         PlayerHUD.instance.ToggleShipRadar(false);
+        PlayerHUD.instance.SetInfoPrompt("You died! :(");
 
         yield return new WaitForSecondsRealtime(3f);
 
+        earthInterestPoints.Clear();
+        moonInterestPoints.Clear();
+        gasInterestPoints.Clear();
+
         gravityBodies.Clear();
         gravityWells.Clear();
-        PlayerData.instance.ClearBulletLists();
 
-        AsyncOperation reloadScene = SceneManager.LoadSceneAsync("TestScene");
+        PlayerData.instance.ClearBulletLists();
+        PlayerData.instance.hasMatterManipulator = false;
+        PlayerData.instance.hasMulticannon = false;
+
+        AsyncOperation reloadScene = SceneManager.LoadSceneAsync("TestScene", LoadSceneMode.Single);
         while (!reloadScene.isDone) {
+            PlayerHUD.instance.SetInfoPrompt("Loading...");
             Debug.LogWarning("GameManager: Loading...");
             yield return null;
         }
-
-        Resources.UnloadUnusedAssets();
 
         Start();
     }
 
     public string GetModuleTypeString(GameTypes.ModuleType moduleType) {
         switch (moduleType) {
-            case GameTypes.ModuleType.FuelPack:
-                return "Fuel Pack";
-            case GameTypes.ModuleType.Boosters:
-                return "Boosters";
-            case GameTypes.ModuleType.Thrusters:
-                return "Thrusters";
-            case GameTypes.ModuleType.QuantumDrive:
-                return "Quantum Drive";
-            default:
-                return "Unknown module type";
+            case GameTypes.ModuleType.EnergyPack: return "Energy Pack";
+            case GameTypes.ModuleType.Boosters: return "Boosters";
+            case GameTypes.ModuleType.Thrusters: return "Thrusters";
+            case GameTypes.ModuleType.QuantumDrive: return "Quantum Drive";
+            case GameTypes.ModuleType.LaserCannon: return "Laser Cannon";
+            default: return "Unknown module type";
         }
+    }
+
+    public bool TestMode() {
+        return testMode;
     }
 }
