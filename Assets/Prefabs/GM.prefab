@@ -62,8 +62,11 @@ MonoBehaviour:
   multicannonPrefab: {fileID: 1545196223467270, guid: 117e8342b1b108346897543e39fe0239,
     type: 3}
   xromPrefab: {fileID: 1188217680102406, guid: ce6cc1e631e52a04d9137b99f32a6904, type: 3}
+  spawnLocation: 0
   testMode: 0
+  equipmentSpawnHeight: 10
   equipmentSpawnSeparation: 5
+  equipmentTier: 1
   ship: {fileID: 0}
 --- !u!114 &114243553186129760
 MonoBehaviour:
@@ -93,7 +96,7 @@ MonoBehaviour:
     type: 3}
   shipTeleportTime: 3
   shipDamageTolerance: 30
-  fallTolerance: 50
+  playerDamageTolerance: 50
   bulletPrefabs:
   - {fileID: 1182280151139152, guid: 050bf6e2a47d4ae48b26956868ff3b80, type: 3}
   - {fileID: 1182280151139152, guid: 399755ca273d06642aeeb02f7652eeb1, type: 3}
@@ -173,37 +176,11 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1953795909229534}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6fd26bac8428bbb4d9790b41c16ac99c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   xromFlockPrefab: {fileID: 1542343575561727086, guid: 063372812b00859469b9ecb2809dbc06,
     type: 3}
-  POI:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   flockingTest: 0
