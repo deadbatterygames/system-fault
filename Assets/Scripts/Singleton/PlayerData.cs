@@ -16,7 +16,6 @@ public class PlayerData : MonoBehaviour {
     public GameObject dematerializedShipPrefab;
     public float shipTeleportTime = 2f;
     public float shipDamageTolerance = 30f;
-    public float playerDamageTolerance = 50f;
 
     [Header("Bullets")]
     public GameObject[] bulletPrefabs;

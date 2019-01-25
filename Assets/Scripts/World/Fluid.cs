@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 
 //
 // Fluid.cs
@@ -28,10 +29,12 @@ public class Fluid : MonoBehaviour
     void FixedUpdate() {
         if (rigidbodies.Count > 0) {
             foreach (Rigidbody rb in rigidbodies) {
-                if (!rb.isKinematic) {
-                    Vector3 toObject = rb.position - transform.position;
-                    rb.AddForce(toObject.normalized * sqrBuoyancy / toObject.sqrMagnitude, ForceMode.Acceleration);
-                }
+                if (rb) {
+                    if (!rb.isKinematic) {
+                        Vector3 toObject = rb.position - transform.position;
+                        rb.AddForce(toObject.normalized * sqrBuoyancy / toObject.sqrMagnitude, ForceMode.Acceleration);
+                    }
+                } else rigidbodies = rigidbodies.Where(x => x != null).ToList();
             }
         }
     }

@@ -23,14 +23,22 @@ public class MatterManipulator : MonoBehaviour, IWeapon {
 	void Start () {
         if (snapPoint == null) Debug.LogError("MatterManipulator: No snap point set");
 		if (dematMaterial == null) Debug.LogError("MatterManipulator: No demat material set");
+
+        if (GameManager.instance.IsInTestMode()) ConnectAllModules();
 	}
+
+    void ConnectAllModules() {
+        foreach (ShipModule module in FindObjectsOfType<ShipModule>()) foreach (ModuleSlot moduleSlot in GameManager.instance.ship.GetComponentsInChildren<ModuleSlot>()) {
+            if (!moduleSlot.connectedModule && moduleSlot.slotType == module.moduleType) ConnectModule(module, moduleSlot);
+        }
+    }
 
     public void Fire() {
         if (heldObject == null) {
             RaycastHit? hit = FindObjectOfType<PlayerCamera>().GetMaterializableTarget(dematRange);
             if (hit != null) GrabObject(hit.Value.collider.gameObject);
         } else {
-            if (assignedSlot) ConnectModule(assignedSlot);
+            if (assignedSlot) ConnectModule(heldModule, assignedSlot);
             else DropObject();
         }
     }
@@ -45,7 +53,7 @@ public class MatterManipulator : MonoBehaviour, IWeapon {
                 if (playerSlot.connectedModule == null) {
                     PlayerHUD.instance.EnableEnergyPackHUD(heldObject.GetComponent<EnergyPack>());
                     string moduleName = heldModule.GetName();
-                    ConnectModule(playerSlot);
+                    ConnectModule(heldModule, playerSlot);
                     PlayerHUD.instance.SetInfoPrompt(moduleName + " equipped");
                 } else PlayerHUD.instance.SetInfoPrompt("Another Energy Pack is already equipped");
             } else PlayerHUD.instance.SetInfoPrompt("Not holding a Energy Pack");
@@ -58,31 +66,28 @@ public class MatterManipulator : MonoBehaviour, IWeapon {
         }
     }
 
-    void ConnectModule(ModuleSlot slot) {
-        Rigidbody rb = heldObject.GetComponent<Rigidbody>();
+    void ConnectModule(ShipModule module, ModuleSlot slot) {
+        Rigidbody rb = module.GetComponent<Rigidbody>();
         GameManager.instance.RemoveGravityBody(rb);
         Destroy(rb);
 
-        heldObject.transform.SetParent(slot.transform);
-
-        heldModule = heldObject.GetComponent<ShipModule>();
-        slot.connectedModule = heldModule;
-        heldModule.connected = true;
+        module.transform.SetParent(slot.transform);
+        slot.connectedModule = module;
+        module.connected = true;
 
         slot.SetActive(false);
         assignedSlot = null;
 
         if (GameManager.instance.ship) {
-            GameManager.instance.ship.UpdateModuleStatus(heldModule, heldModule.moduleType, true);
-            heldModule.shipRB = GameManager.instance.ship.GetComponent<Rigidbody>();
+            GameManager.instance.ship.UpdateModuleStatus(module, module.moduleType, true);
+            module.shipRB = GameManager.instance.ship.GetComponent<Rigidbody>();
         }
 
         GameManager.instance.ship.ToggleModuleSlot(slot.slotType, false);
-        PlayerHUD.instance.SetInfoPrompt(heldModule.GetName() + " connected");
-
+        PlayerHUD.instance.SetInfoPrompt(module.GetName() + " connected");
 
         heldObject = null;
-        heldModule = null;
+        module = null;
 
         PlayerHUD.instance.ToggleCrosshair(true);
 
@@ -95,6 +100,7 @@ public class MatterManipulator : MonoBehaviour, IWeapon {
     void DisconnectModule(ModuleSlot slot) {
         Rigidbody rb = heldObject.AddComponent<Rigidbody>();
         rb.mass = heldModule.mass;
+        rb.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
         GameManager.instance.AddGravityBody(rb);
 
         slot.connectedModule = null;

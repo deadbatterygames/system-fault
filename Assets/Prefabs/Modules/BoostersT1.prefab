@@ -544,7 +544,7 @@ MonoBehaviour:
   connected: 0
   shipRB: {fileID: 0}
   acceleration: 10
-  torqueAcceleration: 5
+  torqueAcceleration: 4
   maxHoverSpeed: 5
   hoverDampaning: 0.5
   efficiency: 10
@@ -565,4 +565,4 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 3

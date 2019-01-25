@@ -90,7 +90,7 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable, IDamageab
                 if (otherDamageable != null) otherDamageable.Damage(collision.relativeVelocity.magnitude, GameTypes.DamageType.Physical, -collision.relativeVelocity);
             }
 
-            if (collisionMagnitude > PlayerData.instance.playerDamageTolerance && !collision.gameObject.GetComponent<Rigidbody>())
+            if (collisionMagnitude > PlayerData.instance.shipDamageTolerance && !collision.gameObject.GetComponent<Rigidbody>())
                 Damage(collisionMagnitude / shipStrength, GameTypes.DamageType.Physical, Vector3.zero);
         }
     }

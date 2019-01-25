@@ -5741,7 +5741,7 @@ GameObject:
   - component: {fileID: 4681421655179214232}
   - component: {fileID: 4651521726962765110}
   m_Layer: 0
-  m_Name: Refinery 1
+  m_Name: Refinery
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

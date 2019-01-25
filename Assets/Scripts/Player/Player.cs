@@ -48,13 +48,6 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
 
     bool canEquip;
 
-    void OnCollisionEnter(Collision collision) {
-        if (PlayerData.instance.alive) {
-            float collisionVelocity = collision.relativeVelocity.magnitude;
-            if (collisionVelocity > PlayerData.instance.playerDamageTolerance) Damage(collisionVelocity / fallResistance, GameTypes.DamageType.Physical, Vector3.zero);
-        }
-    }
-
     void Start() {
         PlayerData.instance.alive = true;
         PlayerHUD.instance.ToggleShipRadar(true);
@@ -74,7 +67,7 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
 
         StartCoroutine("WeaponTimer");
 
-        Overmind.AddAttractor(new Attractor(gameObject, 9999999999999f, Attractor.Type.None));
+        //Overmind.AddAttractor(new Attractor(gameObject, 9999999999999f, Attractor.Type.None));
     }
 
     void FixedUpdate() {
@@ -147,9 +140,17 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
 
         }
 
-        if (GameManager.instance.TestMode()) {
+        if (GameManager.instance.IsInTestMode()) {
             if (Input.GetKeyDown(KeyCode.L) && energySlot.connectedModule) GetComponentInChildren<EnergyPack>().AddEnergy(1000000f);
             if (Input.GetKeyDown(KeyCode.K)) Damage(1000000f, GameTypes.DamageType.Physical, Vector3.zero);
+
+            if (Input.GetKeyDown(KeyCode.ScrollLock)) {
+                GameManager.instance.SetTestMode(false);
+                KillPlayer();
+            }
+        } else if (Input.GetKeyDown(KeyCode.ScrollLock)) {
+            GameManager.instance.SetTestMode(true);
+            KillPlayer();
         }
     }
 

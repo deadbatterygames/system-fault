@@ -10,7 +10,7 @@ public class Overmind : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        int n = 0;
+        int n = 5;
         int created = 0;
 
         POI = GameObject.FindGameObjectsWithTag("IPEarth");

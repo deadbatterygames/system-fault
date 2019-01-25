@@ -35,6 +35,18 @@ public class FlockingController : MonoBehaviour {
 			flock.AddSeparator(separator);
 		}
 	}
+
+	public static void DestroyAttractor(GameObject attractor, Attractor.Type type = Attractor.Type.None){
+		foreach(Flock flock in controller.flocks){
+			flock.RemoveAttractor(attractor, type);
+		}
+	}
+
+	public static void DestroyAttractor(Attractor attractor){
+		foreach(Flock flock in controller.flocks){
+			flock.RemoveAttractor(attractor);
+		}
+	}
 	
 	public static void DestroySeparator(GameObject separator, Separator.Type type = Separator.Type.None){
 		foreach(Flock flock in controller.flocks){

@@ -31,7 +31,7 @@ public class PartPrinterData : MonoBehaviour {
 
         DontDestroyOnLoad(gameObject);
 
-        if (GameManager.instance.TestMode()) UnlockAllModules();
+        if (GameManager.instance.IsInTestMode()) UnlockAllModules();
         else UnlockModule(GameTypes.ModuleType.EnergyPack, 1);
     }
 

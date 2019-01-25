@@ -167,6 +167,16 @@ public class Flock : MonoBehaviour {
 	public void AddSeparator(Separator separator){
 		this.separators.Add(separator);
 	}
+
+	public void RemoveAttractor(Attractor attractor){
+		this.attractors.Remove(attractor);
+	}
+
+	public void RemoveAttractor(GameObject attractor, Attractor.Type type = Attractor.Type.None){
+		if(type == Attractor.Type.None) this.attractors.RemoveAll(x => x.go == attractor);
+		else this.attractors.RemoveAll(x => x.go == attractor && x.type == type);
+	}
+
 	public void RemoveSeparator(Separator separator){
 		this.separators.Remove(separator);
 	}

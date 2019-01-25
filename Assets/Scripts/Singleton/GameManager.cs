@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour {
     List<GameObject> earthInterestPoints = new List<GameObject>();
     List<GameObject> moonInterestPoints = new List<GameObject>();
     List<GameObject> gasInterestPoints = new List<GameObject>();
+    List<GameObject> playerShipSpawns = new List<GameObject>();
 
     GravityWell currentWell = null;
     List<GravityWell> gravityWells = new List<GravityWell>();
@@ -39,6 +40,7 @@ public class GameManager : MonoBehaviour {
     [SerializeField] GameTypes.SpawnLocation spawnLocation;
     [SerializeField] bool testMode;
     [SerializeField] float equipmentSpawnHeight = 10f;
+    float spawnHeight;
     [SerializeField] float equipmentSpawnSeparation = 5f;
     [SerializeField][Range(0,2)] int equipmentTier;
 
@@ -66,6 +68,7 @@ public class GameManager : MonoBehaviour {
         moonInterestPoints.AddRange(GameObject.FindGameObjectsWithTag("IPMoon"));
         earthInterestPoints.AddRange(GameObject.FindGameObjectsWithTag("IPEarth"));
         gasInterestPoints.AddRange(GameObject.FindGameObjectsWithTag("IPGas"));
+        playerShipSpawns.AddRange(GameObject.FindGameObjectsWithTag("PlayerShipSpawn"));
 
         if (moonInterestPoints.Count < PartPrinterData.MODULE_TYPES + 2) Debug.LogError("GameManager: Not enough Moon interest points");
         if (earthInterestPoints.Count < PartPrinterData.MODULE_TYPES + 2) Debug.LogError("GameManager: Not enough Earth interest points");
@@ -95,11 +98,6 @@ public class GameManager : MonoBehaviour {
         currentWell = FindClosestWell();
         ChangeGravityWell(currentWell);
 
-        // DELETE DIS ###########################
-        PlayerData.instance.blueUnlocked = true;
-        PlayerData.instance.redUnlocked = true;
-        // DELETE DIS ###########################
-
         // Starting Spawn
         SpawnPlayer(playerSpawn, Vector3.zero);
         if (testMode) {
@@ -108,12 +106,12 @@ public class GameManager : MonoBehaviour {
             PlayerData.instance.blueUnlocked = true;
             PlayerData.instance.redUnlocked = true;
 
+            spawnHeight = equipmentSpawnHeight;
             GiveEquipment(PartPrinterData.instance.modulePrefabs[0 + equipmentTier], 0f);
             GiveEquipment(PartPrinterData.instance.modulePrefabs[3 + equipmentTier], 0f);
             GiveEquipment(PartPrinterData.instance.modulePrefabs[6 + equipmentTier], 0f);
             GiveEquipment(PartPrinterData.instance.modulePrefabs[9 + equipmentTier], 0f);
             GiveEquipment(PartPrinterData.instance.modulePrefabs[12 + equipmentTier], 0f);
-
         } else {
             GiveEquipment(PartPrinterData.instance.modulePrefabs[0], 0f);
             GiveEquipment(matterManipulatorPrefab, 0f);
@@ -121,7 +119,7 @@ public class GameManager : MonoBehaviour {
         }
 
         // Ship
-        SpawnShip(moonInterestPoints[1].transform);
+        SpawnShip(playerShipSpawns[Random.Range(1, playerShipSpawns.Count)].transform);
         if (testMode) {
             ship.transform.position = playerSpawn.position + playerSpawn.forward * 20f + playerSpawn.up * 20f;
             ship.transform.rotation = playerSpawn.rotation;
@@ -189,10 +187,10 @@ public class GameManager : MonoBehaviour {
     }
 
     public void GiveEquipment(GameObject equipment, float horizontalOffset) {
-        equipmentSpawnHeight += equipmentSpawnSeparation;
+        spawnHeight += equipmentSpawnSeparation;
 
         Rigidbody rb = Instantiate(equipment,
-            playerSpawn.position + playerSpawn.up * equipmentSpawnHeight + playerSpawn.forward * 10f + playerSpawn.right * horizontalOffset,
+            playerSpawn.position + playerSpawn.up * spawnHeight + playerSpawn.forward * 10f + playerSpawn.right * horizontalOffset,
             playerSpawn.rotation, null).GetComponent<Rigidbody>();
 
         AddGravityBody(rb);
@@ -202,8 +200,8 @@ public class GameManager : MonoBehaviour {
         Player player = FindObjectOfType<Player>();
         if (player) {
             Rigidbody playerRB = player.GetComponent<Rigidbody>();
-            foreach (Fluid fluid in FindObjectsOfType<Fluid>()) fluid.RemoveFluidBody(playerRB);
             RemoveGravityBody(playerRB);
+            FlockingController.DestroyAttractor(player.gameObject);
             FlockingController.DestroySeparator(player.gameObject);
             Destroy(player.gameObject);
         }
@@ -256,13 +254,14 @@ public class GameManager : MonoBehaviour {
         Debug.LogWarning("Player: DEAD!");
         PlayerHUD.instance.ClearHUD();
         PlayerHUD.instance.ToggleShipRadar(false);
-        PlayerHUD.instance.SetInfoPrompt("You died! :(");
+        PlayerHUD.instance.SetInfoPrompt("DEAD");
 
         yield return new WaitForSecondsRealtime(3f);
 
         earthInterestPoints.Clear();
         moonInterestPoints.Clear();
         gasInterestPoints.Clear();
+        playerShipSpawns.Clear();
 
         gravityBodies.Clear();
         gravityWells.Clear();
@@ -271,7 +270,7 @@ public class GameManager : MonoBehaviour {
         PlayerData.instance.hasMatterManipulator = false;
         PlayerData.instance.hasMulticannon = false;
 
-        AsyncOperation reloadScene = SceneManager.LoadSceneAsync("TestScene", LoadSceneMode.Single);
+        AsyncOperation reloadScene = SceneManager.LoadSceneAsync("Eric's Scene", LoadSceneMode.Single);
         while (!reloadScene.isDone) {
             PlayerHUD.instance.SetInfoPrompt("Loading...");
             Debug.LogWarning("GameManager: Loading...");
@@ -292,7 +291,11 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    public bool TestMode() {
+    public bool IsInTestMode() {
         return testMode;
+    }
+
+    public void SetTestMode(bool set) {
+        testMode = set;
     }
 }

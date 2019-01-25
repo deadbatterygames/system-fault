@@ -27,7 +27,7 @@ public class EnergyPack : ShipModule {
         base.Awake();
         moduleType = GameTypes.ModuleType.EnergyPack;
 
-        //AddEnergy(maxEnergy);
+        if (GameManager.instance.IsInTestMode()) AddEnergy(maxEnergy);
     }
 
     public void AddEnergy(float amount) {
