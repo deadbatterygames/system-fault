@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 //
 // PlayerHUD.cs
@@ -47,11 +49,12 @@ public class PlayerHUD : MonoBehaviour {
     [SerializeField] Image planetDown;
 
     [Header("Help")]
-    [SerializeField] bool showHelp;
+    public bool showHelp;
     [SerializeField] GameObject playerHelp;
     [SerializeField] GameObject shipHelp;
     [SerializeField] GameObject printerHelp;
-    GameObject[] helpObjects;
+    List<GameObject> helpHUD = new List<GameObject>();
+    List<HelpSign> helpSigns = new List<HelpSign>();
 
     bool animateDamage;
     bool fadeEnergySplash;
@@ -69,18 +72,22 @@ public class PlayerHUD : MonoBehaviour {
     }
 
     void Start () {
-		if (!crosshair) Debug.LogError("PlayerHUD: Crosshair not set");
-        if (!usePrompt) Debug.LogError("PlayerHUD: Use Prompt not set");
-        if (!energyPackHUD) Debug.LogError("PlayerHUD: Energy Pack HUD not set");
-        if (!infoPrompt) Debug.LogError("PlayerHUD: Info Prompt not set");
-
         useText = usePrompt.GetComponentInChildren<Text>();
         dematText = dematPrompt.GetComponentInChildren<Text>();
 
-        helpObjects = GameObject.FindGameObjectsWithTag("UIHelp");
+        helpHUD.AddRange(GameObject.FindGameObjectsWithTag("HelpHUD"));
 
         ClearHUD();
         infoPrompt.alpha = 0;
+    }
+
+    //public void FindHelpSigns() {
+    //    if (helpSigns.Count > 0) helpSigns.Clear();
+    //    helpSigns.AddRange(FindObjectsOfType<HelpSign>());
+    //}
+
+    public void AddHelpSign(HelpSign helpSign) {
+        helpSigns.Add(helpSign);
     }
 
     void Update() {
@@ -104,7 +111,7 @@ public class PlayerHUD : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.Slash)) {
             showHelp = !showHelp;
-            foreach (GameObject helpObject in helpObjects) helpObject.SetActive(showHelp);
+            ToggleAllHelp();
         }
     }
 
@@ -149,6 +156,14 @@ public class PlayerHUD : MonoBehaviour {
 
     public void TogglePlayerHelp(bool toggle) {
         playerHelp.SetActive(toggle);
+    }
+
+    public void ToggleAllHelp() {
+        foreach (GameObject helpObject in helpHUD) helpObject.SetActive(showHelp);
+        foreach (HelpSign helpSign in helpSigns) {
+            if (helpSign) helpSign.canvas.enabled = showHelp;
+            else helpSigns = helpSigns.Where(x => x != null).ToList();
+        }
     }
 
     public void ToggleShipHelp(bool toggle) {
@@ -256,13 +271,17 @@ public class PlayerHUD : MonoBehaviour {
 
     public void ClearHUD() {
         DisableEnergyPackHUD();
+
         ToggleCrosshair(false);
         TogglePlanetRadar(false);
+
         ToggleDematPrompt(false);
         ToggleUsePrompt(false);
+
         TogglePrinterHelp(false);
         ToggleShipHelp(false);
         TogglePlayerHelp(false);
+
         infoPrompt.alpha = 0f;
     }
 

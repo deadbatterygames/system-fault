@@ -26,8 +26,13 @@ public class ShipComputer : MonoBehaviour, IPowerable {
     [SerializeField] Text countdownIndicator;
     [SerializeField] Text speedometer;
 
+    [Header("Modules")]
+    [SerializeField] Image thrusters;
+    [SerializeField] Image boosters;
+    [SerializeField] Image quantumDrive;
+
     Color activeColour = new Color(0f, 130f/255f, 1f, 1f);
-    Color inactiveColour = new Color(120f/255f, 120f/255f, 120f/255f, 1f);
+    Color inactiveColour = new Color(80f/255f, 80f/255f, 80f/255f, 1f);
     Color throttleColour = new Color(0f, 220/255f, 0f, 1f);
     Color warningColour = new Color(1f, 0f, 0f, 1f);
 
@@ -95,6 +100,26 @@ public class ShipComputer : MonoBehaviour, IPowerable {
                 hoverIndicator.color = inactiveColour;
                 astroIndicator.color = inactiveColour;
                 quantumIndicator.color = activeColour;
+                break;
+        }
+    }
+
+    public void UpdateModuleStatus(GameTypes.ModuleType moduleType, bool connected) {
+        Color indicatorColour;
+        if (connected) indicatorColour = activeColour;
+        else indicatorColour = inactiveColour;
+
+        switch (moduleType) {
+            case GameTypes.ModuleType.Thrusters:
+                thrusters.color = indicatorColour;
+                break;
+            case GameTypes.ModuleType.Boosters:
+                boosters.color = indicatorColour;
+                break;
+            case GameTypes.ModuleType.QuantumDrive:
+                quantumDrive.color = indicatorColour;
+                break;
+            default:
                 break;
         }
     }

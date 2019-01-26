@@ -9577,7 +9577,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 1d50750524d59c347933df93811f2661, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 53e68688b36293a488e668ca882dbbc7, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -9736,7 +9736,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 150179287b58ecb4db6b08632578909d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a2efd9a68e5896e449ebd316ed4f9e46, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -9756,7 +9756,7 @@ GameObject:
   - component: {fileID: 6120798222316109996}
   - component: {fileID: 6153690409224366932}
   m_Layer: 2
-  m_Name: MultiCannon
+  m_Name: Multicannon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14856,7 +14856,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 74c0af2583d38d04baa1f11c3903d923, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 88981e3539ca1a140a433fc49606ce2d, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

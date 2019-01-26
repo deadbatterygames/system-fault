@@ -122,7 +122,7 @@ public class PrintDrivePort : MonoBehaviour, IUsable {
     }
 
     public string GetName() {
-        if (blueprint) return "Blueprint";
-        return "Part Printer";
+        if (blueprint) return "Blueprint Port";
+        return "Part Printer Port";
     }
 }

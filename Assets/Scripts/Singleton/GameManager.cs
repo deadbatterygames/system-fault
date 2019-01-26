@@ -35,6 +35,7 @@ public class GameManager : MonoBehaviour {
     [SerializeField] GameObject matterManipulatorPrefab;
     [SerializeField] GameObject multicannonPrefab;
     [SerializeField] GameObject xromPrefab;
+    [SerializeField] GameObject startingHelpSign;
 
     [Header("Testing")]
     [SerializeField] GameTypes.SpawnLocation spawnLocation;
@@ -63,6 +64,8 @@ public class GameManager : MonoBehaviour {
 
         playerCam = FindObjectOfType<PlayerCamera>();
         if (!playerCam) Debug.LogError("GameManager: No PlayerCam exists in the scene");
+
+        spawnHeight = equipmentSpawnHeight;
 
         // Interest Points
         moonInterestPoints.AddRange(GameObject.FindGameObjectsWithTag("IPMoon"));
@@ -107,15 +110,16 @@ public class GameManager : MonoBehaviour {
             PlayerData.instance.redUnlocked = true;
 
             spawnHeight = equipmentSpawnHeight;
-            GiveEquipment(PartPrinterData.instance.modulePrefabs[0 + equipmentTier], 0f);
-            GiveEquipment(PartPrinterData.instance.modulePrefabs[3 + equipmentTier], 0f);
-            GiveEquipment(PartPrinterData.instance.modulePrefabs[6 + equipmentTier], 0f);
-            GiveEquipment(PartPrinterData.instance.modulePrefabs[9 + equipmentTier], 0f);
-            GiveEquipment(PartPrinterData.instance.modulePrefabs[12 + equipmentTier], 0f);
+            GiveEquipment(PartPrinterData.instance.modulePrefabs[0 + equipmentTier]);
+            GiveEquipment(PartPrinterData.instance.modulePrefabs[3 + equipmentTier]);
+            GiveEquipment(PartPrinterData.instance.modulePrefabs[6 + equipmentTier]);
+            GiveEquipment(PartPrinterData.instance.modulePrefabs[9 + equipmentTier]);
+            GiveEquipment(PartPrinterData.instance.modulePrefabs[12 + equipmentTier]);
         } else {
-            GiveEquipment(PartPrinterData.instance.modulePrefabs[0], 0f);
-            GiveEquipment(matterManipulatorPrefab, 0f);
-            GiveEquipment(multicannonPrefab, 0f);
+            GiveEquipment(startingHelpSign);
+            GiveEquipment(PartPrinterData.instance.modulePrefabs[0]);
+            GiveEquipment(matterManipulatorPrefab);
+            GiveEquipment(multicannonPrefab);
         }
 
         // Ship
@@ -127,7 +131,9 @@ public class GameManager : MonoBehaviour {
 
         // Camera
         PlayerCamera.instance.MoveCamToPlayer();
-        PlayerHUD.instance.ClearHUD();
+
+        // Help Signs
+        PlayerHUD.instance.ToggleAllHelp();
 
         Time.timeScale = 1f;
     }
@@ -186,14 +192,13 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    public void GiveEquipment(GameObject equipment, float horizontalOffset) {
-        spawnHeight += equipmentSpawnSeparation;
-
+    public void GiveEquipment(GameObject equipment, float horizontalOffset = 0f) {
         Rigidbody rb = Instantiate(equipment,
-            playerSpawn.position + playerSpawn.up * spawnHeight + playerSpawn.forward * 10f + playerSpawn.right * horizontalOffset,
+            playerSpawn.position + playerSpawn.up * spawnHeight + playerSpawn.forward * 3f + playerSpawn.right * horizontalOffset,
             playerSpawn.rotation, null).GetComponent<Rigidbody>();
+        if (rb) AddGravityBody(rb);
 
-        AddGravityBody(rb);
+        spawnHeight += equipmentSpawnSeparation;
     }
 
     public void DespawnPlayer() {

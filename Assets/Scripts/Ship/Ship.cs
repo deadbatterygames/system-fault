@@ -117,10 +117,9 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable, IDamageab
                             energyPack.DrainEnergy(Mathf.Abs(thrusters.GetThrottle()) / thrusters.efficiency * Time.deltaTime);
                             break;
                         case GameTypes.AssistMode.Hover:
-                            thrusters.SetThrottle(controlObject.forwardBack / 2f);
+                            thrusters.SetThrottle(controlObject.forwardBack / 4f);
                             shipComputer.UpdateThrottleGauge(thrusters.GetThrottle());
                             energyPack.DrainEnergy(Mathf.Abs(thrusters.GetThrottle() / thrusters.efficiency * Time.deltaTime));
-
                             break;
                         case GameTypes.AssistMode.Astro:
                             thrusters.AdjustAstroThrottle(controlObject.forwardBack * astroThrottleSensitivity * Time.deltaTime);
@@ -141,35 +140,40 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable, IDamageab
                         case GameTypes.AssistMode.Astro:
                             boosters.SetThrottle(controlObject.rightLeft, controlObject.upDown, torque);
                             energyPack.DrainEnergy((Mathf.Abs(controlObject.rightLeft) + Mathf.Abs(controlObject.upDown)) / boosters.efficiency * Time.deltaTime);
-                            energyPack.DrainEnergy(1f / thrusters.efficiency * Time.deltaTime); // Idle burn rate
+                            energyPack.DrainEnergy(1f / boosters.efficiency * Time.deltaTime); // Idle burn rate
                             break;
                         case GameTypes.AssistMode.Hover:
                             boosters.SetThrottle(controlObject.rightLeft / 2f, controlObject.upDown / 2f, torque);
                             energyPack.DrainEnergy((Mathf.Abs(controlObject.rightLeft) / 2f + Mathf.Abs(controlObject.upDown)) / 2f / boosters.efficiency * Time.deltaTime);
                             energyPack.DrainEnergy(1f / boosters.efficiency * Time.deltaTime); // Idle burn rate
                             break;
+                        default: break;
                     }
                 }
 
                 // Quantum Drive
-                if (thrusters && boosters && quantumDrive) {
-                    if (controlObject.quantumJump) quantumDrive.PickTarget();
-
-                    if (assistMode == GameTypes.AssistMode.Quantum && quantumDrive.IsJumping()) {
-                        energyPack.DrainEnergy(1f / quantumDrive.efficiency * Time.deltaTime); // Quantum burn rate
-                    }
+                if (controlObject.quantumJump) {
+                    if (thrusters && boosters && quantumDrive) quantumDrive.PickTarget();
+                    else PlayerHUD.instance.SetInfoPrompt("Connect Thrusters, Boosters and Quantum Drive to jump");
                 }
 
-                shipComputer.UpdateEnergyGauge(energyPack.GetEnergyPercentage());
+                if (assistMode == GameTypes.AssistMode.Quantum && quantumDrive.IsJumping()) {
+                    energyPack.DrainEnergy(1f / quantumDrive.efficiency * Time.deltaTime); // Quantum burn rate
+                    shipComputer.UpdateEnergyGauge(energyPack.GetEnergyPercentage());
+                }
 
-                // Assist Modes
-                if (controlObject.changeAssist) {
+
+            // Assist Modes
+            if (controlObject.changeAssist) {
                     switch (assistMode) {
                         case GameTypes.AssistMode.NoAssist:
+                            if (previousAssistMode == GameTypes.AssistMode.NoAssist)
+                                PlayerHUD.instance.SetInfoPrompt("Connect Boosters to use Hover Assist");
                             ChangeAssistMode(previousAssistMode);
                             break;
                         case GameTypes.AssistMode.Hover:
-                            if (boosters && thrusters) ChangeAssistMode(GameTypes.AssistMode.Astro);
+                            if (thrusters && boosters) ChangeAssistMode(GameTypes.AssistMode.Astro);
+                            else PlayerHUD.instance.SetInfoPrompt("Connect Thrusters and Boosters to use Astro Assist");
                             break;
                         case GameTypes.AssistMode.Astro:
                             ChangeAssistMode(GameTypes.AssistMode.Hover);
@@ -178,7 +182,6 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable, IDamageab
                 }
                 if (controlObject.toggleAssist && assistMode != GameTypes.AssistMode.Quantum) {
                     if (assistMode != GameTypes.AssistMode.NoAssist) {
-                        previousAssistMode = assistMode;
                         ChangeAssistMode(GameTypes.AssistMode.NoAssist);
                         PlayerHUD.instance.SetInfoPrompt("Flight Assist off");
                     } else ChangeAssistMode(previousAssistMode);
@@ -299,6 +302,7 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable, IDamageab
         if (thrusters && mode != GameTypes.AssistMode.Astro) thrusters.SetThrottle(Input.GetAxis("Move Forward/Back"));
 
         shipComputer.ChangeAssistMode(mode);
+        if (assistMode != GameTypes.AssistMode.NoAssist) previousAssistMode = assistMode;
         assistMode = mode;
     }
 
@@ -336,6 +340,8 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable, IDamageab
                 else laserCannon = null;
                 break;
         }
+
+        shipComputer.UpdateModuleStatus(type, connected);
     }
 
     public void Use() {

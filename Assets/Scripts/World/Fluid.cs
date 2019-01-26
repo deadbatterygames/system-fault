@@ -48,11 +48,23 @@ public class Fluid : MonoBehaviour
 
         Rigidbody rb = other.GetComponent<Rigidbody>();
         if (rb) AddFluidBody(rb);
+
+        Player player = other.GetComponent<Player>();
+        if (player) {
+            player.StopCoroutine("WeaponTimer");
+            player.GetComponentInChildren<WeaponSlot>().UnequipAll();
+        }
     }
 
     void OnTriggerExit(Collider other) {
         Rigidbody rb = other.GetComponent<Rigidbody>();
         if (rb) RemoveFluidBody(rb);
+
+        Player player = other.GetComponent<Player>();
+        if (player) {
+            player.StopCoroutine("WeaponTimer");
+            player.StartCoroutine("WeaponTimer");
+        }
     }
 
     public void AddFluidBody(Rigidbody rb) {

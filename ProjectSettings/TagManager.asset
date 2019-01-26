@@ -12,7 +12,7 @@ TagManager:
   - IPEarth
   - IPMoon
   - IPGas
-  - UIHelp
+  - HelpHUD
   layers:
   - Default
   - TransparentFX

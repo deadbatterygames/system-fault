@@ -62,9 +62,11 @@ MonoBehaviour:
   multicannonPrefab: {fileID: 1545196223467270, guid: 117e8342b1b108346897543e39fe0239,
     type: 3}
   xromPrefab: {fileID: 1188217680102406, guid: ce6cc1e631e52a04d9137b99f32a6904, type: 3}
+  startingHelpSign: {fileID: 964507793698594894, guid: c0ed34e2dd353604e998feac20873ed7,
+    type: 3}
   spawnLocation: 0
   testMode: 0
-  equipmentSpawnHeight: 10
+  equipmentSpawnHeight: 2
   equipmentSpawnSeparation: 5
   equipmentTier: 1
   ship: {fileID: 0}
@@ -96,7 +98,6 @@ MonoBehaviour:
     type: 3}
   shipTeleportTime: 3
   shipDamageTolerance: 30
-  playerDamageTolerance: 50
   bulletPrefabs:
   - {fileID: 1182280151139152, guid: 050bf6e2a47d4ae48b26956868ff3b80, type: 3}
   - {fileID: 1182280151139152, guid: 399755ca273d06642aeeb02f7652eeb1, type: 3}
