@@ -335,8 +335,7 @@ MonoBehaviour:
   walkSpeed: 15
   walkForce: 1.2
   airForce: 8
-  airTorque: 3
-  lookSensitivity: 0.5
+  airTorque: 5
   minYAngle: -60
   maxYAngle: 90
   cameraRig: {fileID: 4868457080495422}

@@ -98,7 +98,7 @@ MonoBehaviour:
     type: 3}
   shipTeleportTime: 3
   shipDamageTolerance: 30
-  mouseForceSensitivity: 0.005
+  mouseForceSensitivity: 0.75
   lookSensitivity: 0.5
   bulletPrefabs:
   - {fileID: 1182280151139152, guid: 050bf6e2a47d4ae48b26956868ff3b80, type: 3}

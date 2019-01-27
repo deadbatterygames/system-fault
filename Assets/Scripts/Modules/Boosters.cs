@@ -47,7 +47,7 @@ public class Boosters : ShipModule, IPowerable {
     public void SetThrottle(float horizontal, float vertical, Vector3 torque) {
         throttleHorizontal = horizontal;
         throttleVertical = vertical;
-        throttleTorque = Vector3.ClampMagnitude(torque, 1f);
+        throttleTorque += torque;
     }
 
     public void ResetThrottles() {
@@ -58,7 +58,9 @@ public class Boosters : ShipModule, IPowerable {
 
     void Boost() {
         shipRB.AddForce((shipRB.transform.right * throttleHorizontal * acceleration + shipRB.transform.up * throttleVertical * acceleration), ForceMode.Acceleration);
-        shipRB.AddRelativeTorque(throttleTorque * torqueAcceleration, ForceMode.Acceleration);
+        shipRB.AddRelativeTorque(Vector3.ClampMagnitude(throttleTorque, 1f) * torqueAcceleration, ForceMode.Acceleration);
+
+        throttleTorque = Vector3.zero;
     }
 
     public void ToggleTrails(bool toggle) {

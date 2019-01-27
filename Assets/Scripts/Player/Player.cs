@@ -19,10 +19,10 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
 
     [Header("Movement")]
     [SerializeField] float jumpForce = 20f;
-    [SerializeField] float walkSpeed = 8f;
-    [SerializeField] float walkForce = 1f;
-    [SerializeField] float airForce = 0.2f;
-    [SerializeField] float airTorque = 0.2f;
+    [SerializeField] float walkSpeed = 15f;
+    [SerializeField] float walkForce = 1.2f;
+    [SerializeField] float airForce = 8f;
+    [SerializeField] float airTorque = 5f;
 
     [Header("Mouse")]
     [SerializeField] float minYAngle = -60f;
@@ -100,8 +100,7 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
 
         // Look/Rotate
         if (snapping) Look(new Vector3(-controlObject.verticalLook, controlObject.horizontalLook, controlObject.roll));
-        else forceRotation = new Vector3(-controlObject.verticalLook / Time.deltaTime * PlayerData.instance.mouseForceSensitivity,
-            controlObject.horizontalLook / Time.deltaTime * PlayerData.instance.mouseForceSensitivity, controlObject.roll);
+        else forceRotation += new Vector3(-controlObject.verticalLook * PlayerData.instance.mouseForceSensitivity, controlObject.horizontalLook * PlayerData.instance.mouseForceSensitivity, controlObject.roll);
 
         // Jump
         if (controlObject.jump && grounded) Jump();
@@ -180,7 +179,8 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
     }
 
     void Rotate() {
-        rb.AddRelativeTorque(forceRotation * airTorque, ForceMode.Acceleration);
+        rb.AddRelativeTorque(Vector3.ClampMagnitude(forceRotation, 1f) * airTorque, ForceMode.Acceleration);
+        forceRotation = Vector3.zero;
     }
 
     void Jump() {

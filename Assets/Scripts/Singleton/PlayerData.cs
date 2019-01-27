@@ -18,7 +18,7 @@ public class PlayerData : MonoBehaviour {
     public float shipDamageTolerance = 30f;
 
     [Header("Input")]
-    [Range(0.001f, 0.05f)] public float mouseForceSensitivity = 0.5f;
+    [Range(0.1f, 5f)] public float mouseForceSensitivity = 0.5f;
     [Range(0.1f, 5f)] public float lookSensitivity = 0.5f;
 
     [Header("Bullets")]
