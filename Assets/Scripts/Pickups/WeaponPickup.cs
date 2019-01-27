@@ -38,6 +38,6 @@ public class WeaponPickup : MonoBehaviour, IUsable {
 
     public void Update() {
         transform.Rotate(transform.parent.up, rotationSpeed * Time.deltaTime, Space.World);
-        transform.Translate(0f, 0f, Mathf.Sin(Time.time * 5f) * 0.005f, Space.Self);
+        transform.Translate(0f, 0f, Mathf.Sin(Time.time * 5f) * Time.deltaTime, Space.Self);
     }
 }
