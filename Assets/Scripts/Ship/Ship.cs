@@ -469,6 +469,7 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable, IDamageab
         if (energyPack) PlayerHUD.instance.EnableEnergyPackHUD(energyPack);
         PlayerHUD.instance.TogglePlayerHelp(false);
         PlayerHUD.instance.ToggleShipHelp(true);
+        PlayerHUD.instance.ToggleCrosshair(true);
 
         busy = false;
 
