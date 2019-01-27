@@ -29,12 +29,14 @@ public class PlayerData : MonoBehaviour {
     List<GameObject> blueBullets = new List<GameObject>();
     List<GameObject> redBullets = new List<GameObject>();
 
+    [Header("Unlocks")]
+    public bool hasMatterManipulator;
+    public bool hasMulticannon;
+    public bool blueUnlocked;
+    public bool redUnlocked;
+
     [HideInInspector] public bool alive;
     [HideInInspector] public bool teleportingShip;
-    [HideInInspector] public bool hasMatterManipulator;
-    [HideInInspector] public bool hasMulticannon;
-    [HideInInspector] public bool blueUnlocked;
-    [HideInInspector] public bool redUnlocked;
 
     void Awake() {
         if (instance == null) instance = this;

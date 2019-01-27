@@ -20,11 +20,9 @@ public class HelpSign : MonoBehaviour
     }
 
     void Start() {
-
         if (!PlayerHUD.instance.showHelp) canvas.enabled = false;
 
-        if (transform.parent) relativeUp = transform.parent.up;
-        else relativeUp = transform.up;
+        relativeUp = transform.up;
     }
 
     void Update() {
