@@ -32,17 +32,12 @@ public class GameManager : MonoBehaviour {
     [SerializeField] GameObject playerShipPrefab;
     [SerializeField] GameObject crystalPrefab;
     [SerializeField] GameObject blueprintPrefab;
-    [SerializeField] GameObject matterManipulatorPrefab;
-    [SerializeField] GameObject multicannonPrefab;
     [SerializeField] GameObject xromPrefab;
-    [SerializeField] GameObject startingHelpSign;
+    [SerializeField] GameObject startingZone;
 
     [Header("Testing")]
     [SerializeField] GameTypes.SpawnLocation spawnLocation;
     [SerializeField] bool testMode;
-    [SerializeField] float equipmentSpawnHeight = 10f;
-    float spawnHeight;
-    [SerializeField] float equipmentSpawnSeparation = 5f;
     [SerializeField][Range(0,2)] int equipmentTier;
 
     public const float MAX_PLAYER_SPEED = 300f;
@@ -64,8 +59,6 @@ public class GameManager : MonoBehaviour {
 
         playerCam = FindObjectOfType<PlayerCamera>();
         if (!playerCam) Debug.LogError("GameManager: No PlayerCam exists in the scene");
-
-        spawnHeight = equipmentSpawnHeight;
 
         // Interest Points
         moonInterestPoints.AddRange(GameObject.FindGameObjectsWithTag("IPMoon"));
@@ -109,17 +102,14 @@ public class GameManager : MonoBehaviour {
             PlayerData.instance.blueUnlocked = true;
             PlayerData.instance.redUnlocked = true;
 
-            spawnHeight = equipmentSpawnHeight;
             GiveEquipment(PartPrinterData.instance.modulePrefabs[0 + equipmentTier]);
             GiveEquipment(PartPrinterData.instance.modulePrefabs[3 + equipmentTier]);
             GiveEquipment(PartPrinterData.instance.modulePrefabs[6 + equipmentTier]);
             GiveEquipment(PartPrinterData.instance.modulePrefabs[9 + equipmentTier]);
             GiveEquipment(PartPrinterData.instance.modulePrefabs[12 + equipmentTier]);
         } else {
-            GiveEquipment(startingHelpSign);
-            GiveEquipment(PartPrinterData.instance.modulePrefabs[0]);
-            GiveEquipment(matterManipulatorPrefab);
-            GiveEquipment(multicannonPrefab);
+            GiveEquipment(startingZone);
+            GiveEquipment(PartPrinterData.instance.modulePrefabs[0], 5f);
         }
 
         // Ship
@@ -192,13 +182,9 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    public void GiveEquipment(GameObject equipment, float horizontalOffset = 0f) {
-        Rigidbody rb = Instantiate(equipment,
-            playerSpawn.position + playerSpawn.up * spawnHeight + playerSpawn.forward * 3f + playerSpawn.right * horizontalOffset,
-            playerSpawn.rotation, null).GetComponent<Rigidbody>();
+    public void GiveEquipment(GameObject equipment, float spawnHeight = 0f) {
+        Rigidbody rb = Instantiate(equipment, playerSpawn.position + playerSpawn.up * spawnHeight + playerSpawn.forward * 5f, playerSpawn.rotation, null).GetComponent<Rigidbody>();
         if (rb) AddGravityBody(rb);
-
-        spawnHeight += equipmentSpawnSeparation;
     }
 
     public void DespawnPlayer() {
@@ -241,7 +227,7 @@ public class GameManager : MonoBehaviour {
         return closestWell;
     }
 
-    void ChangeGravityWell(GravityWell /*Gabe*/ newWell) {
+    void ChangeGravityWell(GravityWell newWell) {
         Debug.Log("GameManager: Gravity well changed");
         foreach (GravityWell well in gravityWells) {
             if (well) {

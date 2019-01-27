@@ -12,11 +12,7 @@ public class WeaponPickup : MonoBehaviour, IUsable {
     [SerializeField] GameTypes.PlayerWeaponType weaponType;
     [SerializeField] string pickupName;
 
-    void Start() {
-        if (weaponType == GameTypes.PlayerWeaponType.MatterManipulator) pickupName = "Matter Manipulator";
-        else if (weaponType == GameTypes.PlayerWeaponType.Multicannon) pickupName = "Multicannon";
-        else Debug.LogError("WeaponPickup: No type specified");
-    }
+    static float rotationSpeed = 180f;
 
     public string GetName() {
         return pickupName;
@@ -37,8 +33,11 @@ public class WeaponPickup : MonoBehaviour, IUsable {
 
         if (PlayerData.instance.hasMatterManipulator && PlayerData.instance.hasMulticannon) PlayerHUD.instance.SetInfoPrompt("Press TAB to change equipment");
 
-        GameManager.instance.RemoveGravityBody(GetComponentInParent<Rigidbody>());
-        GameManager.instance.RemoveGravityBody(GetComponentInParent<Rigidbody>());
         Destroy(transform.parent.gameObject);
+    }
+
+    public void Update() {
+        transform.Rotate(transform.parent.up, rotationSpeed * Time.deltaTime, Space.World);
+        transform.Translate(0f, 0f, Mathf.Sin(Time.time * 5f) * 0.005f, Space.Self);
     }
 }

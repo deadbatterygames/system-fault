@@ -57,17 +57,11 @@ MonoBehaviour:
     type: 3}
   blueprintPrefab: {fileID: 1573300878066454, guid: f1dabf6892befca4eb71162e9c6a08ef,
     type: 3}
-  matterManipulatorPrefab: {fileID: 1212171818948768, guid: e749304291a71e049946ad1b7d122efc,
-    type: 3}
-  multicannonPrefab: {fileID: 1545196223467270, guid: 117e8342b1b108346897543e39fe0239,
-    type: 3}
   xromPrefab: {fileID: 1188217680102406, guid: ce6cc1e631e52a04d9137b99f32a6904, type: 3}
-  startingHelpSign: {fileID: 964507793698594894, guid: c0ed34e2dd353604e998feac20873ed7,
+  startingZone: {fileID: 6451903063709986607, guid: b7e0f5488fab98341aae3f32676d829e,
     type: 3}
   spawnLocation: 0
   testMode: 0
-  equipmentSpawnHeight: 2
-  equipmentSpawnSeparation: 5
   equipmentTier: 2
   ship: {fileID: 0}
 --- !u!114 &114243553186129760
@@ -105,12 +99,12 @@ MonoBehaviour:
   - {fileID: 1182280151139152, guid: 399755ca273d06642aeeb02f7652eeb1, type: 3}
   - {fileID: 1182280151139152, guid: 9e86334570c29e14f8b9685f4f97af63, type: 3}
   maxBullets: 10
-  alive: 0
-  teleportingShip: 0
   hasMatterManipulator: 0
   hasMulticannon: 0
   blueUnlocked: 0
   redUnlocked: 0
+  alive: 0
+  teleportingShip: 0
 --- !u!114 &114526494519534050
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -145,20 +139,20 @@ MonoBehaviour:
   printTime: 2
   printCosts:
   - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
+  - 100
+  - 200
+  - 25
+  - 50
+  - 75
+  - 25
+  - 50
+  - 75
+  - 25
+  - 50
+  - 75
+  - 25
+  - 50
+  - 75
 --- !u!114 &760541699
 MonoBehaviour:
   m_ObjectHideFlags: 0
