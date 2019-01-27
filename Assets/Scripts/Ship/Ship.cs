@@ -36,7 +36,6 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable, IDamageab
     [SerializeField] Transform playerExit;
     [SerializeField] Transform playerExitAlt;
     [SerializeField] Transform cameraRig;
-    [SerializeField] float cameraSensitivity = 1f;
     [SerializeField] float cameraResetSpeed = 1f;
 
     ShipComputer shipComputer;
@@ -132,7 +131,8 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable, IDamageab
                 // Booster control
                 if (boosters) {
                     Vector3 torque;
-                    if (!freeLook) torque = new Vector3(-controlObject.verticalLook, controlObject.horizontalLook * yawMultiplier, controlObject.roll);
+                    if (!freeLook) torque = new Vector3(-controlObject.verticalLook * PlayerData.instance.mouseForceSensitivity / Time.deltaTime,
+                        controlObject.horizontalLook * PlayerData.instance.mouseForceSensitivity / Time.deltaTime * yawMultiplier, controlObject.roll);
                     else torque = new Vector3(0f, 0f, controlObject.roll);
 
                     switch (assistMode) {
@@ -246,8 +246,8 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable, IDamageab
     }
 
     void FreeLook(float horizontal, float vertical) {
-        cameraRig.Rotate(cameraRig.parent.up, horizontal * cameraSensitivity, Space.World);
-        cameraRig.Rotate(cameraRig.right, -vertical * cameraSensitivity, Space.World);
+        cameraRig.Rotate(cameraRig.parent.up, horizontal * PlayerData.instance.lookSensitivity, Space.World);
+        cameraRig.Rotate(cameraRig.right, -vertical * PlayerData.instance.lookSensitivity, Space.World);
     }
 
     void ResetCameraRig() {
@@ -405,6 +405,8 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable, IDamageab
 
             // Assist & Modules
             ChangeAssistMode(GameTypes.AssistMode.NoAssist);
+            previousAssistMode = GameTypes.AssistMode.NoAssist;
+
             rb.angularDrag = 0f;
             if (boosters) boosters.TogglePower(false);
             if (thrusters) thrusters.TogglePower(false);

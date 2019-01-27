@@ -68,7 +68,7 @@ MonoBehaviour:
   testMode: 0
   equipmentSpawnHeight: 2
   equipmentSpawnSeparation: 5
-  equipmentTier: 1
+  equipmentTier: 2
   ship: {fileID: 0}
 --- !u!114 &114243553186129760
 MonoBehaviour:
@@ -98,6 +98,8 @@ MonoBehaviour:
     type: 3}
   shipTeleportTime: 3
   shipDamageTolerance: 30
+  mouseForceSensitivity: 0.005
+  lookSensitivity: 0.5
   bulletPrefabs:
   - {fileID: 1182280151139152, guid: 050bf6e2a47d4ae48b26956868ff3b80, type: 3}
   - {fileID: 1182280151139152, guid: 399755ca273d06642aeeb02f7652eeb1, type: 3}

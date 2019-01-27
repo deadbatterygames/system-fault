@@ -57,7 +57,7 @@ public class Boosters : ShipModule, IPowerable {
     }
 
     void Boost() {
-        shipRB.AddForce(shipRB.transform.right * throttleHorizontal * acceleration + shipRB.transform.up * throttleVertical * acceleration, ForceMode.Acceleration);
+        shipRB.AddForce((shipRB.transform.right * throttleHorizontal * acceleration + shipRB.transform.up * throttleVertical * acceleration), ForceMode.Acceleration);
         shipRB.AddRelativeTorque(throttleTorque * torqueAcceleration, ForceMode.Acceleration);
     }
 

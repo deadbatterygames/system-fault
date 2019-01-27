@@ -25,7 +25,6 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
     [SerializeField] float airTorque = 0.2f;
 
     [Header("Mouse")]
-    [SerializeField] float lookSensitivity = 1f;
     [SerializeField] float minYAngle = -60f;
     [SerializeField] float maxYAngle = 60f;
 
@@ -44,6 +43,7 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
     Rigidbody rb;
     Vector3 moveDirection;
     Vector3 lookRotation;
+    Vector3 forceRotation;
 
     bool canEquip;
 
@@ -99,8 +99,9 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
         else moveDirection = (controlObject.rightLeft * transform.right + controlObject.forwardBack * transform.forward + controlObject.upDown * transform.up).normalized;
 
         // Look/Rotate
-        lookRotation = new Vector3(-controlObject.verticalLook, controlObject.horizontalLook, controlObject.roll);
-        if (snapping) Look(lookRotation);
+        if (snapping) Look(new Vector3(-controlObject.verticalLook, controlObject.horizontalLook, controlObject.roll));
+        else forceRotation = new Vector3(-controlObject.verticalLook / Time.deltaTime * PlayerData.instance.mouseForceSensitivity,
+            controlObject.horizontalLook / Time.deltaTime * PlayerData.instance.mouseForceSensitivity, controlObject.roll);
 
         // Jump
         if (controlObject.jump && grounded) Jump();
@@ -170,16 +171,16 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
 
     void Look(Vector3 rotation) {
         // Horizontal
-        Quaternion deltaRot = Quaternion.AngleAxis(rotation.y * lookSensitivity, Vector3.up);
+        Quaternion deltaRot = Quaternion.AngleAxis(rotation.y * PlayerData.instance.lookSensitivity, Vector3.up);
         transform.localRotation = transform.localRotation * deltaRot;
 
         // Vertical
-        yAngle = Mathf.Clamp(yAngle + -rotation.x * lookSensitivity, minYAngle, maxYAngle);
+        yAngle = Mathf.Clamp(yAngle + -rotation.x * PlayerData.instance.lookSensitivity, minYAngle, maxYAngle);
         cameraRig.transform.localEulerAngles = new Vector3(-yAngle, 0f, 0f);
     }
 
     void Rotate() {
-        rb.AddRelativeTorque(lookRotation * airTorque, ForceMode.Acceleration);
+        rb.AddRelativeTorque(forceRotation * airTorque, ForceMode.Acceleration);
     }
 
     void Jump() {
