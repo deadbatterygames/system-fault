@@ -7,7 +7,9 @@ public class Attractor {
 	public enum Type
 	{
 		None,
+		Player,
 		PlayerShip,
+		Energy,
 		Destination,
 		LandingPoint,
 		LandingPad

@@ -30,6 +30,7 @@ public class ShipComputer : MonoBehaviour, IPowerable {
     [SerializeField] Image thrusters;
     [SerializeField] Image boosters;
     [SerializeField] Image quantumDrive;
+    [SerializeField] Image laserCannon;
 
     Color activeColour = new Color(0f, 130f/255f, 1f, 1f);
     Color inactiveColour = new Color(80f/255f, 80f/255f, 80f/255f, 1f);
@@ -118,6 +119,9 @@ public class ShipComputer : MonoBehaviour, IPowerable {
                 break;
             case GameTypes.ModuleType.QuantumDrive:
                 quantumDrive.color = indicatorColour;
+                break;
+            case GameTypes.ModuleType.LaserCannon:
+                laserCannon.color = indicatorColour;
                 break;
             default:
                 break;

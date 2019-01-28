@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Eric's Scene.unity
+    path: Assets/Scenes/Roguelike.unity
     guid: cd2608b919eb0324db98eeffd9a9d050
   m_configObjects: {}

@@ -80,6 +80,7 @@ public class XromFlock : Flock {
 			if(differenceVector.magnitude > extents) extents = differenceVector.magnitude;
 		}
 
-		//collider.radius = Mathf.Max(2 * extents, 10f);
+		boundingRadius = Mathf.Max(extents / 2.0f, 10f);
+		collider.radius = Mathf.Max(extents, 10f);
 	}
 }

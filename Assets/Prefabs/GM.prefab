@@ -53,7 +53,7 @@ MonoBehaviour:
     type: 3}
   playerShipPrefab: {fileID: 1593011597609602, guid: 051aeb6a51134454d83344c8a0ccd7df,
     type: 3}
-  crystalPrefab: {fileID: 1181698613370626, guid: f3007728e68bc8b4a985f66bda8b9e27,
+  crystalPrefab: {fileID: 2316502462934980297, guid: 667ce7b28f1a89243ac641e396def246,
     type: 3}
   blueprintPrefab: {fileID: 1573300878066454, guid: f1dabf6892befca4eb71162e9c6a08ef,
     type: 3}
@@ -62,7 +62,7 @@ MonoBehaviour:
     type: 3}
   spawnLocation: 0
   testMode: 0
-  equipmentTier: 2
+  equipmentTier: 0
   ship: {fileID: 0}
 --- !u!114 &114243553186129760
 MonoBehaviour:
@@ -178,6 +178,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fd26bac8428bbb4d9790b41c16ac99c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  movementScale: 0
   xromFlockPrefab: {fileID: 1542343575561727086, guid: 063372812b00859469b9ecb2809dbc06,
     type: 3}
   flockingTest: 0

@@ -147,11 +147,15 @@ public class Flock : MonoBehaviour {
 		}
 	}
 	protected virtual void ObstacleTriggerEnter(FlockingObstacle obstacle){
-		Debug.Log("Adding obstacle " + obstacle.transform.parent.gameObject.name + " to separators");
-		if((groundedFlock && obstacle.grounded) || (!groundedFlock && !obstacle.grounded)) AddSeparator(obstacle.separator);
+		//Debug.Log("Adding obstacle " + obstacle.transform.parent.gameObject.name + " to separators");
+		if((groundedFlock && obstacle.grounded) || (!groundedFlock && !obstacle.grounded)){
+			if(obstacle.hasSeparator) AddSeparator(obstacle.separator);
+			if(obstacle.hasAttractor) AddAttractor(obstacle.attractor);
+		}
 	}
 	protected virtual void ObstacleTriggerExit(FlockingObstacle obstacle){
 		RemoveSeparator(obstacle.separator);
+		RemoveAttractor(obstacle.attractor);
 	}
 
 	public void AddAttractor(Attractor attractor){

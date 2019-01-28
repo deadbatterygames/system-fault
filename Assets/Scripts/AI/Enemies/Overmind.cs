@@ -4,14 +4,24 @@ using UnityEngine;
 
 public class Overmind : MonoBehaviour
 {
+    public float movementScale;
     [SerializeField] private GameObject xromFlockPrefab;
     private GameObject[] POI;
     [SerializeField] private bool flockingTest;
+    public static Overmind instance;
     // Start is called before the first frame update
     void Start()
     {
+        if(!instance) instance = this;
+        else Destroy(this);
+        
         int n = 5;
         int created = 0;
+
+        if(n >= 5){
+            CreateFlock(true, true, GameObject.FindGameObjectWithTag("Player").transform.position, 5);
+            created += 5;
+        }
 
         POI = GameObject.FindGameObjectsWithTag("IPEarth");
 

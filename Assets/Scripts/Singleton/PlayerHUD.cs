@@ -161,7 +161,7 @@ public class PlayerHUD : MonoBehaviour {
     public void ToggleAllHelp() {
         foreach (GameObject helpObject in helpHUD) helpObject.SetActive(showHelp);
         foreach (HelpSign helpSign in helpSigns) {
-            if (helpSign) helpSign.canvas.enabled = showHelp;
+            if (helpSign) helpSign.ToggleCanvas(showHelp);
             else helpSigns = helpSigns.Where(x => x != null).ToList();
         }
     }

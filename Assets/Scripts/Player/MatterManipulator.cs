@@ -143,6 +143,8 @@ public class MatterManipulator : MonoBehaviour, IWeapon {
             }
 
             GameManager.instance.ship.ToggleModuleSlot(heldModule.moduleType, true);
+
+            if (heldModule.moduleType == GameTypes.ModuleType.EnergyPack) PlayerHUD.instance.SetInfoPrompt("Press RMB to equip/unequip Energy Pack");
         }
 
         gameObject.transform.parent = transform;
@@ -162,7 +164,6 @@ public class MatterManipulator : MonoBehaviour, IWeapon {
     void FixedUpdate() {
         if (heldObject) {
             SnapObject();
-            if (heldModule.moduleType == GameTypes.ModuleType.EnergyPack) PlayerHUD.instance.SetInfoPrompt("Press RMB to equip/unequip Energy Pack");
         }
     }
 

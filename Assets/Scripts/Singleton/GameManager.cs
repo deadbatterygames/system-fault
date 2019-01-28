@@ -261,7 +261,7 @@ public class GameManager : MonoBehaviour {
         PlayerData.instance.hasMatterManipulator = false;
         PlayerData.instance.hasMulticannon = false;
 
-        AsyncOperation reloadScene = SceneManager.LoadSceneAsync("Eric's Scene", LoadSceneMode.Single);
+        AsyncOperation reloadScene = SceneManager.LoadSceneAsync("Roguelike", LoadSceneMode.Single);
         while (!reloadScene.isDone) {
             PlayerHUD.instance.SetInfoPrompt("Loading...");
             Debug.LogWarning("GameManager: Loading...");

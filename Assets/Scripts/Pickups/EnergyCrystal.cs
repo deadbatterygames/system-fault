@@ -20,6 +20,7 @@ public class EnergyCrystal : MonoBehaviour, IDamageable {
 
     void Shatter(Vector3 shatterForce) {
         FlockingController.DestroySeparator(obstacle.separator);
+        FlockingController.DestroyAttractor(obstacle.attractor);
         GameObject pieces = Instantiate(shatteredCrystal, transform.position, transform.rotation);
         pieces.transform.localScale = transform.localScale;
 

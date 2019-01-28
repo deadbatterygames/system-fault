@@ -80,7 +80,7 @@ public class Xrom : Boid, IDamageable {
 			// projHeading = projHeading.normalized * heading.magnitude;
 
 
-			rb.AddForce(heading * 100);
+			rb.AddForce(heading * Overmind.instance.movementScale, ForceMode.Acceleration);
 
 			//rb.velocity += flockingVelocity + (rb.velocity - oldVelocity);
 			//heading = heading.normalized * Mathf.Log(heading.magnitude);
