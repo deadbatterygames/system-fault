@@ -63,7 +63,7 @@ MonoBehaviour:
   explosionPrefab: {fileID: 7287519659594524012, guid: f74edd5e63412e142ad7a3b1ef8f91c6,
     type: 3}
   spawnLocation: 0
-  testMode: 1
+  testMode: 0
   equipmentTier: 2
   ship: {fileID: 0}
 --- !u!114 &114243553186129760

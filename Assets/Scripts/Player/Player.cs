@@ -67,7 +67,7 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
         StartCoroutine("WeaponTimer");
 
         // TODO: Delete this
-        StartCoroutine("TestUse"); 
+        //StartCoroutine("TestUse"); 
     }
 
     // TODO: Delete this

@@ -87,7 +87,7 @@ public class PrintDrivePort : MonoBehaviour, IUsable {
 
         Player currentPlayer = FindObjectOfType<Player>();
         if (currentPlayer.GetComponentInChildren<ModuleSlot>().connectedModule) currentPlayer.GetComponentInChildren<EnergyPack>().ShowPack(true);
-        currentPlayer.StartCoroutine("WeaponTimer");
+        if (!blueprint) currentPlayer.StartCoroutine("WeaponTimer");
 
         printDrive.PowerScreen(false);
 
