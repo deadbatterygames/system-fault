@@ -1,13 +1,21 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
+
+//
+// LaserCannon.cs
+//
+// Author: Eric Thompson (Dead Battery Games)
+// Purpose: Shoots lasers
+//
 
 public class LaserCannon : ShipModule, IWeapon {
 
+    [Header("Cannon Specs")]
     [SerializeField] float damage = 5f;
     [SerializeField] float fireFrequency = 0.25f;
     [SerializeField] float laserForce = 10f;
     [SerializeField] float aimRange = 1000f;
 
+    [Header("Laser Positions")]
     [SerializeField] LineRenderer leftLaser;
     [SerializeField] LineRenderer rightLaser;
     [SerializeField] Transform leftFirePoint;
@@ -16,12 +24,17 @@ public class LaserCannon : ShipModule, IWeapon {
     Vector3[] leftLaserPositions = new Vector3[2];
     Vector3[] rightLaserPositions = new Vector3[2];
 
-    bool canFire;
+    bool canFire = true;
+    float laserAlpha = 0f;
+
+    Material laserMaterial;
 
     protected override void Awake() {
         base.Awake();
         moduleType = GameTypes.ModuleType.LaserCannon;
-        ToggleLasers(false);
+
+        laserMaterial = leftLaser.material;
+        UpdateLaserOpacity();
     }
 
     public Vector3 GetAimPoint() {
@@ -44,6 +57,7 @@ public class LaserCannon : ShipModule, IWeapon {
             leftLaserPositions[0] = leftFirePoint.position;
             rightLaserPositions[0] = rightFirePoint.position;
             UpdateLaserPositions();
+            UpdateLaserOpacity();
         }
     }
 
@@ -55,9 +69,10 @@ public class LaserCannon : ShipModule, IWeapon {
             rightLaserPositions[0] = rightFirePoint.position;
             rightLaserPositions[1] = GetHitPoint(rightFirePoint.position, GetAimPoint());
 
-            // Fire lasers
-            StopCoroutine("ShowLasers");
-            StartCoroutine("ShowLasers");
+            // Make visible
+            laserAlpha = 1f;
+
+            canFire = false;
         }
     }
 
@@ -66,17 +81,17 @@ public class LaserCannon : ShipModule, IWeapon {
         rightLaser.SetPositions(rightLaserPositions);
     }
 
-    void ToggleLasers(bool toggle) {
-        leftLaser.enabled = toggle;
-        rightLaser.enabled = toggle;
-        canFire = !toggle;
-    }
+    void UpdateLaserOpacity() {
+        if (laserAlpha <= 0) {
+            laserAlpha = 0;
+            canFire = true;
+        }
 
-    IEnumerator ShowLasers() {
-        ToggleLasers(true);
+        laserMaterial.color = new Color(laserMaterial.color.r, laserMaterial.color.g, laserMaterial.color.b, laserAlpha);
 
-        yield return new WaitForSeconds(fireFrequency);
+        leftLaser.material = laserMaterial;
+        rightLaser.material = laserMaterial;
 
-        ToggleLasers(false);
+        laserAlpha -= Time.deltaTime / fireFrequency;
     }
 }
