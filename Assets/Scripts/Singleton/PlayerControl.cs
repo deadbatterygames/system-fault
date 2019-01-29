@@ -32,7 +32,7 @@ public struct ControlObject {
     public bool light;
 
     // Weapon types
-    public bool matterManipilator;
+    public bool changeEquipment;
     public bool weapon0;
     public bool weapon1;
     public bool weapon2;
@@ -95,7 +95,7 @@ public class PlayerControl : MonoBehaviour {
             currentInput.chargeShieldCell = Input.GetButton("Charge Shield Cell");
             currentInput.light = Input.GetButtonDown("Light");
 
-            currentInput.matterManipilator = Input.GetButtonDown("Change Equipment");
+            currentInput.changeEquipment = Input.GetButtonDown("Change Equipment");
             currentInput.weapon0 = Input.GetButtonDown("Multicannon Yellow");
             currentInput.weapon1 = Input.GetButtonDown("Multicannon Blue");
             currentInput.weapon2 = Input.GetButtonDown("Multicannon Red");

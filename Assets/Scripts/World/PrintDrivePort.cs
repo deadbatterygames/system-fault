@@ -58,7 +58,7 @@ public class PrintDrivePort : MonoBehaviour, IUsable {
                 if (blueprint) {
                     Destroy(blueprint);
                     Destroy(this);
-                } else FindObjectOfType<WeaponSlot>().SwitchWeapons(false);
+                }
             }
         }
     }
@@ -87,6 +87,7 @@ public class PrintDrivePort : MonoBehaviour, IUsable {
 
         Player currentPlayer = FindObjectOfType<Player>();
         if (currentPlayer.GetComponentInChildren<ModuleSlot>().connectedModule) currentPlayer.GetComponentInChildren<EnergyPack>().ShowPack(true);
+        currentPlayer.StartCoroutine("WeaponTimer");
 
         printDrive.PowerScreen(false);
 

@@ -67,7 +67,7 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
         StartCoroutine("WeaponTimer");
 
         // TODO: Delete this
-        //StartCoroutine("TestUse"); 
+        // StartCoroutine("TestUse"); 
     }
 
     // TODO: Delete this
@@ -131,7 +131,7 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
         if (controlObject.aim && weaponSlot.GetCurrentWeaponType() == GameTypes.PlayerWeaponType.MatterManipulator) {
             weaponSlot.GetComponentInChildren<MatterManipulator>().EquipEnergyPack(energySlot);
         }
-        if (controlObject.matterManipilator) {
+        if (controlObject.changeEquipment) {
             if ((weaponSlot.GetCurrentWeaponType() == GameTypes.PlayerWeaponType.MatterManipulator && !GetComponentInChildren<MatterManipulator>().IsHoldingObject())
             || weaponSlot.GetCurrentWeaponType() != GameTypes.PlayerWeaponType.MatterManipulator
             && canEquip)

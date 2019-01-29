@@ -107,6 +107,13 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable, IDamageab
 
         if (powered) {
             if (EnergyAvailable()) {
+                // Info Prompts
+                if (controlObject.forwardBack != 0 && !thrusters) PlayerHUD.instance.SetInfoPrompt("No Thrusters connected");
+                if ((controlObject.horizontalLook != 0 || controlObject.verticalLook != 0 || controlObject.roll != 0 || controlObject.upDown != 0) && !boosters) PlayerHUD.instance.SetInfoPrompt("No Boosters connected");
+                if (controlObject.firePrimary && !laserCannon) PlayerHUD.instance.SetInfoPrompt("No Laser Cannon connected");
+                if (controlObject.fireSecondary && missileRacks.Count == 0) PlayerHUD.instance.SetInfoPrompt("No Missile Racks connected");
+                if (controlObject.quantumJump && !quantumDrive) PlayerHUD.instance.SetInfoPrompt("No Quantum Drive connected");
+
                 // Thruster control
                 if (thrusters) {
                     switch (assistMode) {
@@ -209,15 +216,8 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable, IDamageab
                         lightOn = true;
                     }
                 }
-
-                // Info Prompts
-                if (controlObject.forwardBack != 0 && !thrusters) PlayerHUD.instance.SetInfoPrompt("No Thrusters connected");
-                if ((controlObject.horizontalLook != 0 || controlObject.verticalLook != 0 || controlObject.roll != 0 || controlObject.upDown != 0) && !boosters) PlayerHUD.instance.SetInfoPrompt("No Boosters connected");
-                if (controlObject.firePrimary && !laserCannon) PlayerHUD.instance.SetInfoPrompt("No Laser Cannon connected");
-                if (controlObject.fireSecondary && missileRacks.Count == 0) PlayerHUD.instance.SetInfoPrompt("No Missile Racks connected");
-                if (controlObject.quantumJump && !quantumDrive) PlayerHUD.instance.SetInfoPrompt("No Quantum Drive connected");
             } else TogglePower(false);
-        } else if (controlObject.interact && !busy)StartCoroutine("ExitShip");
+        } else if (controlObject.interact && !busy) StartCoroutine("ExitShip");
 
         // Shield Cells
         if (controlObject.chargeShieldCell) {
@@ -364,6 +364,7 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable, IDamageab
         rb.mass = slot.connectedModule.mass;
         rb.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
         GameManager.instance.AddGravityBody(rb);
+        GameManager.instance.ship.UpdateModuleStatus(slot.connectedModule, false);
 
         slot.connectedModule.connected = false;
         slot.connectedModule = null;
