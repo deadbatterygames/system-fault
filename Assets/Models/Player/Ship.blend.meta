@@ -26,6 +26,21 @@ ModelImporter:
     100040: RailGunL
     100042: RailGunR
     100044: LaserCannon
+    100046: Missile1_001
+    100048: Missile2_000
+    100050: Missile2_001
+    100052: Missile3_000
+    100054: Missile3_001
+    100056: MissileRack1
+    100058: MissileRack2
+    100060: MissileRack_000
+    100062: MissileRack_001
+    100064: MissileRack3
+    100066: MissileRackTopL
+    100068: MissileRackTopR
+    100070: EnergyPack
+    100072: MissileRack2Fired
+    100074: MissileRackEmpty
     400000: //RootNode
     400002: Canopy
     400004: Ship
@@ -49,6 +64,21 @@ ModelImporter:
     400040: RailGunL
     400042: RailGunR
     400044: LaserCannon
+    400046: Missile1_001
+    400048: Missile2_000
+    400050: Missile2_001
+    400052: Missile3_000
+    400054: Missile3_001
+    400056: MissileRack1
+    400058: MissileRack2
+    400060: MissileRack_000
+    400062: MissileRack_001
+    400064: MissileRack3
+    400066: MissileRackTopL
+    400068: MissileRackTopR
+    400070: EnergyPack
+    400072: MissileRack2Fired
+    400074: MissileRackEmpty
     2100000: RedPaint
     2100002: Metal
     2100004: Cushion
@@ -76,6 +106,21 @@ ModelImporter:
     2300034: MissileRack
     2300036: RailGun
     2300038: LaserCannon
+    2300040: Missile1_001
+    2300042: Missile2_000
+    2300044: Missile2_001
+    2300046: Missile3_000
+    2300048: Missile3_001
+    2300050: MissileRack1
+    2300052: MissileRack2
+    2300054: MissileRack_000
+    2300056: MissileRack_001
+    2300058: MissileRack3
+    2300060: MissileRackTopL
+    2300062: MissileRackTopR
+    2300064: EnergyPack
+    2300066: MissileRack2Fired
+    2300068: MissileRackEmpty
     3300000: //RootNode
     3300002: Canopy
     3300004: Ship
@@ -96,6 +141,21 @@ ModelImporter:
     3300034: MissileRack
     3300036: RailGun
     3300038: LaserCannon
+    3300040: Missile1_001
+    3300042: Missile2_000
+    3300044: Missile2_001
+    3300046: Missile3_000
+    3300048: Missile3_001
+    3300050: MissileRack1
+    3300052: MissileRack2
+    3300054: MissileRack_000
+    3300056: MissileRack_001
+    3300058: MissileRack3
+    3300060: MissileRackTopL
+    3300062: MissileRackTopR
+    3300064: EnergyPack
+    3300066: MissileRack2Fired
+    3300068: MissileRackEmpty
     4300000: Ship
     4300002: Canopy
     4300004: FuelPack
@@ -118,6 +178,21 @@ ModelImporter:
     4300038: RailGunR
     4300040: RailGunL
     4300042: LaserCannon
+    4300044: MissileRack_000
+    4300046: Missile2_000
+    4300048: Missile3_000
+    4300050: MissileRack2
+    4300052: MissileRack_001
+    4300054: Missile1_001
+    4300056: Missile2_001
+    4300058: Missile3_001
+    4300060: MissileRack1
+    4300062: MissileRackTopR
+    4300064: MissileRackTopL
+    4300066: MissileRack3
+    4300068: EnergyPack
+    4300070: MissileRackEmpty
+    4300072: MissileRack2Fired
     7400000: Default Take
     9500000: //RootNode
     13700000: LandingGear

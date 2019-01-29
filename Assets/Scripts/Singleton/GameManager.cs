@@ -102,11 +102,13 @@ public class GameManager : MonoBehaviour {
             PlayerData.instance.blueUnlocked = true;
             PlayerData.instance.redUnlocked = true;
 
-            GiveEquipment(PartPrinterData.instance.modulePrefabs[0 + equipmentTier]);
-            GiveEquipment(PartPrinterData.instance.modulePrefabs[3 + equipmentTier]);
-            GiveEquipment(PartPrinterData.instance.modulePrefabs[6 + equipmentTier]);
-            GiveEquipment(PartPrinterData.instance.modulePrefabs[9 + equipmentTier]);
-            GiveEquipment(PartPrinterData.instance.modulePrefabs[12 + equipmentTier]);
+            GiveEquipment(PartPrinterData.instance.modulePrefabs[0 * PartPrinterData.MODULE_TIERS + equipmentTier]);
+            GiveEquipment(PartPrinterData.instance.modulePrefabs[1 * PartPrinterData.MODULE_TIERS + equipmentTier]);
+            GiveEquipment(PartPrinterData.instance.modulePrefabs[2 * PartPrinterData.MODULE_TIERS + equipmentTier]);
+            GiveEquipment(PartPrinterData.instance.modulePrefabs[3 * PartPrinterData.MODULE_TIERS + equipmentTier]);
+            GiveEquipment(PartPrinterData.instance.modulePrefabs[4 * PartPrinterData.MODULE_TIERS + equipmentTier]);
+            GiveEquipment(PartPrinterData.instance.modulePrefabs[5 * PartPrinterData.MODULE_TIERS + equipmentTier]);
+            GiveEquipment(PartPrinterData.instance.modulePrefabs[5 * PartPrinterData.MODULE_TIERS + equipmentTier]);
         } else {
             GiveEquipment(startingZone);
             GiveEquipment(PartPrinterData.instance.modulePrefabs[0], 5f);

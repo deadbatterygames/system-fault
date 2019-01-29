@@ -14,7 +14,6 @@ public struct ControlObject {
     public float upDown;
     public float roll;
     public bool jump;
-    public bool run;
     public bool changeAssist;
     public bool toggleAssist;
     public bool quantumJump;
@@ -25,7 +24,8 @@ public struct ControlObject {
     public bool changeCamera;
 
     // Player action
-    public bool fire;
+    public bool firePrimary;
+    public bool fireSecondary;
     public bool aim;
     public bool interact;
     public bool chargeShieldCell;
@@ -80,7 +80,6 @@ public class PlayerControl : MonoBehaviour {
             currentInput.upDown = Input.GetAxis("Move Up/Down");
             currentInput.roll = Input.GetAxis("Roll");
             currentInput.jump = Input.GetButtonDown("Jump");
-            currentInput.run = Input.GetButton("Change Assist Mode");
             currentInput.changeAssist = Input.GetButtonDown("Change Assist Mode");
             currentInput.toggleAssist = Input.GetButtonDown("Toggle Flight Assist");
             currentInput.quantumJump = Input.GetButtonDown("Quantum Jump");
@@ -89,15 +88,16 @@ public class PlayerControl : MonoBehaviour {
             currentInput.verticalLook = Input.GetAxis("Vertical Look");
             currentInput.changeCamera = Input.GetButtonDown("Change Camera");
 
-            currentInput.fire = Input.GetButtonDown("Fire");
+            currentInput.firePrimary = Input.GetButtonDown("Fire Primary");
+            currentInput.fireSecondary = Input.GetButtonDown("Fire Secondary");
             currentInput.aim = Input.GetButtonDown("Equip Energy Pack/Freelook");
             currentInput.interact = Input.GetButtonDown("Interact");
             currentInput.chargeShieldCell = Input.GetButton("Charge Shield Cell");
             currentInput.light = Input.GetButtonDown("Light");
 
-            currentInput.matterManipilator = Input.GetButtonDown("Matter Manipulator");
-            currentInput.weapon0 = Input.GetButtonDown("Multicannon Yellow/Energy Weapon");
-            currentInput.weapon1 = Input.GetButtonDown("Multicannon Blue/Kinetic Weapon");
+            currentInput.matterManipilator = Input.GetButtonDown("Change Equipment");
+            currentInput.weapon0 = Input.GetButtonDown("Multicannon Yellow");
+            currentInput.weapon1 = Input.GetButtonDown("Multicannon Blue");
             currentInput.weapon2 = Input.GetButtonDown("Multicannon Red");
 
             currentInput.menuRight = Input.GetButtonDown("Menu Right");

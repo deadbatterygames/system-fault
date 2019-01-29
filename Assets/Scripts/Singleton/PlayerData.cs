@@ -16,6 +16,7 @@ public class PlayerData : MonoBehaviour {
     public GameObject dematerializedShipPrefab;
     public float shipTeleportTime = 3f;
     public float shipDamageTolerance = 30f;
+    public Material reservedSlotMaterial;
 
     [Header("Input")]
     [Range(0.1f, 5f)] public float mouseForceSensitivity = 0.5f;

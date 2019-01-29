@@ -28,11 +28,10 @@ public class ShipModule : MonoBehaviour, IMaterializeable {
     protected virtual void Awake() {
         defaultMaterials = GetComponent<MeshRenderer>().materials;
 
-        if (GetComponent<Rigidbody>()) {
-            mass = GetComponent<Rigidbody>().mass;
-        } else {
-            Debug.LogError("ShipModule: No attached rigidbody");
-        }
+        if (GetComponent<Rigidbody>()) mass = GetComponent<Rigidbody>().mass;
+        else Debug.LogError("ShipModule: No attached rigidbody");
+
+        if (gameObject.layer != LayerMask.NameToLayer("Materializable")) Debug.LogError("ShipModule: " + GetName() + "'s layer is not set to \"Materializable\"");
     }
 
     public string GetName() {

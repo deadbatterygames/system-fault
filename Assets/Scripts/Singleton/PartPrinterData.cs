@@ -17,7 +17,7 @@ public class PartPrinterData : MonoBehaviour {
     public float printTime = 2f;
     public float[] printCosts;
 
-    public const int MODULE_TYPES = 5;
+    public const int MODULE_TYPES = 6;
     public const int MODULE_TIERS = 3;
 
     bool[,] unlockedModules = new bool[MODULE_TYPES, MODULE_TIERS];

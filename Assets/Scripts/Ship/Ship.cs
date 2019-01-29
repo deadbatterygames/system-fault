@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 //
 // Ship.cs
@@ -18,6 +19,8 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable, IDamageab
     Boosters boosters = null;
     QuantumDrive quantumDrive = null;
     LaserCannon laserCannon;
+    List<MissileRack> missileRacks = new List<MissileRack>();
+    
     IWeapon kineticWeapon;
 
     LandingGear landingGear;
@@ -47,6 +50,7 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable, IDamageab
     bool powered = false;
     bool busy = false;
     bool lightOn = true;
+    int missileRackIndex = 0;
 
     bool freeLook = false;
 
@@ -59,7 +63,7 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable, IDamageab
 
     void Start() {
         moduleSlots = GetComponentsInChildren<ModuleSlot>();
-        foreach (ModuleSlot slot in moduleSlots) ToggleModuleSlot(slot.slotType, false);
+        foreach (ModuleSlot slot in moduleSlots) ToggleModuleSlots(slot.slotType, false);
 
         rb = GetComponent<Rigidbody>();
         rb.centerOfMass = centerOfMass.localPosition;
@@ -187,7 +191,14 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable, IDamageab
                 }
 
                 // Weapons
-                if (laserCannon != null && controlObject.fire) laserCannon.Fire();
+                if (laserCannon != null && controlObject.firePrimary) laserCannon.Fire();
+                if (missileRacks.Count > 0 && controlObject.fireSecondary) {
+                    missileRacks[missileRackIndex].Fire();
+                    if (missileRacks.Count > 1) {
+                        if (missileRackIndex == 0) missileRackIndex = 1;
+                        else if (missileRackIndex == 1) missileRackIndex = 0;
+                    }
+                }
 
                 // Speedometer
                 shipComputer.UpdateSpeedometer(rb.velocity.magnitude, transform.InverseTransformDirection(rb.velocity).z < -0.5f);
@@ -206,7 +217,7 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable, IDamageab
                 // Info Prompts
                 if (controlObject.forwardBack != 0 && !thrusters) PlayerHUD.instance.SetInfoPrompt("No Thrusters connected");
                 if ((controlObject.horizontalLook != 0 || controlObject.verticalLook != 0 || controlObject.roll != 0 || controlObject.upDown != 0) && !boosters) PlayerHUD.instance.SetInfoPrompt("No Boosters connected");
-                if (controlObject.fire && !laserCannon) PlayerHUD.instance.SetInfoPrompt("No Laser Cannon connected");
+                if (controlObject.firePrimary && !laserCannon) PlayerHUD.instance.SetInfoPrompt("No Laser Cannon connected");
                 if (controlObject.quantumJump && !quantumDrive) PlayerHUD.instance.SetInfoPrompt("No Quantum Drive connected");
             } else TogglePower(false);
         } else if (controlObject.interact && !busy)StartCoroutine("ExitShip");
@@ -316,8 +327,8 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable, IDamageab
         }
     }
 
-    public void UpdateModuleStatus(ShipModule module, GameTypes.ModuleType type, bool connected) {
-        switch (type) {
+    public void UpdateModuleStatus(ShipModule module, bool connected) {
+        switch (module.moduleType) {
             case GameTypes.ModuleType.EnergyPack:
                 if (connected) energyPack = module.GetComponent<EnergyPack>();
                 else energyPack = null;
@@ -338,9 +349,17 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable, IDamageab
                 if (connected) laserCannon = module.GetComponent<LaserCannon>();
                 else laserCannon = null;
                 break;
+            case GameTypes.ModuleType.MissileRack:
+                if (connected) missileRacks.Add(module.GetComponent<MissileRack>());
+                else {
+                    missileRacks.Remove(module.GetComponent<MissileRack>());
+                    missileRackIndex = 0;
+                }
+                break;
         }
 
-        shipComputer.UpdateModuleStatus(type, connected);
+        shipComputer.UpdateModuleStatus(module.moduleType, connected);
+        if (module.moduleType == GameTypes.ModuleType.MissileRack && missileRacks.Count > 0) shipComputer.UpdateModuleStatus(module.moduleType, true);
     }
 
     public void Use() {
@@ -446,8 +465,8 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable, IDamageab
         controlCam.checkForMaterializable = false;
     }
 
-    public void ToggleModuleSlot(GameTypes.ModuleType moduleType, bool toggle) {
-        foreach (ModuleSlot slot in moduleSlots) if (!slot.connectedModule && moduleType == slot.slotType) slot.SetActive(toggle);
+    public void ToggleModuleSlots(GameTypes.ModuleType moduleType, bool toggle) {
+        foreach (ModuleSlot slot in moduleSlots) if (!slot.connectedModule && moduleType == slot.slotType) slot.ToggleSlot(toggle);
     }
 
     public void SetCanopyClear(bool exitClear) {

@@ -83,6 +83,7 @@ public class WeaponSlot : MonoBehaviour {
             // Objects
             currentWeapon = null;
             currentWeaponType = GameTypes.PlayerWeaponType.None;
+            GetComponentInParent<Player>().canEquip = false;
             matterManipulator.gameObject.SetActive(false);
             multicannon.gameObject.SetActive(false);
 

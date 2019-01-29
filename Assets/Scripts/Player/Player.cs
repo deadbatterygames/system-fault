@@ -45,7 +45,7 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
     Vector3 lookRotation;
     Vector3 forceRotation;
 
-    bool canEquip;
+    [HideInInspector] public bool canEquip;
 
     void Start() {
         PlayerData.instance.alive = true;
@@ -118,7 +118,7 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
         }
 
         // Weapons
-        if (controlObject.fire && weaponSlot.currentWeapon != null) {
+        if (controlObject.firePrimary && weaponSlot.currentWeapon != null) {
             weaponSlot.currentWeapon.Fire();
         }
         if (controlObject.aim && weaponSlot.GetCurrentWeaponType() == GameTypes.PlayerWeaponType.MatterManipulator) {

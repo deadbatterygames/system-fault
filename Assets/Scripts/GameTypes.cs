@@ -6,14 +6,13 @@
 //
 
 public class GameTypes {
+
 	public enum ModuleType {
         EnergyPack,
         Thrusters,
         Boosters,
         QuantumDrive,
         LaserCannon,
-        PulseCannon,
-        Railgun,
         MissileRack
     };
 
@@ -32,9 +31,9 @@ public class GameTypes {
     };
 
     public enum PlayerWeaponType {
+        None,
         MatterManipulator,
-        Multicannon,
-        None
+        Multicannon
     };
 
     public enum XromPartType {

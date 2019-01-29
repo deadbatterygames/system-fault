@@ -29,7 +29,10 @@ public class MatterManipulator : MonoBehaviour, IWeapon {
 
     void ConnectAllModules() {
         foreach (ShipModule module in FindObjectsOfType<ShipModule>()) foreach (ModuleSlot moduleSlot in GameManager.instance.ship.GetComponentsInChildren<ModuleSlot>()) {
-            if (!moduleSlot.connectedModule && moduleSlot.slotType == module.moduleType) ConnectModule(module, moduleSlot);
+            if (!moduleSlot.connectedModule && moduleSlot.slotType == module.moduleType) {
+                ConnectModule(module, moduleSlot);
+                break;
+            }
         }
     }
 
@@ -66,25 +69,72 @@ public class MatterManipulator : MonoBehaviour, IWeapon {
         }
     }
 
+    void GrabObject(GameObject gameObject) {
+        heldObject = gameObject;
+
+        heldModule = gameObject.GetComponent<ShipModule>();
+        if (heldModule) {
+            if (heldModule.connected) {
+                DisconnectModule(gameObject.GetComponentInParent<ModuleSlot>());
+                heldModule.shipRB = null;
+                GameManager.instance.ship.UpdateModuleStatus(heldModule, false);
+            }
+
+            GameManager.instance.ship.ToggleModuleSlots(heldModule.moduleType, true);
+
+            if (heldModule.moduleType == GameTypes.ModuleType.EnergyPack) PlayerHUD.instance.SetInfoPrompt("Press RMB to equip/unequip Energy Pack");
+        }
+
+        gameObject.transform.parent = transform;
+
+        IMaterializeable materializable = gameObject.GetComponent<IMaterializeable>();
+        materializable.Dematerialize(dematMaterial);
+
+        PlayerHUD.instance.ToggleCrosshair(false);
+        PlayerHUD.instance.ToggleUsePrompt(false);
+        PlayerHUD.instance.ToggleDematPrompt(false);
+        PlayerCamera.instance.checkForUsable = false;
+        PlayerCamera.instance.checkForMaterializable = false;
+
+        energyParticles.Play();
+    }
+
+    void DropObject() {
+        IMaterializeable mObject = heldObject.GetComponent<IMaterializeable>();
+
+        if (!Physics.Linecast(transform.position, snapPoint.position) && !mObject.IsColliding()) {
+            if (heldModule) GameManager.instance.ship.ToggleModuleSlots(heldModule.moduleType, false);
+
+            heldObject.transform.parent = null;
+            mObject.Materialize();
+            heldObject.GetComponent<Rigidbody>().velocity = GetComponentInParent<Rigidbody>().velocity;
+            heldObject = null;
+
+            PlayerHUD.instance.ToggleCrosshair(true);
+            PlayerCamera.instance.checkForUsable = true;
+            PlayerCamera.instance.checkForMaterializable = true;
+
+            energyParticles.Stop();
+        } else {
+            PlayerHUD.instance.SetInfoPrompt("Cannot materialize object here");
+        }
+    }
+
     void ConnectModule(ShipModule module, ModuleSlot slot) {
         Rigidbody rb = module.GetComponent<Rigidbody>();
         GameManager.instance.RemoveGravityBody(rb);
         Destroy(rb);
 
+        assignedSlot = null;
+        GameManager.instance.ship.ToggleModuleSlots(slot.slotType, false);
+        PlayerHUD.instance.SetInfoPrompt(module.GetName() + " connected");
+
         module.transform.SetParent(slot.transform);
         slot.connectedModule = module;
         module.connected = true;
 
-        slot.SetActive(false);
-        assignedSlot = null;
-
-        if (GameManager.instance.ship) {
-            GameManager.instance.ship.UpdateModuleStatus(module, module.moduleType, true);
-            module.shipRB = GameManager.instance.ship.GetComponent<Rigidbody>();
-        }
-
-        GameManager.instance.ship.ToggleModuleSlot(slot.slotType, false);
-        PlayerHUD.instance.SetInfoPrompt(module.GetName() + " connected");
+        GameManager.instance.ship.UpdateModuleStatus(module, true);
+        module.shipRB = GameManager.instance.ship.GetComponent<Rigidbody>();
 
         heldObject = null;
         module = null;
@@ -107,58 +157,7 @@ public class MatterManipulator : MonoBehaviour, IWeapon {
         heldObject.GetComponent<ShipModule>().connected = false;
         assignedSlot = slot;
 
-        slot.SetActive(true);
-    }
-
-    void DropObject() {
-        IMaterializeable mObject = heldObject.GetComponent<IMaterializeable>();
-
-        if (!Physics.Linecast(transform.position, snapPoint.position) && !mObject.IsColliding()) {
-            if (heldModule) GameManager.instance.ship.ToggleModuleSlot(heldModule.moduleType, false);
-
-            heldObject.transform.parent = null;
-            mObject.Materialize();
-            heldObject.GetComponent<Rigidbody>().velocity = GetComponentInParent<Rigidbody>().velocity;
-            heldObject = null;
-
-            PlayerHUD.instance.ToggleCrosshair(true);
-            PlayerCamera.instance.checkForUsable = true;
-            PlayerCamera.instance.checkForMaterializable = true;
-
-            energyParticles.Stop();
-        } else {
-            PlayerHUD.instance.SetInfoPrompt("Cannot materialize object here");
-        }
-    }
-
-    void GrabObject(GameObject gameObject) {
-        heldObject = gameObject;
-
-        heldModule = gameObject.GetComponent<ShipModule>();
-        if (heldModule) {
-            if (heldModule.connected) {
-                DisconnectModule(gameObject.GetComponentInParent<ModuleSlot>());
-                heldModule.shipRB = null;
-                GameManager.instance.ship.UpdateModuleStatus(heldModule, heldModule.moduleType, false);
-            }
-
-            GameManager.instance.ship.ToggleModuleSlot(heldModule.moduleType, true);
-
-            if (heldModule.moduleType == GameTypes.ModuleType.EnergyPack) PlayerHUD.instance.SetInfoPrompt("Press RMB to equip/unequip Energy Pack");
-        }
-
-        gameObject.transform.parent = transform;
-
-        IMaterializeable materializable = gameObject.GetComponent<IMaterializeable>();
-        materializable.Dematerialize(dematMaterial);
-
-        PlayerHUD.instance.ToggleCrosshair(false);
-        PlayerHUD.instance.ToggleUsePrompt(false);
-        PlayerHUD.instance.ToggleDematPrompt(false);
-        PlayerCamera.instance.checkForUsable = false;
-        PlayerCamera.instance.checkForMaterializable = false;
-
-        energyParticles.Play();
+        GameManager.instance.ship.ToggleModuleSlots(slot.slotType, true);
     }
 
     void FixedUpdate() {

@@ -25,6 +25,7 @@ public class PrintDrive : MonoBehaviour, IControllable {
     [SerializeField] Image boosters;
     [SerializeField] Image quantumDrive;
     [SerializeField] Image laserCannon;
+    [SerializeField] Image missile;
 
     [SerializeField] Image tier1;
     [SerializeField] Image tier2;
@@ -74,6 +75,7 @@ public class PrintDrive : MonoBehaviour, IControllable {
         boosters.enabled = false;
         quantumDrive.enabled = false;
         laserCannon.enabled = false;
+        missile.enabled = false;
 
         switch (module) {
             case GameTypes.ModuleType.EnergyPack:
@@ -90,6 +92,9 @@ public class PrintDrive : MonoBehaviour, IControllable {
                 break;
             case GameTypes.ModuleType.LaserCannon:
                 laserCannon.enabled = true;
+                break;
+            case GameTypes.ModuleType.MissileRack:
+                missile.enabled = true;
                 break;
         }
     }

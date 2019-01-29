@@ -18,7 +18,6 @@ public class ModuleSlot : MonoBehaviour {
 
     [HideInInspector] public ShipModule connectedModule;
 
-    [SerializeField] Material reservedMaterial; // TODO: This should be stored somewhere else...
     Material[] defaultMaterials;
     Material[] reservedMaterials;
 
@@ -26,12 +25,10 @@ public class ModuleSlot : MonoBehaviour {
     Collider slotTrigger;
 
     void Awake() {
-        if (reservedMaterial == null) Debug.LogWarning("ModuleSlot: No reserved material set");
-
         meshRenderer = GetComponent<MeshRenderer>();
         defaultMaterials = meshRenderer.materials;
         reservedMaterials = new Material[meshRenderer.materials.Length];
-        for (int i = 0; i < reservedMaterials.Length; i++) reservedMaterials[i] = reservedMaterial;
+        for (int i = 0; i < reservedMaterials.Length; i++) reservedMaterials[i] = PlayerData.instance.reservedSlotMaterial;
 
         slotTrigger = GetComponent<Collider>();
     }
@@ -71,7 +68,7 @@ public class ModuleSlot : MonoBehaviour {
         }
     }
 
-    public void SetActive(bool toggle) {
+    public void ToggleSlot(bool toggle) {
         meshRenderer.enabled = toggle;
         slotTrigger.enabled = toggle;
 

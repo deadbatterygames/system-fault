@@ -92,6 +92,8 @@ MonoBehaviour:
     type: 3}
   shipTeleportTime: 3
   shipDamageTolerance: 30
+  reservedSlotMaterial: {fileID: 2100000, guid: 8113cd56145d7c94cac79e1428dbf0f5,
+    type: 2}
   mouseForceSensitivity: 0.75
   lookSensitivity: 0.5
   bulletPrefabs:
@@ -101,8 +103,8 @@ MonoBehaviour:
   maxBullets: 10
   hasMatterManipulator: 0
   hasMulticannon: 0
-  blueUnlocked: 0
-  redUnlocked: 0
+  blueUnlocked: 1
+  redUnlocked: 1
   alive: 0
   teleportingShip: 0
 --- !u!114 &114526494519534050
@@ -133,6 +135,9 @@ MonoBehaviour:
   - {fileID: 1214613102520248, guid: ea7d3418299b3464db82a996f90d36b6, type: 3}
   - {fileID: 1496576636978324, guid: 61507748ce5ddf74c909259a8d2939c3, type: 3}
   - {fileID: 1583911093838380, guid: aef357e0d23f4fc47a1758bb25a85e4e, type: 3}
+  - {fileID: 1195262833593692441, guid: fbae6b6b324f47144a619611e7e8a418, type: 3}
+  - {fileID: 256799335, guid: 2aa3f8169a4599a4c86e0344e6d3292e, type: 3}
+  - {fileID: 9019007867198740734, guid: a5e10bb4cee63c44fb4e26f56a778d56, type: 3}
   printDrivePrefab: {fileID: 1062327865660682, guid: d7cd52ea10c2d9046a86abdb9ec7b3b6,
     type: 3}
   printMaterial: {fileID: 2100000, guid: 0f4058a2bca35a349a625027cb054b9d, type: 2}
@@ -153,6 +158,9 @@ MonoBehaviour:
   - 25
   - 50
   - 75
+  - 0
+  - 0
+  - 0
 --- !u!114 &760541699
 MonoBehaviour:
   m_ObjectHideFlags: 0
