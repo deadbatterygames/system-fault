@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 //
 // Missile.cs
@@ -7,22 +8,38 @@
 // Purpose: Moves towards target (if any) and explodes
 //
 
-[RequireComponent(typeof(Rigidbody))]
-[RequireComponent(typeof(CapsuleCollider))]
-
 public class Missile : MonoBehaviour {
 
     Rigidbody rb;
+    CapsuleCollider capsule;
 
     static float thrust = 50f;
 
-    // Start is called before the first frame update
     void Start() {
         rb = GetComponent<Rigidbody>();
+        capsule = GetComponent<CapsuleCollider>();
+        if (!rb) Debug.LogError("Missile: No Rigidbody attached to missile");
+        if (!capsule) Debug.LogError("Missile: No Rigidbody attached to missile");
     }
 
-    // Update is called once per frame
     void FixedUpdate() {
-        rb.AddForce(transform.up * thrust, ForceMode.Acceleration);
+        if (rb) rb.AddForce(transform.up * thrust, ForceMode.Acceleration);
+    }
+
+    void OnCollisionEnter(Collision collision) {
+        StartCoroutine("DestroyMissile");
+    }
+
+    IEnumerator DestroyMissile() {
+        Destroy(GetComponent<MeshRenderer>());
+        Destroy(GetComponentInChildren<ParticleSystem>());
+        Destroy(GetComponent<CapsuleCollider>());
+        Destroy(rb);
+
+        Instantiate(GameManager.instance.explosionPrefab, transform.position, transform.rotation);
+
+        yield return new WaitForSeconds(GetComponentInChildren<TrailRenderer>().time);
+
+        Destroy(gameObject);
     }
 }

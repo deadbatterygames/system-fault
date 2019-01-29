@@ -62,12 +62,19 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
         weaponSlot = GetComponentInChildren<WeaponSlot>();
         if (weaponSlot == null) Debug.LogError("Player: No weapon slot set as child");
 
-        if (cameraRig == null)  Debug.LogError("Player: No camera rig set in inspector");
+        if (cameraRig == null) Debug.LogError("Player: No camera rig set in inspector");
 
         StartCoroutine("WeaponTimer");
-
-        //Overmind.AddAttractor(new Attractor(gameObject, 9999999999999f, Attractor.Type.None));
+        // TODO: Delete this
+        //StartCoroutine("TestUse"); 
     }
+
+    // TODO: Delete this
+    IEnumerator TestUse() {
+        yield return new WaitForSeconds(1f);
+        GameManager.instance.ship.Use();
+    }
+    // #######################
 
     void FixedUpdate() {
         Move();
@@ -79,7 +86,6 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
     }
 
     void UpdateShipRadar() {
-        // TODO: Make a utility function for this...
         Vector3 playerToShip = (GameManager.instance.ship.transform.position - transform.position).normalized;
         float rightLeft = Vector3.Dot(transform.right, playerToShip);
         float forwardBack = Vector3.Dot(transform.forward, playerToShip);

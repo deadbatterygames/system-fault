@@ -3169,7 +3169,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &3378876966972495179
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4597,7 +4597,7 @@ GameObject:
   - component: {fileID: 421788064149161707}
   m_Layer: 5
   m_Name: HelpButton
-  m_TagString: HelpHUD
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4953,7 +4953,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &6852411005148863398
 RectTransform:
   m_ObjectHideFlags: 0

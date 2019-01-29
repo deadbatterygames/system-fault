@@ -26,7 +26,6 @@ public class PartPrinter : MonoBehaviour {
     }
 
     void Update () {
-        // TODO: This should probably be in a shader
         if (newPart) {
             alpha += Time.deltaTime / PartPrinterData.instance.printTime;
             SetPartAlpha(alpha);

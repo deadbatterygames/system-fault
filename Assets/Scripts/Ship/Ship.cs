@@ -44,8 +44,6 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable, IDamageab
     ShipComputer shipComputer;
     ShipLight shipLight;
 
-    ParticleSystem spaceParticles;
-
     bool canopyClear = true;
     bool powered = false;
     bool busy = false;
@@ -74,8 +72,6 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable, IDamageab
         if (!landingGear) Debug.LogError("Ship: No ship computer set as child");
         shipLight = GetComponentInChildren<ShipLight>();
         if (!landingGear) Debug.LogError("Ship: No ship light set as child");
-        spaceParticles = GetComponentInChildren<ParticleSystem>();
-        if (!spaceParticles) Debug.LogError("Ship: No space particles set as child");
 
         if (cameraRig == null) Debug.LogError("Ship: No camera rig set in inspector");
         if (playerExit == null) Debug.LogError("Ship: No player exit set in inspector");
@@ -475,7 +471,6 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable, IDamageab
 
     IEnumerator EnterShip() {
         busy = true;
-        spaceParticles.Play();
 
         yield return new WaitForSeconds(0.75f);
 
@@ -514,8 +509,6 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable, IDamageab
         if (canopyClear) GameManager.instance.SpawnPlayer(playerExit, rb.velocity);
         else GameManager.instance.SpawnPlayer(playerExitAlt, rb.velocity);
 
-        spaceParticles.Stop();
-        spaceParticles.Clear();
         busy = false;
     }
 

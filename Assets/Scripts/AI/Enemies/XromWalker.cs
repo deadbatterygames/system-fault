@@ -128,11 +128,6 @@ public class XromWalker : MonoBehaviour, IGroundable {
         return xromActive;
     }
 
-    //// TODO: FOR TESTING
-    //void SearchForPlayer() {
-    //    target = FindObjectOfType<Player>().transform;
-    //}
-
     IEnumerator ExplodeXrom() {
         // Warning Flash
         float flashInterval = explosionDelay / warningFlashes / 2f;

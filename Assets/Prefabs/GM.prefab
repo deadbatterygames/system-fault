@@ -53,12 +53,14 @@ MonoBehaviour:
     type: 3}
   playerShipPrefab: {fileID: 1593011597609602, guid: 051aeb6a51134454d83344c8a0ccd7df,
     type: 3}
+  startingZone: {fileID: 6451903063709986607, guid: b7e0f5488fab98341aae3f32676d829e,
+    type: 3}
   crystalPrefab: {fileID: 2316502462934980297, guid: 667ce7b28f1a89243ac641e396def246,
     type: 3}
   blueprintPrefab: {fileID: 1573300878066454, guid: f1dabf6892befca4eb71162e9c6a08ef,
     type: 3}
   xromPrefab: {fileID: 1188217680102406, guid: ce6cc1e631e52a04d9137b99f32a6904, type: 3}
-  startingZone: {fileID: 6451903063709986607, guid: b7e0f5488fab98341aae3f32676d829e,
+  explosionPrefab: {fileID: 7287519659594524012, guid: f74edd5e63412e142ad7a3b1ef8f91c6,
     type: 3}
   spawnLocation: 0
   testMode: 0

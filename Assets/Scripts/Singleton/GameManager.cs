@@ -30,10 +30,15 @@ public class GameManager : MonoBehaviour {
     [Header("Prefabs")]
     [SerializeField] GameObject playerPrefab;
     [SerializeField] GameObject playerShipPrefab;
+    [SerializeField] GameObject startingZone;
+
+    [Space]
     [SerializeField] GameObject crystalPrefab;
     [SerializeField] GameObject blueprintPrefab;
+
+    [Space]
     [SerializeField] GameObject xromPrefab;
-    [SerializeField] GameObject startingZone;
+    public GameObject explosionPrefab;
 
     [Header("Testing")]
     [SerializeField] GameTypes.SpawnLocation spawnLocation;
@@ -280,6 +285,7 @@ public class GameManager : MonoBehaviour {
             case GameTypes.ModuleType.Thrusters: return "Thrusters";
             case GameTypes.ModuleType.QuantumDrive: return "Quantum Drive";
             case GameTypes.ModuleType.LaserCannon: return "Laser Cannon";
+            case GameTypes.ModuleType.MissileRack: return "Missile Rack";
             default: return "Unknown module type";
         }
     }

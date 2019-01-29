@@ -78,24 +78,12 @@ public class PrintDrive : MonoBehaviour, IControllable {
         missile.enabled = false;
 
         switch (module) {
-            case GameTypes.ModuleType.EnergyPack:
-                energyPack.enabled = true;
-                break;
-            case GameTypes.ModuleType.Thrusters:
-                thrusters.enabled = true;
-                break;
-            case GameTypes.ModuleType.Boosters:
-                boosters.enabled = true;
-                break;
-            case GameTypes.ModuleType.QuantumDrive:
-                quantumDrive.enabled = true;
-                break;
-            case GameTypes.ModuleType.LaserCannon:
-                laserCannon.enabled = true;
-                break;
-            case GameTypes.ModuleType.MissileRack:
-                missile.enabled = true;
-                break;
+            case GameTypes.ModuleType.EnergyPack: energyPack.enabled = true; break;
+            case GameTypes.ModuleType.Thrusters: thrusters.enabled = true; break;
+            case GameTypes.ModuleType.Boosters: boosters.enabled = true; break;
+            case GameTypes.ModuleType.QuantumDrive: quantumDrive.enabled = true; break;
+            case GameTypes.ModuleType.LaserCannon: laserCannon.enabled = true; break;
+            case GameTypes.ModuleType.MissileRack: missile.enabled = true; break;
         }
     }
 
