@@ -214,6 +214,7 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable, IDamageab
                 if (controlObject.forwardBack != 0 && !thrusters) PlayerHUD.instance.SetInfoPrompt("No Thrusters connected");
                 if ((controlObject.horizontalLook != 0 || controlObject.verticalLook != 0 || controlObject.roll != 0 || controlObject.upDown != 0) && !boosters) PlayerHUD.instance.SetInfoPrompt("No Boosters connected");
                 if (controlObject.firePrimary && !laserCannon) PlayerHUD.instance.SetInfoPrompt("No Laser Cannon connected");
+                if (controlObject.fireSecondary && missileRacks.Count == 0) PlayerHUD.instance.SetInfoPrompt("No Missile Racks connected");
                 if (controlObject.quantumJump && !quantumDrive) PlayerHUD.instance.SetInfoPrompt("No Quantum Drive connected");
             } else TogglePower(false);
         } else if (controlObject.interact && !busy)StartCoroutine("ExitShip");
@@ -356,6 +357,16 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable, IDamageab
 
         shipComputer.UpdateModuleStatus(module.moduleType, connected);
         if (module.moduleType == GameTypes.ModuleType.MissileRack && missileRacks.Count > 0) shipComputer.UpdateModuleStatus(module.moduleType, true);
+    }
+
+    public void DetachModule(ModuleSlot slot) {
+        Rigidbody rb = slot.connectedModule.gameObject.AddComponent<Rigidbody>();
+        rb.mass = slot.connectedModule.mass;
+        rb.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
+        GameManager.instance.AddGravityBody(rb);
+
+        slot.connectedModule.connected = false;
+        slot.connectedModule = null;
     }
 
     public void Use() {

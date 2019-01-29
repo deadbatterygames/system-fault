@@ -35,6 +35,8 @@ public class MissileRack : ShipModule, IWeapon {
             rb.velocity = GameManager.instance.ship.GetComponent<Rigidbody>().velocity;
 
             fireCount++;
+
+            if (fireCount == firePoints.Length) GameManager.instance.ship.DetachModule(GetComponentInParent<ModuleSlot>());
         }
     }
 }
