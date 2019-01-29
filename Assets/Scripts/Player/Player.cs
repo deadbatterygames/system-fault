@@ -65,8 +65,9 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
         if (cameraRig == null) Debug.LogError("Player: No camera rig set in inspector");
 
         StartCoroutine("WeaponTimer");
+
         // TODO: Delete this
-        StartCoroutine("TestUse"); 
+        //StartCoroutine("TestUse"); 
     }
 
     // TODO: Delete this
