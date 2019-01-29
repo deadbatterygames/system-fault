@@ -147,14 +147,14 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
         }
 
         // Test stuff
-        if (GameManager.instance.IsInTestMode()) {
-            if (Input.GetKeyDown(KeyCode.L) && energySlot.connectedModule) GetComponentInChildren<EnergyPack>().AddEnergy(1000000f);
-            if (Input.GetKeyDown(KeyCode.K)) Damage(1000000f, GameTypes.DamageType.Physical, Vector3.zero);
-        }
-
         if (Input.GetKeyDown(KeyCode.ScrollLock)) {
             GameManager.instance.SetTestMode(!GameManager.instance.IsInTestMode());
             KillPlayer();
+        }
+
+        if (GameManager.instance.IsInTestMode()) {
+            if (Input.GetKeyDown(KeyCode.L) && energySlot.connectedModule) GetComponentInChildren<EnergyPack>().AddEnergy(1000000f);
+            if (Input.GetKeyDown(KeyCode.K)) Damage(1000000f, GameTypes.DamageType.Physical, Vector3.zero);
         }
     }
 

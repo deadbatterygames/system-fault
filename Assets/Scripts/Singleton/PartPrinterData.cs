@@ -32,7 +32,7 @@ public class PartPrinterData : MonoBehaviour {
         DontDestroyOnLoad(gameObject);
 
         if (GameManager.instance.IsInTestMode()) UnlockAllModules();
-        else UnlockModule(GameTypes.ModuleType.EnergyPack, 1);
+        else LockAllModules();
     }
 
     void UnlockAllModules() {
@@ -41,6 +41,20 @@ public class PartPrinterData : MonoBehaviour {
                 unlockedModules[x, y] = true;
             }
         }
+
+        Debug.LogWarning("PartPrinterData: All modules unlocked");
+    }
+
+    void LockAllModules() {
+        for (int x = 0; x < MODULE_TYPES; x++) {
+            for (int y = 0; y < MODULE_TIERS; y++) {
+                unlockedModules[x, y] = false;
+            }
+        }
+
+        UnlockModule(GameTypes.ModuleType.EnergyPack, 1);
+
+        Debug.LogWarning("PartPrinterData: All modules locked");
     }
 
     public void UnlockModule(GameTypes.ModuleType moduleType, int tier) {
