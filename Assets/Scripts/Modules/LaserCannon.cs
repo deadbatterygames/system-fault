@@ -46,7 +46,7 @@ public class LaserCannon : ShipModule, IWeapon {
     public Vector3 GetHitPoint(Vector3 firePoint, Vector3 aimPoint) {
         RaycastHit hit;
         if (Physics.Raycast(firePoint, (aimPoint - firePoint).normalized, out hit)) {
-            IDamageable damageable = hit.collider.GetComponent<IDamageable>();
+            IDamageable damageable = hit.collider.GetComponentInParent<IDamageable>();
             if (damageable != null) damageable.Damage(damage, GameTypes.DamageType.Yellow, (aimPoint - firePoint).normalized * laserForce);
             return hit.point;
         } else return aimPoint;

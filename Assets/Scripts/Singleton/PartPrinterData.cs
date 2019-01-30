@@ -30,12 +30,9 @@ public class PartPrinterData : MonoBehaviour {
         if (printCosts.Length != modulePrefabs.Length) Debug.LogError("PartPrinterData: modulePrefabs and printCosts sizes do not match");
 
         DontDestroyOnLoad(gameObject);
-
-        if (GameManager.instance.IsInTestMode()) UnlockAllModules();
-        else LockAllModules();
     }
 
-    void UnlockAllModules() {
+    public void UnlockAllModules() {
         for (int x = 0; x < MODULE_TYPES; x++) {
             for (int y = 0; y < MODULE_TIERS; y++) {
                 unlockedModules[x, y] = true;
@@ -45,7 +42,7 @@ public class PartPrinterData : MonoBehaviour {
         Debug.LogWarning("PartPrinterData: All modules unlocked");
     }
 
-    void LockAllModules() {
+    public void LockAllModules() {
         for (int x = 0; x < MODULE_TYPES; x++) {
             for (int y = 0; y < MODULE_TIERS; y++) {
                 unlockedModules[x, y] = false;
@@ -89,10 +86,19 @@ public class PartPrinterData : MonoBehaviour {
         for (int x = index.x + 1; x < MODULE_TYPES; x++) {
             for (int y = MODULE_TIERS-1; y >= 0; y--) {
                 if (unlockedModules[x, y]) {
+                    Debug.LogWarning(x + "|" + y);
                     return new Vector2Int(x, y);
-                }
+                } else Debug.LogWarning("Something's not right...");
             }
         }
+
+        ////// For testing... //////
+        for (int x = 0; x < MODULE_TYPES; x++) {
+            for (int y = 0; y < MODULE_TIERS; y++) {
+                Debug.LogWarning(unlockedModules[x, y]);
+            }
+        }
+        ////////////////////////////
 
         return index;
     }
@@ -101,8 +107,9 @@ public class PartPrinterData : MonoBehaviour {
         for (int x = index.x -1 ; x >= 0; x--) {
             for (int y = MODULE_TIERS-1; y >= 0; y--) {
                 if (unlockedModules[x, y]) {
+                    Debug.LogWarning(x + "|" + y);
                     return new Vector2Int(x, y);
-                }
+                } else Debug.LogWarning("Something's not right...");
             }
         }
 

@@ -10,7 +10,7 @@
 public class Sun : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other) {
-        IDamageable damageable = other.GetComponent<IDamageable>();
+        IDamageable damageable = other.GetComponentInParent<IDamageable>();
         if (damageable != null) damageable.Damage(Mathf.Infinity, GameTypes.DamageType.Physical, Vector3.zero);
     }
 }

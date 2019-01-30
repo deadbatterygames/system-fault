@@ -30,7 +30,7 @@ public class Explosion : MonoBehaviour {
             Rigidbody rb = col.GetComponent<Rigidbody>();
             if (rb) rb.AddExplosionForce(force, transform.position, damageRadius, 0f, ForceMode.Impulse);
 
-            IDamageable damageable = col.GetComponent<IDamageable>();
+            IDamageable damageable = col.GetComponentInParent<IDamageable>();
             if (damageable != null) {
                 Vector3 centerToObject = col.transform.position - transform.position;
 

@@ -16,6 +16,7 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
     [Header("Health")]
     [SerializeField] float maxHealth = 25f;
     float health;
+    bool dead;
 
     [Header("Movement")]
     [SerializeField] float jumpForce = 20f;
@@ -216,7 +217,7 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
         health -= amount;
         rb.AddForce(damageForce, ForceMode.VelocityChange);
 
-        if (health <= 0) KillPlayer();
+        if (health <= 0 && !dead) KillPlayer();
     }
 
     void KillPlayer() {
@@ -231,6 +232,8 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
         canEquip = false;
         
         GameManager.instance.StartCoroutine("PlayerDeath");
+
+        dead = true;
     }
 
     IEnumerator WeaponTimer() {

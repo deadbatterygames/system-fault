@@ -23,11 +23,9 @@ public class MatterManipulator : MonoBehaviour, IWeapon {
 	void Start () {
         if (snapPoint == null) Debug.LogError("MatterManipulator: No snap point set");
 		if (dematMaterial == null) Debug.LogError("MatterManipulator: No demat material set");
-
-        if (GameManager.instance.IsInTestMode()) ConnectAllModules();
 	}
 
-    void ConnectAllModules() {
+    public void ConnectAllModules() {
         foreach (ShipModule module in FindObjectsOfType<ShipModule>()) foreach (ModuleSlot moduleSlot in GameManager.instance.ship.GetComponentsInChildren<ModuleSlot>()) {
             if (!moduleSlot.connectedModule && moduleSlot.slotType == module.moduleType) {
                 ConnectModule(module, moduleSlot);

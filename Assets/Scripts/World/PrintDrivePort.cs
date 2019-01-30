@@ -35,6 +35,8 @@ public class PrintDrivePort : MonoBehaviour, IUsable {
             if (blueprint) gameObject.layer = LayerMask.GetMask("Default");
             else {
                 FindObjectOfType<WeaponSlot>().UnequipAll();
+                if (!blueprint) FindObjectOfType<Player>().StopCoroutine("WeaponTimer");
+
                 PlayerHUD.instance.ToggleShipRadar(false);
                 PlayerHUD.instance.ToggleUsePrompt(false);
                 PlayerCamera.instance.checkForUsable = false;
@@ -72,9 +74,7 @@ public class PrintDrivePort : MonoBehaviour, IUsable {
         } else {
             PlayerControl.instance.TakeControl(printDrive.GetComponent<IControllable>());
             Player currentPlayer = FindObjectOfType<Player>();
-            if (currentPlayer.GetComponentInChildren<ModuleSlot>().connectedModule) {
-                currentPlayer.GetComponentInChildren<EnergyPack>().ShowPack(false);
-            }
+            if (currentPlayer.GetComponentInChildren<ModuleSlot>().connectedModule) currentPlayer.GetComponentInChildren<EnergyPack>().ShowPack(false);
             currentPlayer.ResetPlayer(playerReset);
         }
 

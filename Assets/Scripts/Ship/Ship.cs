@@ -34,6 +34,7 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable, IDamageab
     [SerializeField] float shipStrength = 5f;
     [SerializeField] float maxHull = 50f;
     float hull;
+    bool dead;
 
     [Header("Camera")]
     [SerializeField] Transform playerExit;
@@ -85,7 +86,7 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable, IDamageab
         float collisionMagnitude = collision.relativeVelocity.magnitude;
         if (PlayerData.instance.alive && PlayerControl.instance.GetControllingActor() == GetComponent<IControllable>()) {
             if (collisionMagnitude > PlayerData.instance.shipDamageTolerance) {
-                IDamageable otherDamageable = collision.collider.GetComponent<IDamageable>();
+                IDamageable otherDamageable = collision.collider.GetComponentInParent<IDamageable>();
                 if (otherDamageable != null) otherDamageable.Damage(collision.relativeVelocity.magnitude, GameTypes.DamageType.Physical, -collision.relativeVelocity);
             }
 
@@ -389,7 +390,7 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable, IDamageab
         hull -= amount;
         rb.AddForce(damageForce, ForceMode.Impulse);
 
-        if (hull <= 0) KillPlayer();
+        if (hull <= 0 && !dead) KillPlayer();
     }
 
     void KillPlayer() {
@@ -401,6 +402,8 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable, IDamageab
         PlayerData.instance.alive = false;
 
         GameManager.instance.StartCoroutine("PlayerDeath");
+
+        dead = true;
     }
 
     public void TogglePower(bool toggle) {

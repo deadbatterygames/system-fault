@@ -106,6 +106,7 @@ public class GameManager : MonoBehaviour {
             PlayerData.instance.hasMulticannon = true;
             PlayerData.instance.blueUnlocked = true;
             PlayerData.instance.redUnlocked = true;
+            PartPrinterData.instance.UnlockAllModules();
 
             GiveEquipment(PartPrinterData.instance.modulePrefabs[0 * PartPrinterData.MODULE_TIERS + equipmentTier]);
             GiveEquipment(PartPrinterData.instance.modulePrefabs[1 * PartPrinterData.MODULE_TIERS + equipmentTier]);
@@ -114,7 +115,9 @@ public class GameManager : MonoBehaviour {
             GiveEquipment(PartPrinterData.instance.modulePrefabs[4 * PartPrinterData.MODULE_TIERS + equipmentTier]);
             GiveEquipment(PartPrinterData.instance.modulePrefabs[5 * PartPrinterData.MODULE_TIERS + equipmentTier]);
             GiveEquipment(PartPrinterData.instance.modulePrefabs[5 * PartPrinterData.MODULE_TIERS + equipmentTier]);
+            StartCoroutine("ConnectAllShipModules");
         } else {
+            PartPrinterData.instance.LockAllModules();
             GiveEquipment(startingZone);
             GiveEquipment(PartPrinterData.instance.modulePrefabs[0], 5f);
         }
@@ -129,7 +132,8 @@ public class GameManager : MonoBehaviour {
         // Camera
         PlayerCamera.instance.MoveCamToPlayer();
 
-        // Help Signs
+        // HUD
+        PlayerHUD.instance.ClearHUD();
         PlayerHUD.instance.ToggleAllHelp();
 
         Time.timeScale = 1f;
@@ -247,9 +251,14 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    IEnumerator ConnectAllShipModules() {
+        yield return new WaitForSeconds(1f);
+
+        FindObjectOfType<MatterManipulator>().ConnectAllModules();
+    }
+
     public IEnumerator PlayerDeath() {
         Time.timeScale = 0.25f;
-        Debug.LogWarning("Player: DEAD!");
         PlayerHUD.instance.ClearHUD();
         PlayerHUD.instance.ToggleShipRadar(false);
         PlayerHUD.instance.SetInfoPrompt("DEAD");
