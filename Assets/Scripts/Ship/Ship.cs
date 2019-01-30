@@ -45,6 +45,7 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable, IDamageab
     ShipComputer shipComputer;
     ShipLight shipLight;
 
+    bool occupied = false;
     bool canopyClear = true;
     bool powered = false;
     bool busy = false;
@@ -384,13 +385,15 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable, IDamageab
     }
 
     public void Damage(float amount, GameTypes.DamageType damageType, Vector3 damageForce) {
-        PlayerHUD.instance.ShowDamageSplash();
+        if (occupied) {
+            PlayerHUD.instance.ShowDamageSplash();
 
-        if (energyPack) amount = energyPack.AbsorbDamage(amount);
-        hull -= amount;
-        rb.AddForce(damageForce, ForceMode.Impulse);
+            if (energyPack) amount = energyPack.AbsorbDamage(amount);
+            hull -= amount;
+            rb.AddForce(damageForce, ForceMode.Impulse);
 
-        if (hull <= 0 && !dead) KillPlayer();
+            if (hull <= 0 && !dead) KillPlayer();
+        }
     }
 
     void KillPlayer() {
@@ -486,6 +489,7 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable, IDamageab
 
     IEnumerator EnterShip() {
         busy = true;
+        occupied = true;
 
         yield return new WaitForSeconds(0.75f);
 
@@ -500,7 +504,6 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable, IDamageab
         PlayerHUD.instance.ToggleCrosshair(true);
 
         busy = false;
-
     }
 
     IEnumerator ExitShip() {
@@ -523,6 +526,8 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable, IDamageab
 
         if (canopyClear) GameManager.instance.SpawnPlayer(playerExit, rb.velocity);
         else GameManager.instance.SpawnPlayer(playerExitAlt, rb.velocity);
+
+        occupied = false;
 
         busy = false;
     }
