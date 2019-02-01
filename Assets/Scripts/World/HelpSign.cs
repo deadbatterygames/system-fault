@@ -15,7 +15,7 @@ public class HelpSign : MonoBehaviour
     Vector3 relativeUp;
 
     bool showCanvas;
-    static float maxSqrDistance = 2500f;
+    const float MAX_DISTANCE = 50f;
 
     void Awake() {
         relativeUp = transform.up;
@@ -26,7 +26,7 @@ public class HelpSign : MonoBehaviour
     }
 
     void Update() {
-        if ((PlayerCamera.instance.transform.position - transform.position).sqrMagnitude < maxSqrDistance) {
+        if ((PlayerCamera.instance.transform.position - transform.position).sqrMagnitude < MAX_DISTANCE * MAX_DISTANCE) {
             transform.LookAt(PlayerCamera.instance.transform, relativeUp);
             canvas.enabled = showCanvas;
         } else canvas.enabled = false;

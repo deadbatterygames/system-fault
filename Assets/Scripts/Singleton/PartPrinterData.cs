@@ -92,14 +92,6 @@ public class PartPrinterData : MonoBehaviour {
             }
         }
 
-        ////// For testing... //////
-        for (int x = 0; x < MODULE_TYPES; x++) {
-            for (int y = 0; y < MODULE_TIERS; y++) {
-                Debug.LogWarning(unlockedModules[x, y]);
-            }
-        }
-        ////////////////////////////
-
         return index;
     }
 

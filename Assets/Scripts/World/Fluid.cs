@@ -23,7 +23,6 @@ public class Fluid : MonoBehaviour
 
     void Start() {
         if (!GetComponent<SphereCollider>().isTrigger) Debug.LogError("Fluid: " + gameObject.name + "'s collider is not a trigger");
-        sqrBuoyancy = buoyancy * buoyancy * GameManager.GRAVITY_CONSTANT;
     }
 
     void FixedUpdate() {
@@ -32,7 +31,7 @@ public class Fluid : MonoBehaviour
                 if (rb) {
                     if (!rb.isKinematic) {
                         Vector3 toObject = rb.position - transform.position;
-                        rb.AddForce(toObject.normalized * sqrBuoyancy / toObject.sqrMagnitude, ForceMode.Acceleration);
+                        rb.AddForce(toObject.normalized * buoyancy * buoyancy * GameManager.GRAVITY_CONSTANT / toObject.sqrMagnitude, ForceMode.Acceleration);
                     }
                 } else rigidbodies = rigidbodies.Where(x => x != null).ToList();
             }
@@ -86,7 +85,11 @@ public class Fluid : MonoBehaviour
                     break;
             }
         } else rb.angularDrag = 0f;
-        rb.drag = 0f;
+
+        EnergyShard shard = rb.GetComponent<EnergyShard>();
+        if (shard && shard.currentState == GameTypes.EnergyState.Magnetize) rb.drag = 1f;
+        else rb.drag = 0f;
+
         rigidbodies.Remove(rb);
     }
 }

@@ -19,8 +19,7 @@ public class GravityWell : MonoBehaviour {
         foreach (Rigidbody rb in GameManager.instance.gravityBodies) {
             if (rb.useGravity && !rb.isKinematic) {
                 Vector3 difference = transform.position - rb.transform.position;
-                Vector3 gravity = (transform.position - rb.transform.position).normalized
-                    / (difference.magnitude * difference.magnitude);
+                Vector3 gravity = (transform.position - rb.transform.position).normalized / difference.sqrMagnitude;
                 rb.AddForce(gravity * gravityStrength * GameManager.GRAVITY_CONSTANT, ForceMode.Acceleration);
             }
         }

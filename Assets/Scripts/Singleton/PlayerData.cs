@@ -30,6 +30,10 @@ public class PlayerData : MonoBehaviour {
     List<GameObject> blueBullets = new List<GameObject>();
     List<GameObject> redBullets = new List<GameObject>();
 
+    [Header("Particles")]
+    public GameObject explosionPrefab;
+    public GameObject laserParticles;
+
     [Header("Unlocks")]
     public bool hasMatterManipulator;
     public bool hasMulticannon;

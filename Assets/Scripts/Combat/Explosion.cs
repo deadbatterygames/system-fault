@@ -10,8 +10,8 @@ using UnityEngine;
 
 public class Explosion : MonoBehaviour {
 
-    static float damage = 500f;
-    static float force = 100f;
+    const float DAMAGE = 500f;
+    const float FORCE = 100f;
 
     float damageRadius;
 
@@ -28,20 +28,20 @@ public class Explosion : MonoBehaviour {
         Collider[] colliders = Physics.OverlapSphere(transform.position, damageRadius);
         foreach (Collider col in colliders) {
             Rigidbody rb = col.GetComponent<Rigidbody>();
-            if (rb) rb.AddExplosionForce(force, transform.position, damageRadius, 0f, ForceMode.Impulse);
+            if (rb) rb.AddExplosionForce(FORCE, transform.position, damageRadius, 0f, ForceMode.Impulse);
 
             IDamageable damageable = col.GetComponentInParent<IDamageable>();
             if (damageable != null) {
                 Vector3 centerToObject = col.transform.position - transform.position;
 
-                Vector3 damageForce = centerToObject.normalized * force;
-                float damageAmount = damage / centerToObject.magnitude;
+                Vector3 damageForce = centerToObject.normalized * FORCE;
+                float damageAmount = DAMAGE / centerToObject.magnitude;
 
                 damageable.Damage(damageAmount, GameTypes.DamageType.Physical, damageForce);
             }
         }
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(3f);
         Destroy(gameObject);
     }
 }

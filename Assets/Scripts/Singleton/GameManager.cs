@@ -38,7 +38,6 @@ public class GameManager : MonoBehaviour {
 
     [Space]
     [SerializeField] GameObject xromPrefab;
-    public GameObject explosionPrefab;
 
     [Header("Testing")]
     [SerializeField] GameTypes.SpawnLocation spawnLocation;

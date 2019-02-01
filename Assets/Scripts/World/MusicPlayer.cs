@@ -35,14 +35,11 @@ public class MusicPlayer : MonoBehaviour {
                 source.volume = maxVolume;
                 source.Play();
             }
-
-            Debug.Log("Music Player: Music zone entered");
         }
     }
 
     void OnTriggerExit(Collider other) {
         if (enabled && other.GetComponentInChildren<Camera>()) {
-            Debug.Log("Music Player: Music zone exited");
             fadeDirection = -1;
         }
     }

@@ -15,10 +15,10 @@ public class PrintDrivePort : MonoBehaviour, IUsable {
     [SerializeField] Material disabledMaterial;
 
     PrintDrive printDrive = null;
-    static float insertionSpeed = 1.5f;
+    const float INSERTION_SPEED = 1.5f;
 
     Blueprint blueprint = null;
-    static float blueprintDisplayTime = 3f;
+    const float DISPLAY_TIME = 3f;
 
     Vector3 desiredLocation;
     bool driveConnected = false;
@@ -51,7 +51,7 @@ public class PrintDrivePort : MonoBehaviour, IUsable {
     void Update() {
         if (printDrive) {
             if (printDrive.transform.localPosition != desiredLocation) {
-                printDrive.transform.localPosition = Vector3.MoveTowards(printDrive.transform.localPosition, desiredLocation, insertionSpeed * Time.deltaTime);
+                printDrive.transform.localPosition = Vector3.MoveTowards(printDrive.transform.localPosition, desiredLocation, INSERTION_SPEED * Time.deltaTime);
             } else if (!driveConnected) ConnectDrive();
 
             if (desiredLocation != Vector3.zero && printDrive.transform.localPosition == desiredLocation) {
@@ -104,7 +104,7 @@ public class PrintDrivePort : MonoBehaviour, IUsable {
     }
 
     IEnumerator BlueprintTimer() {
-        yield return new WaitForSeconds(blueprintDisplayTime);
+        yield return new WaitForSeconds(DISPLAY_TIME);
 
         // Remove drive
         RemovePrintDrive();

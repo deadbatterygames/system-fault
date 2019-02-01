@@ -11,18 +11,29 @@ using System.Collections;
 public class EnergyShard : MonoBehaviour, ICollectable {
 
     Rigidbody rb;
+    MeshCollider mc;
     const float ENERGY_UNITS = 1f;
 
-    bool magnetizeToShip = false;
-    const float SQR_MAGNETIZE_DISTANCE = 22500f;
+    bool magnetismEnabled;
+    const float MAGNETISM_FORCE = 50f;
+    const float MAGNETISM_DELAY = 1f;
+    const float MAGNETISM_SPEED = 50f;
+    const float MAGNETISM_DISTANCE = 150f;
+    const float MINIMUM_RIGIDBODY_SPEED = 0.2f;
+
+    bool collected;
+    bool root;
+
+    public GameTypes.EnergyState currentState = GameTypes.EnergyState.Normal;
 
     void Awake() {
-        // Add rigidbody to scene
         rb = GetComponent<Rigidbody>();
-        if (rb) {
-            GameManager.instance.AddGravityBody(rb);
-            StartCoroutine("DestroyRigidbody");
-        }
+        if (rb) GameManager.instance.AddGravityBody(rb);
+        else root = true;
+
+        mc = GetComponent<MeshCollider>();
+
+        StartCoroutine("MagnetizeTimer");
     }
 
     public void Pickup() {
@@ -30,14 +41,14 @@ public class EnergyShard : MonoBehaviour, ICollectable {
     }
 
     void OnTriggerEnter(Collider other) {
-        if (other.CompareTag("Player")) {
+        if (other.CompareTag("Player") && !collected) {
             if (other.GetComponentInChildren<ModuleSlot>().connectedModule) {
                 EnergyPack fp = other.GetComponentInChildren<EnergyPack>();
                 AddEnergyToPack(fp);
             } else PlayerHUD.instance.SetInfoPrompt("Equip an Energy Pack to collect energy");
         }
 
-        if (other.CompareTag("Ship")) {
+        if (other.CompareTag("Ship") && !collected) {
             EnergyPack fp = GameManager.instance.ship.GetEnergyPack();
             if (fp) {
                 AddEnergyToPack(fp);
@@ -54,38 +65,88 @@ public class EnergyShard : MonoBehaviour, ICollectable {
         } else PlayerHUD.instance.SetInfoPrompt("Energy Pack full");
     }
 
+    void ChangeEnergyState(GameTypes.EnergyState state) {
+        switch (state) {
+            case GameTypes.EnergyState.Normal:
+                if (!rb) CreateGraviyBody();
+                rb.useGravity = true;
+                mc.enabled = true;
+                rb.drag = 0f;
+                break;
+            case GameTypes.EnergyState.Magnetize:
+                if (!rb) CreateGraviyBody();
+                rb.useGravity = false;
+                rb.drag = 1f;
+                mc.enabled = true;
+                break;
+            case GameTypes.EnergyState.Sleep:
+                if (rb) DestroyGravityBody();
+                mc.enabled = false;
+                break;
+        }
+
+        currentState = state;
+    }
+
     void FixedUpdate() {
-        if (magnetizeToShip && GameManager.instance.ship.IsPowered()) {
-            Vector3 toShip = GameManager.instance.ship.transform.position - transform.position;
-            float sqrDistance = toShip.sqrMagnitude;
-            if (sqrDistance < SQR_MAGNETIZE_DISTANCE) transform.Translate(toShip.normalized * Time.fixedDeltaTime * Mathf.Clamp(SQR_MAGNETIZE_DISTANCE / sqrDistance, 10f, 150f), Space.World);
+        if (!root && !collected && magnetismEnabled) {
+            switch (currentState) {
+                case GameTypes.EnergyState.Normal:
+                    if (ShipMagnetizing()) {
+                        ChangeEnergyState(GameTypes.EnergyState.Magnetize);
+                        break;
+                    }
+                    if (rb.velocity.sqrMagnitude < MINIMUM_RIGIDBODY_SPEED * MINIMUM_RIGIDBODY_SPEED)
+                        ChangeEnergyState(GameTypes.EnergyState.Sleep);
+                    break;
+                case GameTypes.EnergyState.Magnetize:
+                    if (rb) rb.AddForce(VectorToShip().normalized * MAGNETISM_FORCE, ForceMode.Acceleration);
+                    if (!ShipMagnetizing()) ChangeEnergyState(GameTypes.EnergyState.Normal);
+                    break;
+                case GameTypes.EnergyState.Sleep:
+                    if (ShipMagnetizing()) ChangeEnergyState(GameTypes.EnergyState.Magnetize);
+                    break;
+                
+            }
         }
     }
 
-    IEnumerator DestroyRigidbody() {
-        yield return new WaitForSeconds(2f);
+    bool ShipMagnetizing() {
+        return VectorToShip().sqrMagnitude < MAGNETISM_DISTANCE * MAGNETISM_DISTANCE && GameManager.instance.ship.IsPowered();
+    }
 
-        Rigidbody rb = GetComponent<Rigidbody>();
+    Vector3 VectorToShip() {
+        return GameManager.instance.ship.transform.position - transform.position;
+    }
+
+    void CreateGraviyBody() {
+        rb = gameObject.AddComponent<Rigidbody>();
+        rb.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
+        GameManager.instance.AddGravityBody(rb);
+    }
+
+    void DestroyGravityBody() {
         GameManager.instance.RemoveGravityBody(rb);
         Destroy(rb);
-        Destroy(GetComponent<MeshCollider>());
+    }
 
-        magnetizeToShip = true;
+    IEnumerator MagnetizeTimer() {
+        yield return new WaitForSeconds(MAGNETISM_DELAY);
+        magnetismEnabled = true;
     }
 
     IEnumerator Vapourize() {
-        Destroy(GetComponent<SphereCollider>());
-        Destroy(GetComponent<MeshRenderer>());
-        Destroy(GetComponent<MeshCollider>());
+        collected = true;
 
-        if (rb) {
-            GameManager.instance.RemoveGravityBody(rb);
-            Destroy(rb);
-        }
+        GetComponent<MeshRenderer>().enabled = false;
+        GetComponent<SphereCollider>().enabled = false;
+        if (mc) mc.enabled = false;
+        if (rb) DestroyGravityBody();
 
         GetComponent<ParticleSystem>().Emit(50);
 
         yield return new WaitForSeconds(0.5f);
+
         Destroy(gameObject);
     }
 }

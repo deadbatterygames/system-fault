@@ -13,12 +13,16 @@ public class EnergyCrystal : MonoBehaviour, IDamageable {
     [SerializeField] FlockingObstacle obstacle;
     float health = 30f;
 
+    bool shattered;
+
     public void Damage(float amount, GameTypes.DamageType damageType, Vector3 damageForce) {
-            health -= amount;
-        if (health <= 0) Shatter(damageForce);
+        health -= amount;
+        if (health <= 0 && !shattered) Shatter(damageForce);
     }
 
     void Shatter(Vector3 shatterForce) {
+        shattered = true;
+
         FlockingController.DestroySeparator(obstacle.separator);
         FlockingController.DestroyAttractor(obstacle.attractor);
         GameObject pieces = Instantiate(shatteredCrystal, transform.position, transform.rotation);

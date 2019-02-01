@@ -13,7 +13,7 @@ public class Missile : MonoBehaviour {
     Rigidbody rb;
     CapsuleCollider capsule;
 
-    static float thrust = 50f;
+    const float THRUST = 50f;
 
     void Start() {
         rb = GetComponent<Rigidbody>();
@@ -23,7 +23,7 @@ public class Missile : MonoBehaviour {
     }
 
     void FixedUpdate() {
-        if (rb) rb.AddForce(transform.up * thrust, ForceMode.Acceleration);
+        if (rb) rb.AddForce(transform.up * THRUST, ForceMode.Acceleration);
     }
 
     void OnCollisionEnter(Collision collision) {
@@ -36,7 +36,7 @@ public class Missile : MonoBehaviour {
         Destroy(GetComponent<CapsuleCollider>());
         Destroy(rb);
 
-        Instantiate(GameManager.instance.explosionPrefab, transform.position, transform.rotation);
+        Instantiate(PlayerData.instance.explosionPrefab, transform.position, transform.rotation);
 
         yield return new WaitForSeconds(GetComponentInChildren<TrailRenderer>().time);
 

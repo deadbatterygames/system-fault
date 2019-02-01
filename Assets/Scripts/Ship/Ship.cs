@@ -430,8 +430,6 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable, IDamageab
 
             // Light
             if (lightOn) shipLight.TogglePower(true);
-
-            Debug.Log("Ship: Powered on");
         } else {
             powered = false;
 
@@ -451,8 +449,6 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable, IDamageab
 
             // Light
             shipLight.TogglePower(false);
-
-            Debug.Log("Ship: Powered off");
         }
     }
 

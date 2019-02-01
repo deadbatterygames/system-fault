@@ -82,7 +82,7 @@ public class SceneShift : MonoBehaviour {
                 lines[i].SetPositions(linePositions);
             }
 
-            Debug.LogWarning("SceneShift: Scene shifted");
+            Debug.Log("SceneShift: Scene shifted");
         }
     }
 }

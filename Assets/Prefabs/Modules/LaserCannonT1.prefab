@@ -103,7 +103,7 @@ MonoBehaviour:
   shipRB: {fileID: 0}
   damage: 10
   fireFrequency: 0.5
-  laserForce: 10
+  laserForce: 25
   aimRange: 1000
   leftLaser: {fileID: 120434906124441792}
   rightLaser: {fileID: 120259424204571958}

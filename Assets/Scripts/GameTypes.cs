@@ -14,37 +14,43 @@ public class GameTypes {
         QuantumDrive,
         LaserCannon,
         MissileRack
-    };
+    }
 
     public enum AssistMode {
         NoAssist,
         Hover,
         Astro,
         Quantum
-    };
+    }
 
     public enum DamageType {
         Yellow,
         Blue,
         Red,
         Physical
-    };
+    }
 
     public enum PlayerWeaponType {
         None,
         MatterManipulator,
         Multicannon
-    };
+    }
 
     public enum XromPartType {
         Appendage,
         Vital,
         Separator
-    };
+    }
 
     public enum SpawnLocation {
         Moon,
         Earth,
         Gas
+    }
+
+    public enum EnergyState {
+        Normal,
+        Magnetize,
+        Sleep
     }
 }

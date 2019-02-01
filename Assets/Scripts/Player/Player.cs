@@ -66,17 +66,7 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
         if (cameraRig == null) Debug.LogError("Player: No camera rig set in inspector");
 
         StartCoroutine("WeaponTimer");
-
-        // TODO: Delete this
-        //StartCoroutine("TestUse"); 
     }
-
-    // TODO: Delete this
-    IEnumerator TestUse() {
-        yield return new WaitForSeconds(1f);
-        GameManager.instance.ship.Use();
-    }
-    // #######################
 
     void FixedUpdate() {
         Move();
@@ -153,9 +143,10 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
             KillPlayer();
         }
 
+        if (Input.GetKeyDown(KeyCode.End)) Damage(1000000f, GameTypes.DamageType.Physical, Vector3.back * 100f);
         if (GameManager.instance.IsInTestMode()) {
             if (Input.GetKeyDown(KeyCode.L) && energySlot.connectedModule) GetComponentInChildren<EnergyPack>().AddEnergy(1000000f);
-            if (Input.GetKeyDown(KeyCode.K)) Damage(1000000f, GameTypes.DamageType.Physical, Vector3.zero);
+            if (Input.GetKeyDown(KeyCode.Home)) GameManager.instance.ship.Use();
         }
     }
 
