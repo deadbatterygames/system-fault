@@ -24,7 +24,7 @@ public class SceneShift : MonoBehaviour {
     void FixedUpdate() {
         Vector3 currentPos = transform.position;
         
-        if (currentPos.magnitude > threshold) {
+        if (currentPos.sqrMagnitude > threshold * threshold) {
             objects = FindObjectsOfType<Transform>();
 
             // Objects

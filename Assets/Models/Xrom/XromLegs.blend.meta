@@ -21,6 +21,8 @@ ModelImporter:
     100030: RightUpperLegBone
     100032: Skeleton
     100034: //RootNode
+    100036: Icosphere
+    100038: Icosphere_001
     400000: LeftFoot
     400002: LeftFootBone
     400004: LeftLowerLeg
@@ -39,10 +41,16 @@ ModelImporter:
     400030: RightUpperLegBone
     400032: Skeleton
     400034: //RootNode
+    400036: Icosphere
+    400038: Icosphere_001
     2100000: Metal
     2100002: Rubber
     2100004: BluePaint
     2100006: RedHot
+    2300000: Icosphere
+    2300002: Icosphere_001
+    3300000: Icosphere
+    3300002: Icosphere_001
     4300000: LeftFoot
     4300002: LeftLowerLeg
     4300004: LeftUpperLeg
@@ -50,6 +58,8 @@ ModelImporter:
     4300008: RightFoot
     4300010: RightLowerLeg
     4300012: RightUpperLeg
+    4300014: Icosphere
+    4300016: Icosphere_001
     7400000: Walk
     7400002: Idle
     9500000: //RootNode

@@ -8,13 +8,21 @@
 //
 
 public class SnapVolume : MonoBehaviour {
+    [SerializeField] bool snapUp = false;
+
     void OnTriggerEnter(Collider other) {
-        CharacterSnap snap = other.GetComponent<CharacterSnap>();
-        if (snap != null) snap.SetSnapPoint(transform);
+        CharacterSnap character = other.GetComponent<CharacterSnap>();
+        if (character != null) {
+            if (snapUp) character.SetSnapUp(transform.up);
+            else character.SetSnapPoint(transform);
+        }
     }
 
     void OnTriggerExit(Collider other) {
-        CharacterSnap snap = other.GetComponent<CharacterSnap>();
-        if (snap != null) snap.RemoveSnapPoint();
+        CharacterSnap character = other.GetComponent<CharacterSnap>();
+        if (character != null) {
+            if (snapUp) character.RemoveSnapUp();
+            else character.RemoveSnapPoint();
+        }
     }
 }

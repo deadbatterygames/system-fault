@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Overmind : MonoBehaviour
 {
@@ -9,14 +7,15 @@ public class Overmind : MonoBehaviour
     private GameObject[] POI;
     [SerializeField] private bool flockingTest;
     public static Overmind instance;
-    // Start is called before the first frame update
-    void Start()
-    {
+
+    void Start() {
         if(!instance) instance = this;
         else Destroy(this);
         
         int n = 5;
         int created = 0;
+
+        Debug.Log("Overmind::Start ~ Making " + n + " boys");
 
         if(n >= 5){
             CreateFlock(true, true, GameObject.FindGameObjectWithTag("Player").transform.position, 5);
@@ -32,12 +31,6 @@ public class Overmind : MonoBehaviour
                 created += 5;
             }
         }
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
         
     }
 

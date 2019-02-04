@@ -64,14 +64,14 @@ public class LaserCannon : ShipModule, IWeapon {
 
     public void Fire() {
         if (canFire) {
+            // Make visible
+            ToggleLasers(true);
+
             // Find start and end point of each laser
             leftLaserPositions[0] = leftFirePoint.position;
             leftLaserPositions[1] = GetHitPoint(leftFirePoint.position, GetAimPoint());
             rightLaserPositions[0] = rightFirePoint.position;
             rightLaserPositions[1] = GetHitPoint(rightFirePoint.position, GetAimPoint());
-
-            // Make visible
-            laserAlpha = 1f;
 
             canFire = false;
         }
@@ -82,9 +82,27 @@ public class LaserCannon : ShipModule, IWeapon {
         rightLaser.SetPositions(rightLaserPositions);
     }
 
+    void ToggleLasers(bool toggle) {
+        leftLaser.useWorldSpace = toggle;
+        rightLaser.useWorldSpace = toggle;
+
+        if (!toggle) {
+            laserAlpha = 0;
+            leftLaserPositions = new Vector3[2];
+            rightLaserPositions = new Vector3[2];
+            UpdateLaserPositions();
+        } else {
+            laserAlpha = 1f;
+        }
+
+        leftLaser.enabled = toggle;
+        rightLaser.enabled = toggle;
+    }
+
     void UpdateLaserOpacity() {
         if (laserAlpha <= 0) {
-            laserAlpha = 0;
+            ToggleLasers(false);
+
             canFire = true;
         }
 

@@ -14,7 +14,7 @@ public static class FlockingManager {
 		return "[" + vector.x.ToString() + ", " + vector.y.ToString() + ", " + vector.z.ToString() + "]";
 	}
 
-	public static Vector3[] Headings(Boid[] boids, Attractor[] attractors, Separator[] separators, Vector3 boundingOrigin, float boundingScale, int flockSize, bool debug, bool debugHeading, bool debugCohesion, bool debugSeparation, bool debugAlignment, bool debugAttraction, bool debugBounding, bool cohesion = true, bool alignment = true, bool separation = true){
+	public static Vector3[] Headings(Boid[] boids, Attractor[] attractors, Separator[] separators, Inhibitor[] inhibitors, Vector3 boundingOrigin, float boundingScale, int flockSize, bool debug, bool debugHeading, bool debugCohesion, bool debugSeparation, bool debugAlignment, bool debugAttraction, bool debugBounding, bool cohesion = true, bool alignment = true, bool separation = true){
 		List<Vector3> newHeadings = new List<Vector3>();
 
 		Vector3[] cohesionVectors = new Vector3[]{};
@@ -53,26 +53,35 @@ public static class FlockingManager {
 			if(i < attractionVectors.Length) vector += attractionVectors[i];
 			if(i < boundingVectors.Length) vector += boundingVectors[i];
 
-			// if(boids[i].GetLanding()){
-			// 	GameObject body = boids[i].GetLandingBody();
-			// 	Vector3 vectorToBody = body.transform.position - boids[i].GetPosition();
-			// 	Vector3 vectorToPad = boids[i].GetLandingPosition() - boids[i].GetPosition();
-
-			// 	if(vectorToPad.magnitude < vectorToBody.magnitude && vectorToBody.magnitude < body.GetComponentInChildren<Renderer>().bounds.extents.magnitude * 2){
-			// 		//(((body.GetComponentInChildren<Renderer>().bounds.extents.magnitude * 2 - vectorToBody.magnitude) / body.GetComponentInChildren<Renderer>().bounds.extents.magnitude) / 5)
-			// 		Vector3 adjustment = vectorToBody *  Avoid(Avoid(vectorToBody.magnitude / (body.GetComponentInChildren<Renderer>().bounds.extents.magnitude * 2)));
-			// 		// if(debug){
-			// 		// 	Debug.DrawLine(boids[i].GetPosition(), boids[i].GetPosition() + adjustment, Color.gray);
-			// 		// 	Debug.Log("Smooth descent");
-			// 		// }
-			// 		vector += adjustment;
-			// 	}
-			// }
-
 			newHeadings.Add(vector);
 		}
 
-		return newHeadings.ToArray();
+		return Inhibition(boids, inhibitors, newHeadings, debug);
+	}
+
+	public static Vector3[] Inhibition(Boid[] boids, Inhibitor[] inhibitors, List<Vector3> headings, bool debug){
+		for(int i = 0; i < boids.Length; i++){
+			Vector3 heading = headings[i];
+
+			for(int j = 0; j < inhibitors.Length; j++){
+				Vector3 boidPosition = boids[i].GetPosition();
+				Vector3 dif = inhibitors[j].GetPosition() - boidPosition;
+
+				if(dif.sqrMagnitude < inhibitors[j].radius * inhibitors[j].radius){
+					// If the heading is pointing towards the inhibitor
+					if(Vector3.Dot(heading, dif.normalized) > 0){
+						if(debug) Debug.DrawLine(boidPosition, boidPosition + heading, Color.black);
+
+						// Project the heading onto the plane spanned by the difference vector and the difference of the difference vector and the heading
+						heading = Vector3.Project(heading, (heading.normalized - dif.normalized).normalized);
+					}
+				}
+			}
+
+			headings[i] = heading;
+		}
+
+		return headings.ToArray();
 	}
 
 	public static void DrawPerceptiveDistance(Boid[] boids){

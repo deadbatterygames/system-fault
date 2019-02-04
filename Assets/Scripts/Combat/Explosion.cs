@@ -10,7 +10,7 @@ using UnityEngine;
 
 public class Explosion : MonoBehaviour {
 
-    const float DAMAGE = 500f;
+    const float DAMAGE = 250f;
     const float FORCE = 100f;
 
     float damageRadius;
@@ -35,9 +35,8 @@ public class Explosion : MonoBehaviour {
                 Vector3 centerToObject = col.transform.position - transform.position;
 
                 Vector3 damageForce = centerToObject.normalized * FORCE;
-                float damageAmount = DAMAGE / centerToObject.magnitude;
 
-                damageable.Damage(damageAmount, GameTypes.DamageType.Physical, damageForce);
+                damageable.Damage(DAMAGE, GameTypes.DamageType.Physical, damageForce);
             }
         }
 

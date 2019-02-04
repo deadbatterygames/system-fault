@@ -36,15 +36,12 @@ public class GameManager : MonoBehaviour {
     [SerializeField] GameObject crystalPrefab;
     [SerializeField] GameObject blueprintPrefab;
 
-    [Space]
-    [SerializeField] GameObject xromPrefab;
-
     [Header("Testing")]
     [SerializeField] GameTypes.SpawnLocation spawnLocation;
     [SerializeField] bool testMode;
     [SerializeField][Range(0,2)] int equipmentTier;
 
-    public const float MAX_PLAYER_SPEED = 300f;
+    public const float MAX_SHIP_SPEED = 300f;
 
     [HideInInspector] public Ship ship;
     PlayerCamera playerCam;
@@ -108,13 +105,12 @@ public class GameManager : MonoBehaviour {
             PartPrinterData.instance.UnlockAllModules();
 
             GiveEquipment(PartPrinterData.instance.modulePrefabs[0 * PartPrinterData.MODULE_TIERS + equipmentTier]);
-            GiveEquipment(PartPrinterData.instance.modulePrefabs[1 * PartPrinterData.MODULE_TIERS + equipmentTier]);
-            GiveEquipment(PartPrinterData.instance.modulePrefabs[2 * PartPrinterData.MODULE_TIERS + equipmentTier]);
-            GiveEquipment(PartPrinterData.instance.modulePrefabs[3 * PartPrinterData.MODULE_TIERS + equipmentTier]);
-            GiveEquipment(PartPrinterData.instance.modulePrefabs[4 * PartPrinterData.MODULE_TIERS + equipmentTier]);
-            GiveEquipment(PartPrinterData.instance.modulePrefabs[5 * PartPrinterData.MODULE_TIERS + equipmentTier]);
-            GiveEquipment(PartPrinterData.instance.modulePrefabs[5 * PartPrinterData.MODULE_TIERS + equipmentTier]);
-            StartCoroutine("ConnectAllShipModules");
+            GiveEquipment(PartPrinterData.instance.modulePrefabs[1 * PartPrinterData.MODULE_TIERS + equipmentTier], 5f);
+            GiveEquipment(PartPrinterData.instance.modulePrefabs[2 * PartPrinterData.MODULE_TIERS + equipmentTier], 10f);
+            GiveEquipment(PartPrinterData.instance.modulePrefabs[3 * PartPrinterData.MODULE_TIERS + equipmentTier], 15f);
+            GiveEquipment(PartPrinterData.instance.modulePrefabs[4 * PartPrinterData.MODULE_TIERS + equipmentTier], 20f);
+            GiveEquipment(PartPrinterData.instance.modulePrefabs[5 * PartPrinterData.MODULE_TIERS + equipmentTier], 25f);
+            GiveEquipment(PartPrinterData.instance.modulePrefabs[5 * PartPrinterData.MODULE_TIERS + equipmentTier], 30f);
         } else {
             PartPrinterData.instance.LockAllModules();
             GiveEquipment(startingZone);
@@ -188,7 +184,6 @@ public class GameManager : MonoBehaviour {
             AddGravityBody(playerRB);
             playerRB.velocity = spawnVelocity;
             PlayerControl.instance.TakeControl(playerRB.GetComponent<IControllable>());
-            FlockingController.CreateSeparator(new Separator(player, 10f));
         }
     }
 
@@ -202,8 +197,8 @@ public class GameManager : MonoBehaviour {
         if (player) {
             Rigidbody playerRB = player.GetComponent<Rigidbody>();
             RemoveGravityBody(playerRB);
-            FlockingController.DestroyAttractor(player.gameObject);
-            FlockingController.DestroySeparator(player.gameObject);
+            FlockingController.DestroyAttractor(player.obstacle.attractor);
+            FlockingController.DestroySeparator(player.obstacle.separator);
             Destroy(player.gameObject);
         }
     }
@@ -250,10 +245,8 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    IEnumerator ConnectAllShipModules() {
-        yield return new WaitForSeconds(1f);
-
-        FindObjectOfType<MatterManipulator>().ConnectAllModules();
+    public void ConnectAllShipModules() {
+        FindObjectOfType<WeaponSlot>().matterManipulator.ConnectAllModules();
     }
 
     public IEnumerator PlayerDeath() {

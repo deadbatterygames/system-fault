@@ -13,6 +13,7 @@ TagManager:
   - IPMoon
   - IPGas
   - HelpHUD
+  - SpaceParticles
   layers:
   - Default
   - TransparentFX
@@ -33,7 +34,7 @@ TagManager:
   - Flocking
   - Xrom
   - Missile
-  - 
+  - XromProjectile
   - 
   - 
   - 

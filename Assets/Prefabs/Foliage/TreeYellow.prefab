@@ -410,7 +410,22 @@ PrefabInstance:
     - target: {fileID: 3916676660898861062, guid: cca91fc9ca0fb1e47a9d3cefe9ceafdf,
         type: 3}
       propertyPath: type
-      value: 3
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3916676660898861062, guid: cca91fc9ca0fb1e47a9d3cefe9ceafdf,
+        type: 3}
+      propertyPath: hasSeparator
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3916676660898861062, guid: cca91fc9ca0fb1e47a9d3cefe9ceafdf,
+        type: 3}
+      propertyPath: radius
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3900941725797032130, guid: cca91fc9ca0fb1e47a9d3cefe9ceafdf,
+        type: 3}
+      propertyPath: m_Radius
+      value: 15.395765
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cca91fc9ca0fb1e47a9d3cefe9ceafdf, type: 3}

@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class TempGun : MonoBehaviour, IWeapon {
 
-    [SerializeField] Transform firePoint;
+    [SerializeField] public Transform firePoint;
 
-    [SerializeField] float bulletVelocity = 400f;
+    [SerializeField] GameObject bulletPrefab;
+    [SerializeField] ParticleSystem particles;
+
+    [SerializeField] float bulletVelocity = 150f;
     [SerializeField] int maxBullets = 20;
 
     //[SerializeField] ParticleSystem particles;
@@ -22,7 +25,7 @@ public class TempGun : MonoBehaviour, IWeapon {
     Quaternion resetRotation;
 
     public void Start() {
-        StartCoroutine("FirePattern");
+        //StartCoroutine("FirePattern");
     }
 
     public void Fire() {
@@ -38,7 +41,7 @@ public class TempGun : MonoBehaviour, IWeapon {
             return bullets[index];
         } else {
             // Make new bullet
-            GameObject newBullet = Instantiate(PlayerData.instance.bulletPrefabs[0]);
+            GameObject newBullet = Instantiate(bulletPrefab);
             bullets.Add(newBullet);
             return newBullet;
         }
@@ -59,13 +62,14 @@ public class TempGun : MonoBehaviour, IWeapon {
         bulletRB.angularVelocity = Vector3.zero;
         bulletRB.velocity = GetComponentInParent<Rigidbody>().velocity + fireDirection * bulletVelocity;
 
-        bullet.transform.localScale = new Vector3(2f, 2f, 2f);
+        // Particles
+        particles.Play();
     }
 
     IEnumerator FirePattern() {
         for (int i = 0; i < 5f; i++) {
             Fire();
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(1f);
         }
 
         yield return new WaitForSeconds(1f);

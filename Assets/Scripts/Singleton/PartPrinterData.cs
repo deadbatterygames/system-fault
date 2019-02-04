@@ -38,8 +38,6 @@ public class PartPrinterData : MonoBehaviour {
                 unlockedModules[x, y] = true;
             }
         }
-
-        Debug.LogWarning("PartPrinterData: All modules unlocked");
     }
 
     public void LockAllModules() {
@@ -50,8 +48,6 @@ public class PartPrinterData : MonoBehaviour {
         }
 
         UnlockModule(GameTypes.ModuleType.EnergyPack, 1);
-
-        Debug.LogWarning("PartPrinterData: All modules locked");
     }
 
     public void UnlockModule(GameTypes.ModuleType moduleType, int tier) {

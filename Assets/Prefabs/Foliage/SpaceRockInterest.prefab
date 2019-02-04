@@ -311,6 +311,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5997827991940825326}
   - component: {fileID: 4525175294604213387}
+  - component: {fileID: 4839600944929854017}
+  - component: {fileID: 2661779471953955798}
   m_Layer: 12
   m_Name: SpaceRockInterest
   m_TagString: Untagged
@@ -363,6 +365,31 @@ LODGroup:
     renderers:
     - renderer: {fileID: 6379143834642973418}
   m_Enabled: 1
+--- !u!135 &4839600944929854017
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6480852239514807205}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 100
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2661779471953955798
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6480852239514807205}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e211c0082a6315b468ad6962e5958941, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &350644074
 PrefabInstance:
   m_ObjectHideFlags: 0

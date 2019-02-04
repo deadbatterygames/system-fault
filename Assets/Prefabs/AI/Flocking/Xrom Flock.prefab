@@ -49,7 +49,7 @@ MonoBehaviour:
   flockTogether: 0
   groundedFlock: 1
   flyingFlock: 0
-  maxSpeed: 10
+  maxSpeed: 5
   boundingRadius: 50
   groundedBoids: []
   boids: []

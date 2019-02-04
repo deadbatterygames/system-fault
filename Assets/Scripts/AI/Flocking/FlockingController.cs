@@ -36,6 +36,12 @@ public class FlockingController : MonoBehaviour {
 		}
 	}
 
+	public static void CreateInhibitor(Inhibitor inhibitor){
+		foreach(Flock flock in controller.flocks){
+			flock.AddInhibitor(inhibitor);
+		}
+	}
+
 	public static void DestroyAttractor(GameObject attractor, Attractor.Type type = Attractor.Type.None){
 		foreach(Flock flock in controller.flocks){
 			flock.RemoveAttractor(attractor, type);
@@ -57,6 +63,12 @@ public class FlockingController : MonoBehaviour {
 	public static void DestroySeparator(Separator separator){
 		foreach(Flock flock in controller.flocks){
 			flock.RemoveSeparator(separator);
+		}
+	}
+
+	public static void DestroyInhibitor(Inhibitor inhibitor){
+		foreach(Flock flock in controller.flocks){
+			flock.RemoveInhibitor(inhibitor);
 		}
 	}
 }

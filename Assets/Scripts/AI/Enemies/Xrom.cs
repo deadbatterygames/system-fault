@@ -11,14 +11,19 @@ using UnityEngine;
 
 public class Xrom : Boid, IDamageable {
 
+	Animator animator;
+	[SerializeField] TempGun gun;
+	[SerializeField] List<GameObject> targets;
+	[SerializeField] GameObject legs;
+	[SerializeField] GameObject torso;
 	[SerializeField] bool explode = false;
 	float health = 100f;
-	float rotationSpeed = 5;
+	float rotationSpeed = 2;
+	float fireCooldown = 0.5f;
+	float fireTimer = 0.0f;
 	bool landing = false;
 	bool landed = false;
 	bool landingPermission = false;
-	[SerializeField] XromWalker walker;
-	private Vector3 oldVelocity;
 	private Vector3 flockingVelocity;
 	[SerializeField] bool dummy;
 
@@ -27,10 +32,12 @@ public class Xrom : Boid, IDamageable {
 	}
 
 	public void InitializeXrom(bool grounded){
+		animator = GetComponentInChildren<Animator>();
 		this.grounded = grounded;
 
-		oldVelocity = Vector3.zero;
-		this.perceptiveDistance = (grounded) ? 10f : 100f;
+		this.targets = new List<GameObject>();
+
+		this.perceptiveDistance = (grounded) ? 15f : 100f;
 
 		GameManager.instance.AddGravityBody(GetComponent<Rigidbody>());
 	}
@@ -49,7 +56,8 @@ public class Xrom : Boid, IDamageable {
 			}
 		}
 
-		if(explode && !dummy) walker.DestroyHeatSink();
+		fireTimer -= Time.deltaTime;
+		Debug.Log("Update velocity: " + rb.velocity.magnitude);
 	}
 
 	void OnDrawGizmos(){
@@ -57,49 +65,45 @@ public class Xrom : Boid, IDamageable {
         //Gizmos.DrawWireSphere(GetPosition(), PerceptiveDistance());
 	}
 
+	public void MakeTarget(GameObject target){
+		if(!this.targets.Contains(target)) this.targets.Add(target);
+	}
+
+	public void RemoveTarget(GameObject target){
+		this.targets.RemoveAll(x => x == target);
+	}
+
 	public void Damage(float damage, GameTypes.DamageType damageType, Vector3 force){
+		Debug.Log("Xrom::Damage ~ Dealing " + damage.ToString() + " points of " + damageType + " damage to xrom");
 		health -= damage;
 		Move(force, false);
 
 		if(health <= 0){
-			if(!grounded){
-				DestroyXrom();
-			}
+			DestroyXrom();
 		}
 	}
 
 	public override void Move(Vector3 heading, bool debug){
 		
 		if(grounded){
-			//flockingVelocity += heading;
-			//flockingVelocity = Vector3.ClampMagnitude(flockingVelocity, flock.Speed(this));
-			//oldVelocity = rb.velocity;
+			Vector3 input = Vector3.ClampMagnitude(Vector3.ProjectOnPlane(heading, transform.up) * Overmind.instance.movementScale, 1f);
+            rb.AddForce(Vector3.ClampMagnitude(input * flock.Speed(this) - rb.velocity, 1f), ForceMode.VelocityChange);
 
-			//rb.velocity += heading;
-			// Vector3 projHeading = Vector3.ProjectOnPlane(heading, transform.up);
-			// projHeading = projHeading.normalized * heading.magnitude;
+            animator.SetBool("IsMoving", rb.velocity.sqrMagnitude > 0.1f);
 
+			if(rb.velocity.sqrMagnitude > 0.1f){
+				RotateLegs(rb.velocity.normalized);
+				animator.speed = rb.velocity.magnitude * 0.2f;
+			}
+			else animator.speed = 2f;
 
-			rb.AddForce(heading * Overmind.instance.movementScale, ForceMode.Acceleration);
+			if(targets.Count > 0){
+					GameObject currentTarget = targets.OrderBy(x => (x.transform.position - transform.position).sqrMagnitude).ToArray()[0];
+					Vector3 dif = currentTarget.transform.position - gun.firePoint.transform.position;//transform.position;
 
-			//rb.velocity += flockingVelocity + (rb.velocity - oldVelocity);
-			//heading = heading.normalized * Mathf.Log(heading.magnitude);
-			//if(rb.velocity.magnitude > flock.Speed(this)) rb.AddForce(heading, ForceMode.VelocityChange);
-
-			//if(rb.velocity.magnitude > flock.Speed(this)) rb.velocity = rb.velocity.normalized * flock.Speed(this);
-			rb.velocity = Vector3.ClampMagnitude(rb.velocity, flock.Speed(this));
-
-			//Project old heading on the Xrom's axis to determine extension in each component vector
-			//float oldTheta = Mathf.Atan2(Vector3.Dot(oldVelocity, walker.transform.right), Vector3.Dot(oldVelocity, walker.transform.forward));
-			float theta = 0.0f;
-			if(!dummy) theta = Mathf.Atan2(Vector3.Dot(rb.velocity, walker.transform.right), Vector3.Dot(rb.velocity, walker.transform.forward));
-
-			//theta -= oldTheta;
-
-			//TODO: ROTATION
-			//if(rb.velocity.magnitude > 0.5f && !dummy) walker.Rotate(theta);
-
-			oldVelocity = rb.velocity;
+					RotateTorso(dif);
+					if(fireTimer < 0) FireAtTarget(dif);
+			}
 		}
 		else{
 			//if (debug) Debug.Log("Xrom::Move ~ Adding " + heading.ToString() + " to velocity");
@@ -116,6 +120,32 @@ public class Xrom : Boid, IDamageable {
 	public override void Rotate(Vector3 rotation){
 		rb.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(rotation), Time.fixedDeltaTime);
 		// transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(Vector3.down), Time.fixedDeltaTime);
+	}
+
+	private void RotateLegs(Vector3 heading){
+		// So I guess the torso would theoretically rotate with the legs, but then we can just rotate the torso again to face its target...
+		// if it doesn't have a target, we can just rotate it to face forward, and let the legs do the work?
+		//ye
+
+		Vector3 newRotation = Vector3.RotateTowards(transform.forward, heading, Time.deltaTime * rotationSpeed, 0.0f);
+
+		transform.rotation = Quaternion.LookRotation(newRotation, transform.up);
+	}
+
+	private void RotateTorso(Vector3 heading){
+		//torso.transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(heading), Time.fixedDeltaTime);
+        //torso.transform.Rotate(torso.transform.up, Vector3.Angle(torso.transform.forward, heading) * Time.deltaTime, Space.World);
+
+		Vector3 newRotation = Vector3.RotateTowards(gun.firePoint.transform.forward, heading, Time.deltaTime * rotationSpeed, 0.0f);
+
+		torso.transform.rotation = Quaternion.LookRotation(newRotation, transform.up);
+    }
+
+	private void FireAtTarget(Vector3 toTarget){
+		if(Vector3.Angle(torso.transform.forward, toTarget) < 1){
+			gun.Fire();
+			fireTimer = fireCooldown;
+		}
 	}
 
 	public void OnTriggerEnter(Collider col){
@@ -158,6 +188,8 @@ public class Xrom : Boid, IDamageable {
 		return landing;
 	}
 	public void DestroyXrom(){
+		Debug.Log("Xrom::DestroyXrom ~ Destroying xrom");
+		GameManager.instance.RemoveGravityBody(rb);
 		RemoveFromFlock();
 		Destroy(gameObject);
 	}

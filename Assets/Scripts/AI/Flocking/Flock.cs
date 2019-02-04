@@ -14,6 +14,7 @@ public class Flock : MonoBehaviour {
 	[SerializeField] protected List<Boid> boids;
 	protected List<Attractor> attractors;
 	protected List<Separator> separators;
+	protected List<Inhibitor> inhibitors;
 	[SerializeField] protected bool debug = true;
 	[SerializeField] protected bool debugHeading = true;
 	[SerializeField] protected bool debugCohesion = true;
@@ -36,6 +37,7 @@ public class Flock : MonoBehaviour {
 		this.boids = new List<Boid>();
 		this.attractors = new List<Attractor>();
 		this.separators = new List<Separator>();
+		this.inhibitors = new List<Inhibitor>();
 
 		// debug = true;
 		// debugHeading = true;
@@ -86,11 +88,11 @@ public class Flock : MonoBehaviour {
 		while(true){
 			if(groundedHeadingsApplied){
 				//Debug.Log("Updating headings");
-				groundedHeadings = FlockingManager.Headings(groundedBoids.ToArray(), attractors.ToArray(), separators.ToArray(), transform.position, boundingRadius, 4, debug, debugHeading, debugCohesion, debugSeparation, debugAlignment, debugAttraction, debugBounding, cohesion, alignment, separation);
+				groundedHeadings = FlockingManager.Headings(groundedBoids.ToArray(), attractors.ToArray(), separators.ToArray(), inhibitors.ToArray(), transform.position, boundingRadius, 4, debug, debugHeading, debugCohesion, debugSeparation, debugAlignment, debugAttraction, debugBounding, cohesion, alignment, separation);
 				groundedHeadingsApplied = false;
 			}
 			if(flyingHeadingsApplied){
-				flyingHeadings = FlockingManager.Headings(boids.ToArray(), attractors.ToArray(), separators.ToArray(), transform.position, boundingRadius, 4, debug, debugHeading, debugCohesion, debugSeparation, debugAlignment, debugAttraction, debugBounding, cohesion, alignment, separation);
+				flyingHeadings = FlockingManager.Headings(boids.ToArray(), attractors.ToArray(), separators.ToArray(), inhibitors.ToArray(), transform.position, boundingRadius, 4, debug, debugHeading, debugCohesion, debugSeparation, debugAlignment, debugAttraction, debugBounding, cohesion, alignment, separation);
 				flyingHeadingsApplied = false;
 			}
 			yield return null;
@@ -151,14 +153,16 @@ public class Flock : MonoBehaviour {
 		if((groundedFlock && obstacle.grounded) || (!groundedFlock && !obstacle.grounded)){
 			if(obstacle.hasSeparator) AddSeparator(obstacle.separator);
 			if(obstacle.hasAttractor) AddAttractor(obstacle.attractor);
+			if(obstacle.hasInhibitor) AddInhibitor(obstacle.inhibitor);
 		}
 	}
 	protected virtual void ObstacleTriggerExit(FlockingObstacle obstacle){
 		RemoveSeparator(obstacle.separator);
 		RemoveAttractor(obstacle.attractor);
+		RemoveInhibitor(obstacle.inhibitor);
 	}
 
-	public void AddAttractor(Attractor attractor){
+	public virtual void AddAttractor(Attractor attractor){
         switch((int)attractor.type) {
             case (int)Attractor.Type.PlayerShip:
                 if (flyingFlock) this.attractors.Add(attractor);
@@ -168,25 +172,32 @@ public class Flock : MonoBehaviour {
                 break;
         }
 	}
-	public void AddSeparator(Separator separator){
+	public virtual void AddSeparator(Separator separator){
 		this.separators.Add(separator);
 	}
+	public virtual void AddInhibitor(Inhibitor inhibitor){
+		this.inhibitors.Add(inhibitor);
+	}
 
-	public void RemoveAttractor(Attractor attractor){
+	public virtual void RemoveAttractor(Attractor attractor){
 		this.attractors.Remove(attractor);
 	}
 
-	public void RemoveAttractor(GameObject attractor, Attractor.Type type = Attractor.Type.None){
+	public virtual void RemoveAttractor(GameObject attractor, Attractor.Type type = Attractor.Type.None){
 		if(type == Attractor.Type.None) this.attractors.RemoveAll(x => x.go == attractor);
 		else this.attractors.RemoveAll(x => x.go == attractor && x.type == type);
 	}
 
-	public void RemoveSeparator(Separator separator){
+	public virtual void RemoveSeparator(Separator separator){
 		this.separators.Remove(separator);
 	}
 
-	public void RemoveSeparator(GameObject separator, Separator.Type type = Separator.Type.None){
+	public virtual void RemoveSeparator(GameObject separator, Separator.Type type = Separator.Type.None){
 		if(type == Separator.Type.None) this.separators.RemoveAll(x => x.go == separator);
 		else this.separators.RemoveAll(x => x.go == separator && x.type == type);
+	}
+
+	public virtual void RemoveInhibitor(Inhibitor inhibitor){
+		this.inhibitors.Remove(inhibitor);
 	}
 }

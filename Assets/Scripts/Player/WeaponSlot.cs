@@ -16,8 +16,8 @@ public class WeaponSlot : MonoBehaviour {
     GameTypes.PlayerWeaponType currentWeaponType = GameTypes.PlayerWeaponType.None;
 
     // Weapons
-    [SerializeField] MatterManipulator matterManipulator;
-    [SerializeField] Multicannon multicannon;
+    public MatterManipulator matterManipulator;
+    public Multicannon multicannon;
 
     // Weapon Positions
     Vector3 defaultPosition;

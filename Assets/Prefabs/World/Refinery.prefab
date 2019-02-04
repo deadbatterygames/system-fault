@@ -5246,7 +5246,7 @@ ParticleSystem:
 --- !u!199 &4876041207650163202
 ParticleSystemRenderer:
   serializedVersion: 6
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 2
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -5739,9 +5739,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4719369291640119408}
-  - component: {fileID: 4681909623811252934}
   - component: {fileID: 4681421655179214232}
   - component: {fileID: 4651521726962765110}
+  - component: {fileID: 2726429783203538090}
   m_Layer: 0
   m_Name: Refinery
   m_TagString: Untagged
@@ -5770,19 +5770,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4681909623811252934
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4713749618964893572}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3c5a834a4a3d6424cae2303dfd70df9d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  zeroG: 0
 --- !u!114 &4681421655179214232
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5808,6 +5795,19 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 37.2
   m_Center: {x: 0, y: -0.2, z: 0}
+--- !u!114 &2726429783203538090
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4713749618964893572}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f90e6213e572f0d48a558fd630b632fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  snapUp: 1
 --- !u!1 &4713890804125581174
 GameObject:
   m_ObjectHideFlags: 0
@@ -10862,7 +10862,7 @@ ParticleSystem:
 --- !u!199 &4875849417016595238
 ParticleSystemRenderer:
   serializedVersion: 6
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 2
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -15684,7 +15684,7 @@ ParticleSystem:
 --- !u!199 &4875641651702951558
 ParticleSystemRenderer:
   serializedVersion: 6
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 2
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}

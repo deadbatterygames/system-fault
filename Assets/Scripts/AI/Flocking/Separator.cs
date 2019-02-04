@@ -6,6 +6,7 @@ public class Separator {
 
 	public enum Type {
 		None,
+		Player,
 		LandingBarrier,
 		Obstacle
 	}

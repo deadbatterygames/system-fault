@@ -27,7 +27,7 @@ public class MatterManipulator : MonoBehaviour, IWeapon {
 
     public void ConnectAllModules() {
         foreach (ShipModule module in FindObjectsOfType<ShipModule>()) foreach (ModuleSlot moduleSlot in GameManager.instance.ship.GetComponentsInChildren<ModuleSlot>()) {
-            if (!moduleSlot.connectedModule && moduleSlot.slotType == module.moduleType) {
+            if (!moduleSlot.connectedModule && !module.connected && moduleSlot.slotType == module.moduleType) {
                 ConnectModule(module, moduleSlot);
                 break;
             }

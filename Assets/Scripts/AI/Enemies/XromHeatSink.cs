@@ -16,12 +16,10 @@ public class XromHeatSink : MonoBehaviour, IDamageable {
     float heatLevel = 0f;
     bool cooldown;
 
-    XromWalker walker;
     MeshRenderer meshRenderer;
     Color heatSinkColour;
 
     void Start() {
-        walker = GetComponentInParent<XromWalker>();
         meshRenderer = GetComponent<MeshRenderer>();
         heatSinkColour = meshRenderer.materials[0].GetColor("_EmissionColor");
     }
@@ -52,7 +50,6 @@ public class XromHeatSink : MonoBehaviour, IDamageable {
 
     void DestroyHeatSink() {
         GetComponent<ParticleSystem>().Play();
-        walker.DestroyHeatSink();
 
         DisableHeatSink();
     }

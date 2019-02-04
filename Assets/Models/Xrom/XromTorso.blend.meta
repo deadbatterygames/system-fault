@@ -47,6 +47,7 @@ ModelImporter:
     100082: TorsoBone
     100084: Skeleton
     100086: Skull
+    100088: Icosphere
     400000: Armature
     400002: Body
     400004: Foot
@@ -91,11 +92,13 @@ ModelImporter:
     400082: TorsoBone
     400084: Skeleton
     400086: Skull
+    400088: Icosphere
     2100000: Metal
     2100002: Rubber
     2100004: BluePaint
     2100006: RedHot
     2100008: Screen
+    2100010: Rubber_002
     2300000: Head
     2300002: HeatSinkLeft
     2300004: HeatSinkRight
@@ -108,6 +111,7 @@ ModelImporter:
     2300018: Torso
     2300020: //RootNode
     2300022: MultiCannon
+    2300024: Icosphere
     3300000: Head
     3300002: HeatSinkLeft
     3300004: HeatSinkRight
@@ -120,6 +124,7 @@ ModelImporter:
     3300018: Torso
     3300020: //RootNode
     3300022: MultiCannon
+    3300024: Icosphere
     4300000: RightFoot
     4300002: RightLowerLeg
     4300004: RightLeg
@@ -138,6 +143,7 @@ ModelImporter:
     4300030: HeatSinkRight
     4300032: HeatSinkLeft
     4300034: MultiCannon
+    4300036: Icosphere
     7400000: Default Take
     9500000: //RootNode
     13700000: LeftFoot
@@ -198,7 +204,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Screen
-    second: {fileID: 2100000, guid: fb51979e17055b44ab1256b212712d03, type: 2}
+    second: {fileID: 2100000, guid: d4bf6391c2b1f184c9cd3d2b8589efd2, type: 2}
   materials:
     importMaterials: 1
     materialName: 0

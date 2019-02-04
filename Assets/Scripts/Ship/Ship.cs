@@ -275,7 +275,7 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable, IDamageab
                 break;
         }
 
-        if (assistMode != GameTypes.AssistMode.Quantum) rb.velocity = Vector3.ClampMagnitude(rb.velocity, GameManager.MAX_PLAYER_SPEED);
+        if (assistMode != GameTypes.AssistMode.Quantum) rb.velocity = Vector3.ClampMagnitude(rb.velocity, GameManager.MAX_SHIP_SPEED);
     }
 
     void ChangeAssistMode(GameTypes.AssistMode mode) {
@@ -380,7 +380,6 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable, IDamageab
             if (!busy) StartCoroutine("EnterShip");
 
             GameManager.instance.DespawnPlayer();
-            FlockingController.CreateAttractor(new Attractor(gameObject, 100000f, Attractor.Type.PlayerShip));
         } else PlayerHUD.instance.SetInfoPrompt("Unequip Energy Pack before entering");
     }
 

@@ -34,6 +34,8 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
     [SerializeField] Transform cameraRig;
     [SerializeField] float useRange = 5f;
 
+    public FlockingObstacle obstacle;
+
     ModuleSlot energySlot;
     WeaponSlot weaponSlot;
 
@@ -72,7 +74,7 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
         Move();
         if (!snapping) Rotate();
 
-        rb.velocity = Vector3.ClampMagnitude(rb.velocity, GameManager.MAX_PLAYER_SPEED + 3f); // Player can exceed max player speed to catch up to ship
+        rb.velocity = Vector3.ClampMagnitude(rb.velocity, GameManager.MAX_SHIP_SPEED + 3f); // Player can exceed max player speed to catch up to ship
 
         UpdateShipRadar();
     }
@@ -143,9 +145,10 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
             KillPlayer();
         }
 
-        if (Input.GetKeyDown(KeyCode.End)) Damage(1000000f, GameTypes.DamageType.Physical, Vector3.back * 100f);
+        if (Input.GetKeyDown(KeyCode.End)) Damage(1000000f, GameTypes.DamageType.Physical, -transform.forward * 100f);
         if (GameManager.instance.IsInTestMode()) {
             if (Input.GetKeyDown(KeyCode.L) && energySlot.connectedModule) GetComponentInChildren<EnergyPack>().AddEnergy(1000000f);
+            if (Input.GetKeyDown(KeyCode.Insert)) GameManager.instance.ConnectAllShipModules();
             if (Input.GetKeyDown(KeyCode.Home)) GameManager.instance.ship.Use();
         }
     }

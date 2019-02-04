@@ -83,4 +83,62 @@ public class XromFlock : Flock {
 		boundingRadius = Mathf.Max(extents / 2.0f, 10f);
 		collider.radius = Mathf.Max(extents, 10f);
 	}
+
+	private void MakeTarget(GameObject target){
+		Debug.Log("XromFLock::MakeTarget ~ Making " + target.name.ToString() + " a xrom target for flock " + gameObject.name.ToString());
+		foreach(Xrom xrom in groundedBoids){
+			xrom.MakeTarget(target);
+		}
+		foreach(Xrom xrom in boids){
+			xrom.MakeTarget(target);
+		}
+	}
+
+	private void RemoveTarget(GameObject target){
+		Debug.Log("XromFLock::RemoveTarget ~ Removing xrom target " + target.name.ToString() + " for flock " + gameObject.name.ToString());
+		foreach(Xrom xrom in groundedBoids){
+			xrom.RemoveTarget(target);
+		}
+		foreach(Xrom xrom in boids){
+			xrom.RemoveTarget(target);
+		}
+	}
+
+	public override void AddAttractor(Attractor attractor){
+		base.AddAttractor(attractor);
+
+		if(attractor != null && attractor.type == Attractor.Type.Player){
+			Debug.Log("XromFlock::AddAttractor ~ Adding player attractor to list of attractors");
+
+			MakeTarget(attractor.go);
+		}
+	}
+
+	public override void RemoveAttractor(Attractor attractor){
+		base.RemoveAttractor(attractor);
+
+		if(attractor != null && attractor.type == Attractor.Type.Player){
+
+			RemoveTarget(attractor.go);
+		}
+	}
+
+	public override void AddSeparator(Separator separator){
+		base.AddSeparator(separator);
+
+		if(separator != null && separator.type == Separator.Type.Player){
+			Debug.Log("XromFlock::AddSeparator ~ Adding player separator to list of separators");
+
+			MakeTarget(separator.go);
+		}
+	}
+
+	public override void RemoveSeparator(Separator separator){
+		base.RemoveSeparator(separator);
+
+		if(separator != null && separator.type == Separator.Type.Player){
+
+			RemoveTarget(separator.go);
+		}
+	}
 }
