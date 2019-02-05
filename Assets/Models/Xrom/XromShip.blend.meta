@@ -9,12 +9,14 @@ ModelImporter:
     100006: Wings
     100008: //RootNode
     100010: Cylinder
+    100012: Guns
     400000: Body
     400002: Head
     400004: Thruster
     400006: Wings
     400008: //RootNode
     400010: Cylinder
+    400012: Guns
     2100000: Rubber
     2100002: Metal
     2100004: Light
@@ -25,19 +27,47 @@ ModelImporter:
     2300004: Thruster
     2300006: Wings
     2300008: Cylinder
+    2300010: Guns
     3300000: Body
     3300002: Head
     3300004: Thruster
     3300006: Wings
     3300008: Cylinder
+    3300010: Guns
     4300000: Head
     4300002: Wings
     4300004: Thruster
     4300006: Body
     4300008: Cylinder
+    4300010: Guns
     7400000: Default Take
     9500000: //RootNode
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Engine
+    second: {fileID: 2100000, guid: 5391b630dd73a1441b0938405fd29048, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Light
+    second: {fileID: 2100000, guid: d4bf6391c2b1f184c9cd3d2b8589efd2, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Metal
+    second: {fileID: 2100000, guid: 47e76139f8a743a479871152357ad14f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: PaintBlue
+    second: {fileID: 2100000, guid: 00d6ab50c44bcf54699c7da04b3b6e56, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Rubber
+    second: {fileID: 2100000, guid: b43751fb8d810884da2bced69096bdd5, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
@@ -99,7 +129,7 @@ ModelImporter:
     legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
     blendShapeNormalImportMode: 1
     normalSmoothingSource: 0
-  importAnimation: 1
+  importAnimation: 0
   copyAvatar: 0
   humanDescription:
     serializedVersion: 2
@@ -114,10 +144,10 @@ ModelImporter:
     feetSpacing: 0
     rootMotionBoneName: 
     hasTranslationDoF: 0
-    hasExtraRoot: 0
+    hasExtraRoot: 1
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 2
+  animationType: 0
   humanoidOversampling: 1
   additionalBone: 0
   userData: 

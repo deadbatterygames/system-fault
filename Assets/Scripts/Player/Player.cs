@@ -209,7 +209,7 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
 
         if (energySlot.connectedModule != null) amount = energySlot.connectedModule.GetComponent<EnergyPack>().AbsorbDamage(amount);
         health -= amount;
-        rb.AddForce(damageForce, ForceMode.VelocityChange);
+        rb.AddForce(damageForce, ForceMode.Impulse);
 
         if (health <= 0 && !dead) KillPlayer();
     }

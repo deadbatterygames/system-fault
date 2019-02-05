@@ -24,11 +24,13 @@ public class PlayerData : MonoBehaviour {
 
     [Header("Bullets")]
     public GameObject[] bulletPrefabs;
-    [SerializeField] int maxBullets = 10;
+    [SerializeField] int maxPlayerBullets = 10;
+    [SerializeField] int maxXromBullets = 50;
     int[] bulletIndicies = new int[4];
     List<GameObject> yellowBullets = new List<GameObject>();
     List<GameObject> blueBullets = new List<GameObject>();
     List<GameObject> redBullets = new List<GameObject>();
+    List<GameObject> xromBullets = new List<GameObject>();
 
     [Header("Particles")]
     public GameObject explosionPrefab;
@@ -68,7 +70,7 @@ public class PlayerData : MonoBehaviour {
 
         switch (bulletType) {
             case GameTypes.DamageType.Yellow:
-                if (yellowBullets.Count >= maxBullets) return yellowBullets[index];
+                if (yellowBullets.Count >= maxPlayerBullets) return yellowBullets[index];
                 else {
                     // Make new bullet
                     GameObject newBullet = Instantiate(bulletPrefabs[0]);
@@ -76,7 +78,7 @@ public class PlayerData : MonoBehaviour {
                     return newBullet;
                 }
             case GameTypes.DamageType.Blue:
-                if (blueBullets.Count >= maxBullets) return blueBullets[index];
+                if (blueBullets.Count >= maxPlayerBullets) return blueBullets[index];
                 else {
                     // Make new bullet
                     GameObject newBullet = Instantiate(bulletPrefabs[1]);
@@ -85,11 +87,19 @@ public class PlayerData : MonoBehaviour {
                     return newBullet;
                 }
             case GameTypes.DamageType.Red:
-                if (redBullets.Count >= maxBullets) return redBullets[index];
+                if (redBullets.Count >= maxPlayerBullets) return redBullets[index];
                 else {
                     // Make new bullet
                     GameObject newBullet = Instantiate(bulletPrefabs[2]);
                     redBullets.Add(newBullet);
+                    return newBullet;
+                }
+            case GameTypes.DamageType.Physical:
+                if (xromBullets.Count >= maxXromBullets) return xromBullets[index];
+                else {
+                    // Make new bullet
+                    GameObject newBullet = Instantiate(bulletPrefabs[3]);
+                    xromBullets.Add(newBullet);
                     return newBullet;
                 }
             default:
@@ -100,7 +110,7 @@ public class PlayerData : MonoBehaviour {
 
     int CycleBulletIndex(GameTypes.DamageType bulletType) {
         int typeIndex = (int)bulletType;
-        if (bulletIndicies[typeIndex] >= maxBullets - 1) bulletIndicies[typeIndex] = 0;
+        if (bulletIndicies[typeIndex] >= maxPlayerBullets - 1) bulletIndicies[typeIndex] = 0;
         else bulletIndicies[typeIndex]++;
         return bulletIndicies[typeIndex];
     }

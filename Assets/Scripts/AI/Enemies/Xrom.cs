@@ -12,7 +12,7 @@ using UnityEngine;
 public class Xrom : Boid, IDamageable {
 
 	Animator animator;
-	[SerializeField] TempGun gun;
+	[SerializeField] XromGun gun;
 	[SerializeField] List<GameObject> targets;
 	[SerializeField] GameObject legs;
 	[SerializeField] GameObject torso;
@@ -76,7 +76,7 @@ public class Xrom : Boid, IDamageable {
 	public void Damage(float damage, GameTypes.DamageType damageType, Vector3 force){
 		Debug.Log("Xrom::Damage ~ Dealing " + damage.ToString() + " points of " + damageType + " damage to xrom");
 		health -= damage;
-		Move(force, false);
+		rb.AddForce(force, ForceMode.Impulse);
 
 		if(health <= 0){
 			DestroyXrom();
@@ -99,7 +99,7 @@ public class Xrom : Boid, IDamageable {
 
 			if(targets.Count > 0){
 					GameObject currentTarget = targets.OrderBy(x => (x.transform.position - transform.position).sqrMagnitude).ToArray()[0];
-					Vector3 dif = currentTarget.transform.position - gun.firePoint.transform.position;//transform.position;
+					Vector3 dif = currentTarget.transform.position - gun.transform.position;//transform.position;
 
 					RotateTorso(dif);
 					if(fireTimer < 0) FireAtTarget(dif);
@@ -136,7 +136,7 @@ public class Xrom : Boid, IDamageable {
 		//torso.transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(heading), Time.fixedDeltaTime);
         //torso.transform.Rotate(torso.transform.up, Vector3.Angle(torso.transform.forward, heading) * Time.deltaTime, Space.World);
 
-		Vector3 newRotation = Vector3.RotateTowards(gun.firePoint.transform.forward, heading, Time.deltaTime * rotationSpeed, 0.0f);
+		Vector3 newRotation = Vector3.RotateTowards(gun.transform.forward, heading, Time.deltaTime * rotationSpeed, 0.0f);
 
 		torso.transform.rotation = Quaternion.LookRotation(newRotation, transform.up);
     }
