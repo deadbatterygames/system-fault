@@ -26,6 +26,7 @@ public class PlayerData : MonoBehaviour {
     public GameObject[] bulletPrefabs;
     [SerializeField] int maxPlayerBullets = 10;
     [SerializeField] int maxXromBullets = 50;
+
     int[] bulletIndicies = new int[4];
     List<GameObject> yellowBullets = new List<GameObject>();
     List<GameObject> blueBullets = new List<GameObject>();
@@ -72,7 +73,6 @@ public class PlayerData : MonoBehaviour {
             case GameTypes.DamageType.Yellow:
                 if (yellowBullets.Count >= maxPlayerBullets) return yellowBullets[index];
                 else {
-                    // Make new bullet
                     GameObject newBullet = Instantiate(bulletPrefabs[0]);
                     yellowBullets.Add(newBullet);
                     return newBullet;
@@ -80,16 +80,14 @@ public class PlayerData : MonoBehaviour {
             case GameTypes.DamageType.Blue:
                 if (blueBullets.Count >= maxPlayerBullets) return blueBullets[index];
                 else {
-                    // Make new bullet
                     GameObject newBullet = Instantiate(bulletPrefabs[1]);
                     blueBullets.Add(newBullet);
-                    GameManager.instance.AddGravityBody(newBullet.GetComponent<Rigidbody>());
+                    GameManager.instance.AddGravityBody(newBullet.GetComponent<Rigidbody>()); // Blue bullets are affected by gravity
                     return newBullet;
                 }
             case GameTypes.DamageType.Red:
                 if (redBullets.Count >= maxPlayerBullets) return redBullets[index];
                 else {
-                    // Make new bullet
                     GameObject newBullet = Instantiate(bulletPrefabs[2]);
                     redBullets.Add(newBullet);
                     return newBullet;
@@ -99,7 +97,6 @@ public class PlayerData : MonoBehaviour {
 
                 if (xromBullets.Count >= maxXromBullets) return xromBullets[index];
                 else {
-                    // Make new bullet
                     GameObject newBullet = Instantiate(bulletPrefabs[3]);
                     xromBullets.Add(newBullet);
                     return newBullet;
