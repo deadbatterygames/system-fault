@@ -57,7 +57,7 @@ public class MatterManipulator : MonoBehaviour, IWeapon {
                     ConnectModule(heldModule, playerSlot);
                     PlayerHUD.instance.SetInfoPrompt(moduleName + " equipped");
                 } else PlayerHUD.instance.SetInfoPrompt("Another Energy Pack is already equipped");
-            } else PlayerHUD.instance.SetInfoPrompt("Not holding a Energy Pack");
+            } else PlayerHUD.instance.SetInfoPrompt("Not holding an Energy Pack");
         } else {
             if (playerSlot.connectedModule != null) {
                 PlayerHUD.instance.DisableEnergyPackHUD();
