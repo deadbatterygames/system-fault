@@ -15,6 +15,7 @@ public class FlockingObstacle : MonoBehaviour {
 	public float inhibitorRadius;
 	public bool grounded;
 	public ObstacleTypes type;
+	public FlockingObstacle previous, next;
 	[SerializeField] private float radius;
 
 	public enum ObstacleTypes
@@ -23,24 +24,33 @@ public class FlockingObstacle : MonoBehaviour {
 		Energy,
 		Water,
 		Hazard,
-		Obstacle
+		Obstacle,
+		InhibitorStrip
 	}
 
 	[ExecuteInEditMode]
 	void OnDrawGizmosSelected(){
-		if(hasAttractor){
-			Gizmos.color = Color.green;
-        	Gizmos.DrawWireSphere(transform.position, attractorRadius);
+		if(type == ObstacleTypes.InhibitorStrip){
+			if(next != null){
+				Gizmos.color = Color.black;
+				Gizmos.DrawLine(transform.position, next.transform.position);
+			}
 		}
+		else{
+			if(hasAttractor){
+				Gizmos.color = Color.green;
+				Gizmos.DrawWireSphere(transform.position, attractorRadius);
+			}
 
-		if(hasSeparator){
-			Gizmos.color = Color.red;
-			Gizmos.DrawWireSphere(transform.position, separatorRadius);
-		}
+			if(hasSeparator){
+				Gizmos.color = Color.red;
+				Gizmos.DrawWireSphere(transform.position, separatorRadius);
+			}
 
-		if(hasInhibitor){
-			Gizmos.color = Color.black;
-			Gizmos.DrawWireSphere(transform.position, inhibitorRadius);
+			if(hasInhibitor){
+				Gizmos.color = Color.black;
+				Gizmos.DrawWireSphere(transform.position, inhibitorRadius);
+			}
 		}
 	}
 
@@ -55,7 +65,7 @@ public class FlockingObstacle : MonoBehaviour {
 					if(renderer.bounds.extents.magnitude > largestRenderer.bounds.extents.magnitude) largestRenderer = renderer;
 				}
 				
-				radius = 2 * Vector3.ProjectOnPlane(largestRenderer.bounds.extents, transform.up).magnitude;
+				radius = Vector3.ProjectOnPlane(largestRenderer.bounds.extents, transform.up).magnitude;
 			}
 		}
 
@@ -77,6 +87,11 @@ public class FlockingObstacle : MonoBehaviour {
 				hasSeparator = true;
 				hasInhibitor = false;
 				break;
+			case ObstacleTypes.InhibitorStrip:
+				hasAttractor = false;
+				hasSeparator = false;
+				hasInhibitor = true;
+				break;
 			default:
 				hasAttractor = false;
 				hasSeparator = false;
@@ -87,16 +102,22 @@ public class FlockingObstacle : MonoBehaviour {
 		if(hasInhibitor){
 			Inhibitor.Type inhibitorType = Inhibitor.Type.None;
 			if(inhibitorRadius == 0.0f) inhibitorRadius = 0.75f * radius;
+			bool inStrip = false;
 
 			switch(type){
 				case ObstacleTypes.Water:
 					inhibitorType = Inhibitor.Type.Water;
 					break;
+				case ObstacleTypes.InhibitorStrip:
+					inhibitorType = Inhibitor.Type.StripNode;
+					inStrip = true;
+					break;
 				default:
 					break;
 			}
 
-			inhibitor = new Inhibitor(gameObject, inhibitorRadius, inhibitorType);
+			if(inStrip) inhibitor = new Inhibitor(gameObject, inhibitorRadius, previous, next);
+			else inhibitor = new Inhibitor(gameObject, inhibitorRadius, inhibitorType);
 		}
 		else inhibitor = null;
 

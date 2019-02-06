@@ -95,7 +95,7 @@ public class Flock : MonoBehaviour {
 				flyingHeadings = FlockingManager.Headings(boids.ToArray(), attractors.ToArray(), separators.ToArray(), inhibitors.ToArray(), transform.position, boundingRadius, 4, debug, debugHeading, debugCohesion, debugSeparation, debugAlignment, debugAttraction, debugBounding, cohesion, alignment, separation);
 				flyingHeadingsApplied = false;
 			}
-			yield return null;
+			yield return new WaitForFixedUpdate();
 		}
 	}
 

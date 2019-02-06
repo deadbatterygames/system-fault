@@ -66,7 +66,7 @@ public class PlayerData : MonoBehaviour {
     }
 
     public GameObject GetBullet(GameTypes.DamageType bulletType) {
-        int index = CycleBulletIndex(bulletType);
+        int index = CycleBulletIndex(bulletType, maxPlayerBullets);
 
         switch (bulletType) {
             case GameTypes.DamageType.Yellow:
@@ -95,6 +95,8 @@ public class PlayerData : MonoBehaviour {
                     return newBullet;
                 }
             case GameTypes.DamageType.Physical:
+                index = CycleBulletIndex(bulletType, maxXromBullets); // Xrom bullets have a separate pool
+
                 if (xromBullets.Count >= maxXromBullets) return xromBullets[index];
                 else {
                     // Make new bullet
@@ -108,9 +110,9 @@ public class PlayerData : MonoBehaviour {
         }
     }
 
-    int CycleBulletIndex(GameTypes.DamageType bulletType) {
+    int CycleBulletIndex(GameTypes.DamageType bulletType, int maxBullets) {
         int typeIndex = (int)bulletType;
-        if (bulletIndicies[typeIndex] >= maxPlayerBullets - 1) bulletIndicies[typeIndex] = 0;
+        if (bulletIndicies[typeIndex] >= maxBullets - 1) bulletIndicies[typeIndex] = 0;
         else bulletIndicies[typeIndex]++;
         return bulletIndicies[typeIndex];
     }

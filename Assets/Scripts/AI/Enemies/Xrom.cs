@@ -18,7 +18,7 @@ public class Xrom : Boid, IDamageable {
 	[SerializeField] GameObject torso;
 	[SerializeField] bool explode = false;
 	float health = 100f;
-	float rotationSpeed = 2;
+	float rotationSpeed = 1.5f;
 	float fireCooldown = 0.5f;
 	float fireTimer = 0.0f;
 	bool landing = false;
@@ -87,15 +87,20 @@ public class Xrom : Boid, IDamageable {
 		
 		if(grounded){
 			Vector3 input = Vector3.ClampMagnitude(Vector3.ProjectOnPlane(heading, transform.up) * Overmind.instance.movementScale, 1f);
-            rb.AddForce(Vector3.ClampMagnitude(input * flock.Speed(this) - rb.velocity, 1f), ForceMode.VelocityChange);
+			Vector3 dv = Vector3.ClampMagnitude(input * flock.Speed(this) - rb.velocity, flock.Speed(this));
 
-            animator.SetBool("IsMoving", rb.velocity.sqrMagnitude > 0.1f);
+            if(input.sqrMagnitude > 0.5f) rb.AddForce(dv, ForceMode.VelocityChange);
 
-			if(rb.velocity.sqrMagnitude > 0.1f){
+            animator.SetBool("IsMoving", rb.velocity.sqrMagnitude > 0.2f);
+
+			if(rb.velocity.sqrMagnitude > 0.2f){
 				RotateLegs(rb.velocity.normalized);
 				animator.speed = rb.velocity.magnitude * 0.2f;
 			}
-			else animator.speed = 2f;
+			else{
+				animator.speed = 2f;
+				rb.velocity = Vector3.zero;
+			}
 
 			if(targets.Count > 0){
 					GameObject currentTarget = targets.OrderBy(x => (x.transform.position - transform.position).sqrMagnitude).ToArray()[0];
@@ -118,25 +123,20 @@ public class Xrom : Boid, IDamageable {
 	}
 
 	public override void Rotate(Vector3 rotation){
-		rb.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(rotation), Time.fixedDeltaTime);
+		//rb.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(rotation), Time.fixedDeltaTime);
 		// transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(Vector3.down), Time.fixedDeltaTime);
 	}
 
 	private void RotateLegs(Vector3 heading){
-		// So I guess the torso would theoretically rotate with the legs, but then we can just rotate the torso again to face its target...
-		// if it doesn't have a target, we can just rotate it to face forward, and let the legs do the work?
-		//ye
+		//Vector3 newRotation = Vector3.RotateTowards(transform.forward, heading, Time.deltaTime * rotationSpeed, 0.0f);
 
-		Vector3 newRotation = Vector3.RotateTowards(transform.forward, heading, Time.deltaTime * rotationSpeed, 0.0f);
+        Vector3 newForward = Vector3.Slerp(transform.forward, Vector3.ProjectOnPlane(heading, transform.up), rotationSpeed * Time.fixedDeltaTime);
 
-		transform.rotation = Quaternion.LookRotation(newRotation, transform.up);
+		rb.MoveRotation(Quaternion.LookRotation(newForward, transform.up));
 	}
 
 	private void RotateTorso(Vector3 heading){
-		//torso.transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(heading), Time.fixedDeltaTime);
-        //torso.transform.Rotate(torso.transform.up, Vector3.Angle(torso.transform.forward, heading) * Time.deltaTime, Space.World);
-
-		Vector3 newRotation = Vector3.RotateTowards(gun.transform.forward, heading, Time.deltaTime * rotationSpeed, 0.0f);
+		Vector3 newRotation = Vector3.RotateTowards(gun.transform.forward, heading, rotationSpeed * Time.fixedDeltaTime, 0.0f);
 
 		torso.transform.rotation = Quaternion.LookRotation(newRotation, transform.up);
     }

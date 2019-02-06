@@ -21,8 +21,6 @@ public class Bullet : MonoBehaviour {
         rb = GetComponent<Rigidbody>();
         if (GetComponent<Rigidbody>().collisionDetectionMode != CollisionDetectionMode.Continuous)
             Debug.LogError("Bullet: " + gameObject.name + "'s collision detection is not set to Continuous");
-
-        
     }
 
     void OnCollisionEnter(Collision collision) {
@@ -44,7 +42,7 @@ public class Bullet : MonoBehaviour {
         explosion.Play();
     }
 
-    public void ResetBullet() {
+    public void RecycleBullet() {
         rb.drag = 0f;
 
         explosion.Stop();

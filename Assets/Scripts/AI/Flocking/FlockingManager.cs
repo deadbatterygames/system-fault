@@ -65,15 +65,56 @@ public static class FlockingManager {
 
 			for(int j = 0; j < inhibitors.Length; j++){
 				Vector3 boidPosition = boids[i].GetPosition();
-				Vector3 dif = inhibitors[j].GetPosition() - boidPosition;
 
-				if(dif.sqrMagnitude < inhibitors[j].radius * inhibitors[j].radius){
-					// If the heading is pointing towards the inhibitor
-					if(Vector3.Dot(heading, dif.normalized) > 0){
-						if(debug) Debug.DrawLine(boidPosition, boidPosition + heading, Color.black);
+				if(inhibitors[j].inStrip){
+					Inhibitor previous = inhibitors[j].GetPrevious();
+					Inhibitor next = inhibitors[j].GetNext();
+					Inhibitor closest = null;
 
-						// Project the heading onto the plane spanned by the difference vector and the difference of the difference vector and the heading
-						heading = Vector3.Project(heading, (heading.normalized - dif.normalized).normalized);
+					if(previous != null && next != null) closest = ((previous.GetPosition() - boidPosition).sqrMagnitude < (next.GetPosition() - boidPosition).sqrMagnitude) ? previous : next;
+					else{
+						if(previous != null) closest = previous;
+						else if(next != null) closest = next;
+						else Debug.LogError("FlockingManager::Inhibition ~ Inhibitor node in strip has no neighbours");
+					}
+
+					// Find the point on the segment from this inhibitor to the closeset neighbour
+					// where a vector normal to the segment intersects the boid's position
+					// Explanation: Consider a segment defined by points a and b
+					// A point on that segment is defined by p(t) = a + td, where d is their difference b - a
+					// So the point where the distance to the boid is normal to the segment
+					// d . (p(t) - B) = 0
+					// d . (a + td - B) = 0
+					// t = -((d . a) - (d . B)) / (d . d)
+					// If t is between 0 and 1 then the segment intersects the plane at B normal to the segment
+
+					Vector3 a = inhibitors[j].GetPosition();
+					Vector3 b = closest.GetPosition();
+					Vector3 d = b - a;
+
+					float t = (-Vector3.Dot(d, a) + Vector3.Dot(d, boidPosition)) / d.sqrMagnitude;//-(Vector3.Dot(d, a) - boidPosition.magnitude) / d.sqrMagnitude;
+					Vector3 p = a + t * d;
+
+					if(0 <= t && t <= 1){
+						if(debug) Debug.DrawLine(boidPosition, p, Color.black);
+						Vector3 dp = p - boidPosition;
+
+						if(dp.sqrMagnitude < inhibitors[j].radius * inhibitors[j].radius){
+							
+						}
+					} 
+				}
+				else{
+					Vector3 dif = inhibitors[j].GetPosition() - boidPosition;
+
+					if(dif.sqrMagnitude < inhibitors[j].radius * inhibitors[j].radius){
+						// If the heading is pointing towards the inhibitor
+						if(Vector3.Dot(heading, dif.normalized) > 0){
+							if(debug) Debug.DrawLine(boidPosition, boidPosition + heading, Color.black);
+
+							// Project the heading onto the plane spanned by the difference vector and the difference of the difference vector and the heading
+							heading = Vector3.Project(heading, (heading.normalized - dif.normalized).normalized);
+						}
 					}
 				}
 			}
@@ -261,7 +302,8 @@ public static class FlockingManager {
 		// ((radius - distance) / radius) + 1 - (distance / radius)
 		// 
 		//return Attract(distance, radius) + 1 - (distance / radius);//2 - distance / radius;
-		return -Attract(distance * distance, radius);
+		float f = Attract(distance * distance, radius);
+		return -(f * f);
 	}
 
 	private static Vector3[] Attraction(Boid[] boids, Attractor[] attractors, bool debug){

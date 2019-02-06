@@ -8,6 +8,7 @@ public class XromFlock : Flock {
 	[SerializeField] private GameObject xromDummyPrefab;
 	[SerializeField] private GameObject xromShipPrefab;
 	public List<Xrom> startingGroundedBoids;
+	public bool peaceful;
 
 	void Start(){
 		//maxSpeed = 10f;

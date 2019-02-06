@@ -18,10 +18,10 @@ public class XromGun : MonoBehaviour, IWeapon {
     }
 
     public void Fire() {
-        FireBullet(PlayerData.instance.GetBullet(GameTypes.DamageType.Physical), transform.forward, bulletVelocity);
+        FireBullet(PlayerData.instance.GetBullet(GameTypes.DamageType.Physical).GetComponent<Bullet>(), transform.forward, bulletVelocity);
     }
 
-    void FireBullet(GameObject bullet, Vector3 fireDirection, float bulletVelocity) {
+    void FireBullet(Bullet bullet, Vector3 fireDirection, float bulletVelocity) {
         // Position
         bullet.transform.position = transform.position;
 
@@ -29,6 +29,9 @@ public class XromGun : MonoBehaviour, IWeapon {
         Rigidbody bulletRB = bullet.GetComponent<Rigidbody>();
         bulletRB.angularVelocity = Vector3.zero;
         bulletRB.velocity = GetComponentInParent<Rigidbody>().velocity + fireDirection * bulletVelocity;
+
+        // Bullet Recycle
+        bullet.RecycleBullet();
 
         // Particles
         particles.Play();

@@ -184,7 +184,6 @@ public class Multicannon : MonoBehaviour, IWeapon {
 
         // Rigidbody
         Rigidbody bulletRB = bullet.GetComponent<Rigidbody>();
-        
 
         // Velocity
         bulletRB.velocity = fireDirection * bulletVelocity;
@@ -202,7 +201,7 @@ public class Multicannon : MonoBehaviour, IWeapon {
                 break;
         }
 
-        bullet.ResetBullet();
+        bullet.RecycleBullet();
     }
 
     IEnumerator Cooldown(float time) {

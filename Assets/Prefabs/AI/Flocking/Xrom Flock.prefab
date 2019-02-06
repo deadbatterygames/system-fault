@@ -49,7 +49,7 @@ MonoBehaviour:
   flockTogether: 0
   groundedFlock: 1
   flyingFlock: 0
-  maxSpeed: 5
+  maxSpeed: 10
   boundingRadius: 50
   groundedBoids: []
   boids: []
@@ -70,6 +70,7 @@ MonoBehaviour:
   xromShipPrefab: {fileID: 1909310721993688, guid: 54a099c191988e645b7b70b5f52d0522,
     type: 3}
   startingGroundedBoids: []
+  peaceful: 1
 --- !u!135 &1542343575561727083
 SphereCollider:
   m_ObjectHideFlags: 0

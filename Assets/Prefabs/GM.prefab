@@ -99,7 +99,9 @@ MonoBehaviour:
   - {fileID: 1182280151139152, guid: 050bf6e2a47d4ae48b26956868ff3b80, type: 3}
   - {fileID: 1182280151139152, guid: 399755ca273d06642aeeb02f7652eeb1, type: 3}
   - {fileID: 1182280151139152, guid: 9e86334570c29e14f8b9685f4f97af63, type: 3}
-  maxBullets: 10
+  - {fileID: 1182280151139152, guid: 25004e51fa76163489570724dd4a6eee, type: 3}
+  maxPlayerBullets: 10
+  maxXromBullets: 50
   explosionPrefab: {fileID: 7287519659594524012, guid: f74edd5e63412e142ad7a3b1ef8f91c6,
     type: 3}
   laserParticles: {fileID: 8220779600435508703, guid: 6818b7c498179b840b85cb0a2e0ecdb8,
