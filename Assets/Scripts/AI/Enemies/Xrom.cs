@@ -9,22 +9,24 @@ using UnityEngine;
 // Purpose: Making shit go zooooooooooooom
 //
 
-public class Xrom : Boid, IDamageable {
+public class Xrom : Boid, IDamageable, IGroundable {
 
 	Animator animator;
 	[SerializeField] XromGun gun;
 	[SerializeField] List<GameObject> targets;
 	[SerializeField] GameObject legs;
 	[SerializeField] GameObject torso;
-	[SerializeField] bool explode = false;
+	//[SerializeField] bool explode = false;
 	float health = 100f;
-	float rotationSpeed = 1.5f;
+	float rotationSpeed = 5f;
 	float fireCooldown = 0.5f;
 	float fireTimer = 0.0f;
 	bool landing = false;
 	bool landed = false;
 	bool landingPermission = false;
 	private Vector3 flockingVelocity;
+	private float knockbackScale = 10f;
+	private float maxForce = 0.5f;
 	[SerializeField] bool dummy;
 
 	void Start(){
@@ -33,7 +35,7 @@ public class Xrom : Boid, IDamageable {
 
 	public void InitializeXrom(bool grounded){
 		animator = GetComponentInChildren<Animator>();
-		this.grounded = grounded;
+		this.flying = !grounded;
 
 		this.targets = new List<GameObject>();
 
@@ -57,7 +59,7 @@ public class Xrom : Boid, IDamageable {
 		}
 
 		fireTimer -= Time.deltaTime;
-		Debug.Log("Update velocity: " + rb.velocity.magnitude);
+		//Debug.Log("Update velocity: " + rb.velocity.magnitude);
 	}
 
 	void OnDrawGizmos(){
@@ -73,10 +75,10 @@ public class Xrom : Boid, IDamageable {
 		this.targets.RemoveAll(x => x == target);
 	}
 
-	public void Damage(float damage, GameTypes.DamageType damageType, Vector3 force){
+	public void Damage(float damage, GameTypes.DamageType damageType, Vector3 force, Vector3 pointOfImpact, Vector3 directionOfImpact){
 		Debug.Log("Xrom::Damage ~ Dealing " + damage.ToString() + " points of " + damageType + " damage to xrom");
 		health -= damage;
-		rb.AddForce(force, ForceMode.Impulse);
+		rb.AddForce(knockbackScale * force, ForceMode.Impulse);
 
 		if(health <= 0){
 			DestroyXrom();
@@ -85,32 +87,34 @@ public class Xrom : Boid, IDamageable {
 
 	public override void Move(Vector3 heading, bool debug){
 		
-		if(grounded){
-			Vector3 input = Vector3.ClampMagnitude(Vector3.ProjectOnPlane(heading, transform.up) * Overmind.instance.movementScale, 1f);
-			Vector3 dv = Vector3.ClampMagnitude(input * flock.Speed(this) - rb.velocity, flock.Speed(this));
+		if(!flying){
+            if (grounded) {
+                Vector3 input = Vector3.ClampMagnitude(Vector3.ProjectOnPlane(heading, transform.up) * Overmind.instance.movementScale, 1f);
+                Vector3 dv = Vector3.ClampMagnitude(input * flock.Speed(this) - rb.velocity, maxForce * flock.Speed(this));
 
-            if(input.sqrMagnitude > 0.5f) rb.AddForce(dv, ForceMode.VelocityChange);
+                if (input.sqrMagnitude > 0.5f && grounded) rb.AddForce(dv, ForceMode.VelocityChange);
 
-            animator.SetBool("IsMoving", rb.velocity.sqrMagnitude > 0.2f);
+                animator.SetBool("IsMoving", rb.velocity.sqrMagnitude > 0.2f);
 
-			if(rb.velocity.sqrMagnitude > 0.2f){
-				RotateLegs(rb.velocity.normalized);
-				animator.speed = rb.velocity.magnitude * 0.2f;
-			}
-			else{
-				animator.speed = 2f;
-				rb.velocity = Vector3.zero;
-			}
+                if (rb.velocity.sqrMagnitude > 0.2f) {
+                    RotateLegs(rb.velocity.normalized);
+                    animator.speed = rb.velocity.magnitude * 0.2f;
+                } else {
+                    animator.speed = 2f;
+                    rb.velocity = Vector3.zero;
+                }
+            }
+			else animator.SetBool("IsMoving", false);
 
 			if(targets.Count > 0){
-					GameObject currentTarget = targets.OrderBy(x => (x.transform.position - transform.position).sqrMagnitude).ToArray()[0];
-					Vector3 dif = currentTarget.transform.position - gun.transform.position;//transform.position;
+				GameObject currentTarget = targets.OrderBy(x => (x.transform.position - transform.position).sqrMagnitude).ToArray()[0];
+				Vector3 dif = currentTarget.transform.position - gun.transform.position;//transform.position;
 
-					RotateTorso(dif);
-					if(fireTimer < 0) FireAtTarget(dif);
+				RotateTorso(dif);
+				if(fireTimer < 0 && !((XromFlock) flock).peaceful) FireAtTarget(dif);
 			}
-		}
-		else{
+			else RotateTorso(transform.forward);
+		} else {
 			//if (debug) Debug.Log("Xrom::Move ~ Adding " + heading.ToString() + " to velocity");
 			Vector3 oldVelocity = rb.velocity;
 			rb.velocity += heading;//.normalized;
@@ -131,12 +135,16 @@ public class Xrom : Boid, IDamageable {
 		//Vector3 newRotation = Vector3.RotateTowards(transform.forward, heading, Time.deltaTime * rotationSpeed, 0.0f);
 
         Vector3 newForward = Vector3.Slerp(transform.forward, Vector3.ProjectOnPlane(heading, transform.up), rotationSpeed * Time.fixedDeltaTime);
+		Vector3 oldForward = torso.transform.forward;
+		Vector3 oldUp = torso.transform.up;
 
-		rb.MoveRotation(Quaternion.LookRotation(newForward, transform.up));
+		//rb.MoveRotation(Quaternion.LookRotation(newForward, transform.up));
+		transform.rotation = Quaternion.LookRotation(newForward, transform.up);
+		torso.transform.rotation = Quaternion.LookRotation(oldForward, oldUp);
 	}
 
 	private void RotateTorso(Vector3 heading){
-		Vector3 newRotation = Vector3.RotateTowards(gun.transform.forward, heading, rotationSpeed * Time.fixedDeltaTime, 0.0f);
+		Vector3 newRotation = Vector3.Slerp(gun.transform.forward, Vector3.ProjectOnPlane(heading, transform.up), rotationSpeed * Time.fixedDeltaTime);
 
 		torso.transform.rotation = Quaternion.LookRotation(newRotation, transform.up);
     }

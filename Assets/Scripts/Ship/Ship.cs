@@ -50,7 +50,9 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable, IDamageab
     bool powered = false;
     bool busy = false;
     bool lightOn = true;
+
     int missileRackIndex = 0;
+    int missiles;
 
     bool freeLook = false;
 
@@ -88,11 +90,11 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable, IDamageab
         if (PlayerData.instance.alive && PlayerControl.instance.GetControllingActor() == GetComponent<IControllable>()) {
             if (collisionMagnitude > PlayerData.instance.shipDamageTolerance) {
                 IDamageable otherDamageable = collision.collider.GetComponentInParent<IDamageable>();
-                if (otherDamageable != null) otherDamageable.Damage(collision.relativeVelocity.magnitude, GameTypes.DamageType.Physical, -collision.relativeVelocity);
+                if (otherDamageable != null) otherDamageable.Damage(collision.relativeVelocity.magnitude, GameTypes.DamageType.Physical, -collision.relativeVelocity, Vector3.zero, Vector3.zero);
             }
 
             if (collisionMagnitude > PlayerData.instance.shipDamageTolerance && !collision.gameObject.GetComponent<Rigidbody>())
-                Damage(collisionMagnitude / shipStrength, GameTypes.DamageType.Physical, Vector3.zero);
+                Damage(collisionMagnitude / shipStrength, GameTypes.DamageType.Physical, Vector3.zero, Vector3.zero, Vector3.zero);
         }
     }
 
@@ -349,9 +351,13 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable, IDamageab
                 else laserCannon = null;
                 break;
             case GameTypes.ModuleType.MissileRack:
-                if (connected) missileRacks.Add(module.GetComponent<MissileRack>());
-                else {
+                MissileRack rack = module.GetComponent<MissileRack>();
+                if (connected) {
+                    missileRacks.Add(rack);
+                    UpdateMissileCount(rack.GetMissileCount());
+                } else {
                     missileRacks.Remove(module.GetComponent<MissileRack>());
+                    UpdateMissileCount(-rack.GetMissileCount());
                     missileRackIndex = 0;
                 }
                 break;
@@ -359,6 +365,11 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable, IDamageab
 
         shipComputer.UpdateModuleStatus(module.moduleType, connected);
         if (module.moduleType == GameTypes.ModuleType.MissileRack && missileRacks.Count > 0) shipComputer.UpdateModuleStatus(module.moduleType, true);
+    }
+
+    public void UpdateMissileCount(int count) {
+        missiles += count;
+        shipComputer.UpdateMissileCount(missiles);
     }
 
     public void DetachModule(ModuleSlot slot) {
@@ -383,7 +394,7 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable, IDamageab
         } else PlayerHUD.instance.SetInfoPrompt("Unequip Energy Pack before entering");
     }
 
-    public void Damage(float amount, GameTypes.DamageType damageType, Vector3 damageForce) {
+    public void Damage(float amount, GameTypes.DamageType damageType, Vector3 damageForce, Vector3 pointOfImpact, Vector3 directionOfImpact) {
         if (occupied) {
             PlayerHUD.instance.ShowDamageSplash();
 

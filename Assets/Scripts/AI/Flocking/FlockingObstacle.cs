@@ -28,12 +28,40 @@ public class FlockingObstacle : MonoBehaviour {
 		InhibitorStrip
 	}
 
+	#if UNITY_EDITOR
 	[ExecuteInEditMode]
 	void OnDrawGizmosSelected(){
 		if(type == ObstacleTypes.InhibitorStrip){
+			int numberOfPoints = 5;
 			if(next != null){
+				//inhibitorRadius = radius;
+				Vector3 toNext = next.transform.position - transform.position;
+				transform.rotation = Quaternion.LookRotation(toNext, transform.up);
+				Vector3 previousPoint = Vector3.zero;
+				Vector3 pointAroundCenter = transform.right * inhibitorRadius;
+
+				
+				float theta = 360 / numberOfPoints;
+
 				Gizmos.color = Color.black;
 				Gizmos.DrawLine(transform.position, next.transform.position);
+				// collider.radius = inhibitorRadius;
+				Gizmos.DrawWireSphere(transform.position, inhibitorRadius);
+				Gizmos.DrawWireSphere(next.transform.position, inhibitorRadius);
+
+				for(int i = 0; i < numberOfPoints + 1; i++){
+					if(previousPoint != Vector3.zero){
+						Gizmos.DrawLine(transform.position + previousPoint, transform.position + pointAroundCenter);
+						Gizmos.DrawLine(next.transform.position + previousPoint, next.transform.position + pointAroundCenter);
+					}
+
+					Gizmos.DrawLine(transform.position + pointAroundCenter, next.transform.position + pointAroundCenter);
+
+					previousPoint = pointAroundCenter;
+					transform.rotation = transform.rotation * Quaternion.AngleAxis(theta, transform.forward);
+					transform.rotation = Quaternion.LookRotation(toNext, transform.up);
+					pointAroundCenter = transform.right * inhibitorRadius;
+				}
 			}
 		}
 		else{
@@ -53,6 +81,8 @@ public class FlockingObstacle : MonoBehaviour {
 			}
 		}
 	}
+
+	#endif
 
 	void Awake(){
 		if(radius <= 0){
@@ -166,25 +196,4 @@ public class FlockingObstacle : MonoBehaviour {
 	// void OnTriggerEnter(Collider col){
 	// 	//Debug.Log("FlockingObstacle " + gameObject.name + " collided with something");
 	// }
-}
-
-public class ObstacleGizmoDrawer
-{
-    [DrawGizmo(GizmoType.InSelectionHierarchy | GizmoType.Active)]
-	void Draw(FlockingObstacle obstacle, GizmoType gizmoType){
-		if(obstacle.hasAttractor){
-			Gizmos.color = Color.green;
-        	Gizmos.DrawWireSphere(obstacle.transform.position, obstacle.attractorRadius);
-		}
-
-		if(obstacle.hasSeparator){
-			Gizmos.color = Color.red;
-			Gizmos.DrawWireSphere(obstacle.transform.position, obstacle.separatorRadius);
-		}
-
-		if(obstacle.hasInhibitor){
-			Gizmos.color = Color.black;
-			Gizmos.DrawWireSphere(obstacle.transform.position, obstacle.inhibitorRadius);
-		}
-	}
 }

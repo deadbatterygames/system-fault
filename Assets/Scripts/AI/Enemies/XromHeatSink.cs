@@ -28,7 +28,7 @@ public class XromHeatSink : MonoBehaviour, IDamageable {
         if (cooldown) Cooldown();
     }
 
-    public void Damage(float amount, GameTypes.DamageType damageType, Vector3 damageForce) {
+    public void Damage(float amount, GameTypes.DamageType damageType, Vector3 damageForce, Vector3 pointOfImpact, Vector3 directionOfImpact) {
         heatLevel += amount;
         if (heatLevel >= maxHeatLevel) DestroyHeatSink();
         else {

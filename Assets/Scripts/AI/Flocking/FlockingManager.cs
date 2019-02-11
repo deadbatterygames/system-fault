@@ -100,21 +100,38 @@ public static class FlockingManager {
 						Vector3 dp = p - boidPosition;
 
 						if(dp.sqrMagnitude < inhibitors[j].radius * inhibitors[j].radius){
-							
+							if(boids[i].flying){
+								/*	<---------------- Inhibitor strip
+											h\	|p 
+												\	|
+												\  |dp
+												\ |
+											h*<---\|boid
+								*/
+								Vector3 planeNormal = Vector3.Cross(dp.normalized, heading.normalized);
+								Vector3 newHeading = Vector3.Cross(planeNormal, dp.normalized);
+
+								heading = Vector3.Project(heading, newHeading);
+
+								if(debug) Debug.DrawLine(boidPosition, boidPosition + heading, Color.yellow);
+							}
+							else{
+								heading = Vector3.Project(heading, d.normalized);
+								if(debug) Debug.DrawLine(boidPosition, boidPosition + heading, Color.yellow);
+							}
 						}
 					} 
 				}
-				else{
-					Vector3 dif = inhibitors[j].GetPosition() - boidPosition;
 
-					if(dif.sqrMagnitude < inhibitors[j].radius * inhibitors[j].radius){
-						// If the heading is pointing towards the inhibitor
-						if(Vector3.Dot(heading, dif.normalized) > 0){
-							if(debug) Debug.DrawLine(boidPosition, boidPosition + heading, Color.black);
+				Vector3 dif = inhibitors[j].GetPosition() - boidPosition;
 
-							// Project the heading onto the plane spanned by the difference vector and the difference of the difference vector and the heading
-							heading = Vector3.Project(heading, (heading.normalized - dif.normalized).normalized);
-						}
+				if(dif.sqrMagnitude < inhibitors[j].radius * inhibitors[j].radius){
+					// If the heading is pointing towards the inhibitor
+					if(Vector3.Dot(heading, dif.normalized) > 0){
+						if(debug) Debug.DrawLine(boidPosition, boidPosition + heading, Color.black);
+
+						// Project the heading onto the plane spanned by the difference vector and the difference of the difference vector and the heading
+						heading = Vector3.Project(heading, (heading.normalized - dif.normalized).normalized);
 					}
 				}
 			}

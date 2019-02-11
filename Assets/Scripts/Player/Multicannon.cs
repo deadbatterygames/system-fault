@@ -43,6 +43,8 @@ public class Multicannon : MonoBehaviour, IWeapon {
 
     bool canFire = true;
 
+    float yellowFireForce = 10f;
+
     bool recoil;
     bool resetWeapon;
     Vector3 resetPosition;

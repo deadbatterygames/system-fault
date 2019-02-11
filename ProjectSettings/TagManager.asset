@@ -28,15 +28,15 @@ TagManager:
   - Foliage
   - Ignore Projectile
   - Celestial
-  - PlayerProjectile
+  - Player Projectile
   - Ignore Player
   - Shield
   - Flocking
   - Xrom
   - Missile
-  - XromProjectile
-  - GroundCheck
-  - 
+  - Xrom Projectile
+  - Ground Check
+  - Snapping
   - 
   - 
   - 

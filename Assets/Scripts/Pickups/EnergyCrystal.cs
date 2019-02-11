@@ -15,7 +15,7 @@ public class EnergyCrystal : MonoBehaviour, IDamageable {
 
     bool shattered;
 
-    public void Damage(float amount, GameTypes.DamageType damageType, Vector3 damageForce) {
+    public void Damage(float amount, GameTypes.DamageType damageType, Vector3 damageForce, Vector3 pointOfImpact, Vector3 directionOfImpact) {
         health -= amount;
         if (health <= 0 && !shattered) Shatter(damageForce);
     }

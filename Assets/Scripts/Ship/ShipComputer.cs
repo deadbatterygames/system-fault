@@ -25,12 +25,14 @@ public class ShipComputer : MonoBehaviour, IPowerable {
     [SerializeField] Text quantumIndicator;
     [SerializeField] Text countdownIndicator;
     [SerializeField] Text speedometer;
+    [SerializeField] Text missileCount;
 
     [Header("Modules")]
     [SerializeField] Image thrusters;
     [SerializeField] Image boosters;
     [SerializeField] Image quantumDrive;
     [SerializeField] Image laserCannon;
+    [SerializeField] Image missileRack;
 
     Color activeColour = new Color(0f, 130f/255f, 1f, 1f);
     Color inactiveColour = new Color(80f/255f, 80f/255f, 80f/255f, 1f);
@@ -64,6 +66,13 @@ public class ShipComputer : MonoBehaviour, IPowerable {
     public void UpdateCountDown(int time) {
         if (time == 0) countdownIndicator.text = "";
         else countdownIndicator.text = time.ToString();
+    }
+
+    public void UpdateMissileCount(int count) {
+        if (count == 0) missileCount.color = inactiveColour;
+        else missileCount.color = activeColour;
+
+        missileCount.text = count.ToString() + "x";
     }
 
     public void TogglePower(bool toggle) {
@@ -122,6 +131,9 @@ public class ShipComputer : MonoBehaviour, IPowerable {
                 break;
             case GameTypes.ModuleType.LaserCannon:
                 laserCannon.color = indicatorColour;
+                break;
+            case GameTypes.ModuleType.MissileRack:
+                missileRack.color = indicatorColour;
                 break;
             default:
                 break;

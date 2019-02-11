@@ -4639,7 +4639,7 @@ ParticleSystem:
 --- !u!199 &1012589645389213193
 ParticleSystemRenderer:
   serializedVersion: 6
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 2
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -4654,7 +4654,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 50a4257d11421b644a0a492e130aa616, type: 2}
+  - {fileID: 2100000, guid: fb11b918b286b304ab8a0f8ccd6a3667, type: 2}
   - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0

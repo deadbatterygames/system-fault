@@ -25,7 +25,7 @@ public class ShieldPanel : MonoBehaviour, IDamageable {
         maxAlpha = meshRenderer.material.color.a;
     }
 
-    public void Damage(float amount, GameTypes.DamageType damageType, Vector3 damageForce) {
+    public void Damage(float amount, GameTypes.DamageType damageType, Vector3 damageForce, Vector3 pointOfImpact, Vector3 directionOfImpact) {
         float finalDamage = amount;
 
         if (damageType == shieldType) finalDamage *= SAME_TYPE_MULTIPLIER;

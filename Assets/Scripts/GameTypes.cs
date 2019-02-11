@@ -27,6 +27,7 @@ public class GameTypes {
         Yellow,
         Blue,
         Red,
+        Purple,
         Physical
     }
 

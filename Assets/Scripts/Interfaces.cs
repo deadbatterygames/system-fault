@@ -27,7 +27,7 @@ public interface ICollectable {
 }
 
 public interface IDamageable {
-    void Damage(float amount, GameTypes.DamageType damageType, Vector3 damageForce);
+    void Damage(float amount, GameTypes.DamageType damageType, Vector3 damageForce, Vector3 pointOfImpact, Vector3 directionOfImpact);
 }
 
 public interface IWeapon {

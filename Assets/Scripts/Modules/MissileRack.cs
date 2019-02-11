@@ -9,6 +9,7 @@
 
 public class MissileRack : ShipModule, IWeapon {
 
+    [SerializeField] int missiles = 1;
     [SerializeField] GameObject missilePrefab;
     [SerializeField] Transform[] firePoints;
     [SerializeField] Mesh[] meshes;
@@ -16,7 +17,6 @@ public class MissileRack : ShipModule, IWeapon {
     MeshFilter meshFilter;
     MeshCollider meshCollider;
 
-    int fireCount = 0;
 
     protected override void Awake() {
         base.Awake();
@@ -27,16 +27,22 @@ public class MissileRack : ShipModule, IWeapon {
     }
 
     public void Fire() {
-        if (fireCount < firePoints.Length) {
-            meshFilter.mesh = meshes[fireCount];
-            meshCollider.sharedMesh = meshes[fireCount];
+        if (missiles > 0) {
+            missiles--;
 
-            Rigidbody rb = Instantiate(missilePrefab, firePoints[fireCount].position, firePoints[fireCount].rotation).GetComponent<Rigidbody>();
+            meshFilter.mesh = meshes[missiles];
+            meshCollider.sharedMesh = meshes[missiles];
+
+            Rigidbody rb = Instantiate(missilePrefab, firePoints[missiles].position, firePoints[missiles].rotation).GetComponent<Rigidbody>();
             rb.velocity = GameManager.instance.ship.GetComponent<Rigidbody>().velocity;
 
-            fireCount++;
+            GameManager.instance.ship.UpdateMissileCount(-1);
 
-            if (fireCount == firePoints.Length) GameManager.instance.ship.DetachModule(GetComponentInParent<ModuleSlot>());
+            if (missiles == 0) GameManager.instance.ship.DetachModule(GetComponentInParent<ModuleSlot>());
         }
+    }
+
+    public int GetMissileCount() {
+        return missiles;
     }
 }

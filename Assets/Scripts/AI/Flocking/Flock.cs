@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Flock : MonoBehaviour {
 
+    public Transform planet;
 	[SerializeField] protected SphereCollider collider;
 	[SerializeField] protected bool flockTogether;
 	[SerializeField] protected bool groundedFlock;
@@ -61,8 +62,10 @@ public class Flock : MonoBehaviour {
 			Vector3[] headings = flyingHeadings;//FlockingManager.Headings(boids.ToArray(), attractors.ToArray(), separators.ToArray(), transform.position, boundingRadius, 4, debug, debugHeading, debugCohesion, debugSeparation, debugAlignment, debugAttraction, debugBounding, cohesion, alignment, separation);
 		
 			for(int i = 0; i < boids.Count && i < headings.Length; i++){
-				boids[i].Move(headings[i], debug && debugHeading);
-				boids[i].Rotate(headings[i]);
+				if(boids[i].flocking){
+					boids[i].Move(headings[i], debug && debugHeading);
+					boids[i].Rotate(headings[i]);
+				}
 			}
 
 			// Vector3 avgRotation = FlockingManager.Rotation(boids.ToArray());
@@ -77,7 +80,7 @@ public class Flock : MonoBehaviour {
 			Vector3[] headings = groundedHeadings;//FlockingManager.Headings(groundedBoids.ToArray(), attractors.ToArray(), separators.ToArray(), transform.position, boundingRadius, 4, debug, debugHeading, debugCohesion, debugSeparation, debugAlignment, debugAttraction, debugBounding, cohesion, alignment, separation);
 
 			for(int i = 0; i < groundedBoids.Count && i < headings.Length; i++){
-				groundedBoids[i].Move(headings[i], debug && debugHeading);
+				if(groundedBoids[i].flocking) groundedBoids[i].Move(headings[i], debug && debugHeading);
 			}
 
 			groundedHeadingsApplied = true;
@@ -101,7 +104,7 @@ public class Flock : MonoBehaviour {
 
 	protected void AddBoid(Boid boid){
 		boid.SetFlock(this);
-		if(boid.grounded) groundedBoids.Add(boid);
+		if(!boid.flying) groundedBoids.Add(boid);
 		else boids.Add(boid);
 	}
 	public void RemoveBoid(Boid boid){
@@ -145,7 +148,7 @@ public class Flock : MonoBehaviour {
 		Flock flock = boid.GetFlock();
 
 		if(flock != null && flock != this){
-			if((boid.grounded && this.groundedFlock) || (!boid.grounded && this.flyingFlock)) flock.TransferBoid(boid, this);
+			if((!boid.flying && this.groundedFlock) || (boid.flying && this.flyingFlock)) flock.TransferBoid(boid, this);
 		}
 	}
 	protected virtual void ObstacleTriggerEnter(FlockingObstacle obstacle){

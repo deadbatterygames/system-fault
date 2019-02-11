@@ -223,13 +223,14 @@ MonoBehaviour:
   mass: 0
   connected: 0
   shipRB: {fileID: 0}
+  missiles: 3
   missilePrefab: {fileID: 8363815905856404670, guid: b0965b032c00f9246a5111c2ee5bb604,
     type: 3}
   firePoints:
-  - {fileID: 5606412907961665337}
-  - {fileID: 6152706004840887860}
   - {fileID: 8699022471879828344}
+  - {fileID: 6152706004840887860}
+  - {fileID: 5606412907961665337}
   meshes:
-  - {fileID: 4300050, guid: cd811a82754cafd41a44b2b626f56de0, type: 3}
-  - {fileID: 4300072, guid: cd811a82754cafd41a44b2b626f56de0, type: 3}
   - {fileID: 4300070, guid: cd811a82754cafd41a44b2b626f56de0, type: 3}
+  - {fileID: 4300072, guid: cd811a82754cafd41a44b2b626f56de0, type: 3}
+  - {fileID: 4300050, guid: cd811a82754cafd41a44b2b626f56de0, type: 3}

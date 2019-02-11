@@ -12,6 +12,6 @@ public class Sun : MonoBehaviour {
 
     private void OnTriggerStay(Collider other) {
         IDamageable damageable = other.GetComponentInParent<IDamageable>();
-        if (damageable != null) damageable.Damage(damagePerSecond * Time.deltaTime, GameTypes.DamageType.Physical, Vector3.zero);
+        if (damageable != null) damageable.Damage(damagePerSecond * Time.deltaTime, GameTypes.DamageType.Physical, Vector3.zero, Vector3.zero, Vector3.zero);
     }
 }

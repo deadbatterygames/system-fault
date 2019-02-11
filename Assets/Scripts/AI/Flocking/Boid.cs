@@ -11,7 +11,8 @@ public class Boid : MonoBehaviour {
 	protected List<Separator> separators;
 	[SerializeField] protected Flock flock;
 	public bool flocking;
-	public bool grounded;
+	protected bool grounded;
+	public bool flying;
 	void Awake(){
 		rb = transform.GetComponent<Rigidbody>();
 		attractors = new List<Attractor>();
@@ -20,6 +21,9 @@ public class Boid : MonoBehaviour {
 	}
 	public virtual void Move(Vector3 heading, bool debug){}
 	public virtual void Rotate(Vector3 rotation){}
+	public void SetGrounded(bool grounded){
+		this.grounded = grounded;
+	}
 	public void SetFlock(Flock flock){
 		this.flock = flock;
 	}

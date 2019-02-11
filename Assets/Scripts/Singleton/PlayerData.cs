@@ -92,7 +92,7 @@ public class PlayerData : MonoBehaviour {
                     redBullets.Add(newBullet);
                     return newBullet;
                 }
-            case GameTypes.DamageType.Physical:
+            case GameTypes.DamageType.Purple:
                 index = CycleBulletIndex(bulletType, maxXromBullets); // Xrom bullets have a separate pool
 
                 if (xromBullets.Count >= maxXromBullets) return xromBullets[index];

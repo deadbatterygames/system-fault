@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1542343575561727085}
   - component: {fileID: 1542343575561727083}
   - component: {fileID: 1542343575561727082}
+  - component: {fileID: 2655355405694922056}
   m_Layer: 16
   m_Name: Xrom Flock
   m_TagString: Untagged
@@ -69,6 +70,9 @@ MonoBehaviour:
     type: 3}
   xromShipPrefab: {fileID: 1909310721993688, guid: 54a099c191988e645b7b70b5f52d0522,
     type: 3}
+  gorbonPrefab: {fileID: 6027379222909038103, guid: 5d361e818e4131545aead35b02bf4f10,
+    type: 3}
+  gorbonDummyPrefab: {fileID: 0}
   startingGroundedBoids: []
   peaceful: 1
 --- !u!135 &1542343575561727083
@@ -100,3 +104,16 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &2655355405694922056
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1542343575561727086}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e5e76b5d3e33744e95ca020fdb30f73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  snapSpeed: 3

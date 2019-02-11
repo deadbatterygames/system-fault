@@ -28,7 +28,7 @@ public class MusicPlayer : MonoBehaviour {
 	}
 
     void OnTriggerEnter(Collider other) {
-        if (enabled && other.GetComponentInChildren<Camera>()) {
+        if (enabled && other.CompareTag("Player") || other.CompareTag("Ship")) {
             if (source.isPlaying) {
                 fadeDirection = 1;
             } else {
@@ -39,7 +39,7 @@ public class MusicPlayer : MonoBehaviour {
     }
 
     void OnTriggerExit(Collider other) {
-        if (enabled && other.GetComponentInChildren<Camera>()) {
+        if (enabled && other.CompareTag("Player") || other.CompareTag("Ship")) {
             fadeDirection = -1;
         }
     }

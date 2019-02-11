@@ -36,7 +36,7 @@ public class Explosion : MonoBehaviour {
 
                 Vector3 damageForce = centerToObject.normalized * FORCE;
 
-                damageable.Damage(DAMAGE, GameTypes.DamageType.Physical, damageForce);
+                damageable.Damage(DAMAGE, GameTypes.DamageType.Physical, damageForce, Vector3.zero, Vector3.zero);
             }
         }
 

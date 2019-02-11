@@ -18,7 +18,7 @@ public class Overmind : MonoBehaviour
         Debug.Log("Overmind::Start ~ Making " + n + " boys");
 
         if(n >= 5){
-            CreateFlock(true, true, GameObject.FindGameObjectWithTag("Player").transform.position, 5);
+            CreateFlock(true, true, GameObject.FindGameObjectWithTag("Player").transform.position, 5, 5);
             created += 5;
         }
 
@@ -27,7 +27,7 @@ public class Overmind : MonoBehaviour
         for(int i = 1; i < POI.Length; i++){
             float r = Random.Range(0.0f, 1.0f);
             if(r > (n / 5) / POI.Length && created < n){
-                CreateFlock(true, false, POI[i].transform.position, 5);
+                CreateFlock(true, false, POI[i].transform.position, 5, 5);
                 created += 5;
             }
         }
@@ -42,7 +42,7 @@ public class Overmind : MonoBehaviour
         }
     }
 
-    private void CreateFlock(bool grounded, bool flying, Vector3 position, int boids){
+    private void CreateFlock(bool grounded, bool flying, Vector3 position, int xroms, int gorbons){
         GameObject flockGO = GameObject.Instantiate(xromFlockPrefab, position, Quaternion.identity);
         XromFlock flock = flockGO.GetComponent<XromFlock>();
 
@@ -50,8 +50,12 @@ public class Overmind : MonoBehaviour
 
         flock.InitializeFlock(grounded, flying);
 
-        for(int i = 0; i < boids; i++){
+        for(int i = 0; i < xroms; i++){
             flock.CreateXrom(grounded, flockingTest);
+        }
+
+        for(int i = 0; i < gorbons; i++){
+            flock.CreateGorbon(flockingTest);
         }
 
         FlockingController.AddFlock(flock);

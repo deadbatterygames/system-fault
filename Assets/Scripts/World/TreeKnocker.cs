@@ -32,7 +32,7 @@ public class TreeKnocker : MonoBehaviour, IDamageable {
         Destroy(gameObject);
     }
 
-    public void Damage(float amount, GameTypes.DamageType damageType, Vector3 damageForce) {
+    public void Damage(float amount, GameTypes.DamageType damageType, Vector3 damageForce, Vector3 pointOfImpact, Vector3 directionOfImpact) {
         currentHealth -= amount;
         if (currentHealth <= 0 && !separated) Separate(damageForce);
     }

@@ -25,7 +25,7 @@ public class Bullet : MonoBehaviour {
 
     void OnCollisionEnter(Collision collision) {
         IDamageable damageableObject = collision.collider.GetComponentInParent<IDamageable>();
-        if (damageableObject != null) damageableObject.Damage(baseDamage, damageType, -collision.relativeVelocity * GetComponent<Rigidbody>().mass);
+        if (damageableObject != null) damageableObject.Damage(baseDamage, damageType, -collision.relativeVelocity * GetComponent<Rigidbody>().mass, transform.position, rb.velocity.normalized);
         Explode();
     }
 

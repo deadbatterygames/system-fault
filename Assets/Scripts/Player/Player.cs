@@ -145,7 +145,7 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
             KillPlayer();
         }
 
-        if (Input.GetKeyDown(KeyCode.End)) Damage(1000000f, GameTypes.DamageType.Physical, -transform.forward * 100f);
+        if (Input.GetKeyDown(KeyCode.End)) Damage(1000000f, GameTypes.DamageType.Physical, -transform.forward * 100f, Vector3.zero, Vector3.zero);
         if (GameManager.instance.IsInTestMode()) {
             if (Input.GetKeyDown(KeyCode.L) && energySlot.connectedModule) GetComponentInChildren<EnergyPack>().AddEnergy(1000000f);
             if (Input.GetKeyDown(KeyCode.Insert)) GameManager.instance.ConnectAllShipModules();
@@ -204,7 +204,7 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
         controlCam.checkForUsable = true;
     }
 
-    public void Damage(float amount, GameTypes.DamageType damageType, Vector3 damageForce) {
+    public void Damage(float amount, GameTypes.DamageType damageType, Vector3 damageForce, Vector3 pointOfImpact, Vector3 directionOfImpact) {
         PlayerHUD.instance.ShowDamageSplash();
 
         if (energySlot.connectedModule != null) amount = energySlot.connectedModule.GetComponent<EnergyPack>().AbsorbDamage(amount);
