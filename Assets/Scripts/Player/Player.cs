@@ -51,7 +51,7 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
     [HideInInspector] public bool canEquip;
 
     void Start() {
-        PlayerData.instance.alive = true;
+        GameData.instance.alive = true;
         PlayerHUD.instance.ToggleShipRadar(true);
         PlayerHUD.instance.TogglePlayerHelp(true);
 
@@ -100,7 +100,7 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
 
         // Look/Rotate
         if (snapping) Look(new Vector3(-controlObject.verticalLook, controlObject.horizontalLook, controlObject.roll));
-        else forceRotation += new Vector3(-controlObject.verticalLook * PlayerData.instance.mouseForceSensitivity, controlObject.horizontalLook * PlayerData.instance.mouseForceSensitivity, controlObject.roll);
+        else forceRotation += new Vector3(-controlObject.verticalLook * GameData.instance.mouseForceSensitivity, controlObject.horizontalLook * GameData.instance.mouseForceSensitivity, controlObject.roll);
 
         // Jump
         if (controlObject.jump && grounded) Jump();
@@ -122,21 +122,15 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
             weaponSlot.currentWeapon.Fire();
         }
         if (controlObject.aim && weaponSlot.GetCurrentWeaponType() == GameTypes.PlayerWeaponType.MatterManipulator) {
-            weaponSlot.GetComponentInChildren<MatterManipulator>().EquipEnergyPack(energySlot);
+            weaponSlot.matterManipulator.EquipEnergyPack(energySlot);
         }
-        if (controlObject.changeEquipment) {
-            if ((weaponSlot.GetCurrentWeaponType() == GameTypes.PlayerWeaponType.MatterManipulator && !GetComponentInChildren<MatterManipulator>().IsHoldingObject())
-            || weaponSlot.GetCurrentWeaponType() != GameTypes.PlayerWeaponType.MatterManipulator
-            && canEquip)
-                weaponSlot.SwitchWeapons();
+        if (controlObject.changeEquipment && canEquip && GameData.instance.hasMatterManipulator && GameData.instance.hasMulticannon) {
+            weaponSlot.ChangeEquipment();
         }
-
-        if (weaponSlot.GetCurrentWeaponType() == GameTypes.PlayerWeaponType.Multicannon) {
-            Multicannon mc = weaponSlot.GetComponentInChildren<Multicannon>();
-            if (controlObject.weapon0) mc.ChangeType(GameTypes.DamageType.Yellow);
-            if (controlObject.weapon1) mc.ChangeType(GameTypes.DamageType.Blue);
-            if (controlObject.weapon2) mc.ChangeType(GameTypes.DamageType.Red);
-
+        if (canEquip && GameData.instance.hasMulticannon) {
+            if (controlObject.yellow) weaponSlot.multicannon.ChangeType(GameTypes.DamageType.Yellow);
+            if (controlObject.blue) weaponSlot.multicannon.ChangeType(GameTypes.DamageType.Blue);
+            if (controlObject.red) weaponSlot.multicannon.ChangeType(GameTypes.DamageType.Red);
         }
 
         // Test stuff
@@ -144,7 +138,6 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
             GameManager.instance.SetTestMode(!GameManager.instance.IsInTestMode());
             KillPlayer();
         }
-
         if (Input.GetKeyDown(KeyCode.End)) Damage(1000000f, GameTypes.DamageType.Physical, -transform.forward * 100f, Vector3.zero, Vector3.zero);
         if (GameManager.instance.IsInTestMode()) {
             if (Input.GetKeyDown(KeyCode.L) && energySlot.connectedModule) GetComponentInChildren<EnergyPack>().AddEnergy(1000000f);
@@ -172,11 +165,11 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
 
     void Look(Vector3 rotation) {
         // Horizontal
-        Quaternion deltaRot = Quaternion.AngleAxis(rotation.y * PlayerData.instance.lookSensitivity, Vector3.up);
+        Quaternion deltaRot = Quaternion.AngleAxis(rotation.y * GameData.instance.lookSensitivity, Vector3.up);
         transform.localRotation = transform.localRotation * deltaRot;
 
         // Vertical
-        yAngle = Mathf.Clamp(yAngle + -rotation.x * PlayerData.instance.lookSensitivity, minYAngle, maxYAngle);
+        yAngle = Mathf.Clamp(yAngle + -rotation.x * GameData.instance.lookSensitivity, minYAngle, maxYAngle);
         cameraRig.transform.localEulerAngles = new Vector3(-yAngle, 0f, 0f);
     }
 
@@ -216,7 +209,7 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
 
     void KillPlayer() {
         PlayerControl.instance.RemoveControl();
-        PlayerData.instance.alive = false;
+        GameData.instance.alive = false;
 
         SetSnapping(false);
         Destroy(GetComponent<CharacterSnap>());
@@ -233,7 +226,7 @@ public class Player : MonoBehaviour, IControllable, IGroundable, IDamageable {
     IEnumerator WeaponTimer() {
         yield return new WaitForSeconds(0.75f);
 
-        weaponSlot.SwitchWeapons(false);
+        weaponSlot.ChangeEquipment(false);
         canEquip = true;
     }
 }

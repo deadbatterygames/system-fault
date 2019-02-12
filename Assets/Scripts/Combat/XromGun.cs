@@ -18,7 +18,7 @@ public class XromGun : MonoBehaviour, IWeapon {
     }
 
     public void Fire() {
-        FireBullet(PlayerData.instance.GetBullet(GameTypes.DamageType.Purple).GetComponent<Bullet>(), transform.forward, bulletVelocity);
+        FireBullet(GameData.instance.GetBullet(GameTypes.DamageType.Purple).GetComponent<Bullet>(), transform.forward, bulletVelocity);
     }
 
     void FireBullet(Bullet bullet, Vector3 fireDirection, float bulletVelocity) {

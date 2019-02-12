@@ -28,7 +28,7 @@ public class ModuleSlot : MonoBehaviour {
         meshRenderer = GetComponent<MeshRenderer>();
         defaultMaterials = meshRenderer.materials;
         reservedMaterials = new Material[meshRenderer.materials.Length];
-        for (int i = 0; i < reservedMaterials.Length; i++) reservedMaterials[i] = PlayerData.instance.reservedSlotMaterial;
+        for (int i = 0; i < reservedMaterials.Length; i++) reservedMaterials[i] = GameData.instance.reservedSlotMaterial;
 
         slotTrigger = GetComponent<Collider>();
     }

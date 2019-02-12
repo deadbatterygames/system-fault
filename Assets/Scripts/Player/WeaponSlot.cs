@@ -38,9 +38,9 @@ public class WeaponSlot : MonoBehaviour {
         if (refresh) ResetWeapon();
     }
 
-    public void SwitchWeapons(bool showPrompt = true) {
-        if (currentWeaponType != GameTypes.PlayerWeaponType.MatterManipulator && PlayerData.instance.hasMatterManipulator) EquipMatterManipulator(showPrompt);
-        else if (currentWeaponType != GameTypes.PlayerWeaponType.Multicannon && PlayerData.instance.hasMulticannon) EquipMulticannon(showPrompt);
+    public void ChangeEquipment(bool showPrompt = true) {
+        if (currentWeaponType != GameTypes.PlayerWeaponType.MatterManipulator && GameData.instance.hasMatterManipulator) EquipMatterManipulator(showPrompt);
+        else if (currentWeaponType != GameTypes.PlayerWeaponType.Multicannon && GameData.instance.hasMulticannon) EquipMulticannon(showPrompt);
     }
 
     public void EquipMatterManipulator(bool showPrompt) {

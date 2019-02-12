@@ -98,10 +98,10 @@ public class GameManager : MonoBehaviour {
         // Starting Spawn
         SpawnPlayer(playerSpawn, Vector3.zero);
         if (testMode) {
-            PlayerData.instance.hasMatterManipulator = true;
-            PlayerData.instance.hasMulticannon = true;
-            PlayerData.instance.blueUnlocked = true;
-            PlayerData.instance.redUnlocked = true;
+            GameData.instance.hasMatterManipulator = true;
+            GameData.instance.hasMulticannon = true;
+            GameData.instance.blueUnlocked = true;
+            GameData.instance.redUnlocked = true;
             PartPrinterData.instance.UnlockAllModules();
 
             GiveEquipment(PartPrinterData.instance.modulePrefabs[0 * PartPrinterData.MODULE_TIERS + equipmentTier]);
@@ -265,9 +265,9 @@ public class GameManager : MonoBehaviour {
         gravityBodies.Clear();
         gravityWells.Clear();
 
-        PlayerData.instance.ClearBulletLists();
-        PlayerData.instance.hasMatterManipulator = false;
-        PlayerData.instance.hasMulticannon = false;
+        GameData.instance.ClearBulletLists();
+        GameData.instance.hasMatterManipulator = false;
+        GameData.instance.hasMulticannon = false;
 
         AsyncOperation reloadScene = SceneManager.LoadSceneAsync("Roguelike", LoadSceneMode.Single);
         while (!reloadScene.isDone) {

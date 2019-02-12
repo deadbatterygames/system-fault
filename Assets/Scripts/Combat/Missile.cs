@@ -36,7 +36,7 @@ public class Missile : MonoBehaviour {
         Destroy(GetComponent<CapsuleCollider>());
         Destroy(rb);
 
-        Instantiate(PlayerData.instance.explosionPrefab, transform.position, transform.rotation);
+        Instantiate(GameData.instance.explosionPrefab, transform.position, transform.rotation);
 
         yield return new WaitForSeconds(GetComponentInChildren<TrailRenderer>().time);
 

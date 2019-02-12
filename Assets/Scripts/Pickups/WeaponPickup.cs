@@ -22,16 +22,16 @@ public class WeaponPickup : MonoBehaviour, IUsable {
         WeaponSlot weaponSlot = FindObjectOfType<WeaponSlot>();
         switch (weaponType) {
             case GameTypes.PlayerWeaponType.MatterManipulator:
-                PlayerData.instance.hasMatterManipulator = true;
+                GameData.instance.hasMatterManipulator = true;
                 weaponSlot.EquipMatterManipulator(true);
                 break;
             case GameTypes.PlayerWeaponType.Multicannon:
-                PlayerData.instance.hasMulticannon = true;
+                GameData.instance.hasMulticannon = true;
                 weaponSlot.EquipMulticannon(true);
                 break;
         }
 
-        if (PlayerData.instance.hasMatterManipulator && PlayerData.instance.hasMulticannon) PlayerHUD.instance.SetInfoPrompt("Press TAB to change equipment");
+        if (GameData.instance.hasMatterManipulator && GameData.instance.hasMulticannon) PlayerHUD.instance.SetInfoPrompt("Press TAB to change equipment");
 
         Destroy(transform.parent.gameObject);
     }

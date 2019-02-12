@@ -8,9 +8,9 @@ using System.Collections.Generic;
 // Purpose: Holds information that should persist if the player is destroyed
 //
 
-public class PlayerData : MonoBehaviour {
+public class GameData : MonoBehaviour {
 
-    public static PlayerData instance = null;
+    public static GameData instance = null;
 
     [Header("Ship")]
     public GameObject dematerializedShipPrefab;

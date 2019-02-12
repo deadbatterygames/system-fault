@@ -19,13 +19,13 @@ public class ShipTeleporter : MonoBehaviour, IUsable {
     bool teleporting;
 
     public void Use() {
-        if (!PlayerData.instance.teleportingShip) StartCoroutine("TeleportShip");
+        if (!GameData.instance.teleportingShip) StartCoroutine("TeleportShip");
     }
 
 	void Update () {
         if (teleporting) {
-            opacityTo += Time.deltaTime / PlayerData.instance.shipTeleportTime;
-            opacityFrom -= Time.deltaTime / PlayerData.instance.shipTeleportTime;
+            opacityTo += Time.deltaTime / GameData.instance.shipTeleportTime;
+            opacityFrom -= Time.deltaTime / GameData.instance.shipTeleportTime;
 
             SetShipOpacities(opacityTo, opacityFrom);
         }
@@ -38,24 +38,24 @@ public class ShipTeleporter : MonoBehaviour, IUsable {
 
     IEnumerator TeleportShip() {
         teleporting = true;
-        PlayerData.instance.teleportingShip = true;
+        GameData.instance.teleportingShip = true;
 
         Rigidbody shipRB = GameManager.instance.ship.GetComponent<Rigidbody>();
         shipRB.velocity = Vector3.zero;
         shipRB.angularVelocity = Vector3.zero;
         shipRB.gameObject.SetActive(false);
 
-        meshTo = Instantiate(PlayerData.instance.dematerializedShipPrefab, transform.parent.position, transform.parent.rotation).GetComponentInChildren<MeshRenderer>();
-        meshFrom = Instantiate(PlayerData.instance.dematerializedShipPrefab, shipRB.transform.position, shipRB.transform.rotation).GetComponentInChildren<MeshRenderer>();
+        meshTo = Instantiate(GameData.instance.dematerializedShipPrefab, transform.parent.position, transform.parent.rotation).GetComponentInChildren<MeshRenderer>();
+        meshFrom = Instantiate(GameData.instance.dematerializedShipPrefab, shipRB.transform.position, shipRB.transform.rotation).GetComponentInChildren<MeshRenderer>();
 
         opacityTo = 0f;
         opacityFrom = 1f;
         SetShipOpacities(opacityTo, opacityFrom);
 
-        yield return new WaitForSeconds(PlayerData.instance.shipTeleportTime);
+        yield return new WaitForSeconds(GameData.instance.shipTeleportTime);
 
         teleporting = false;
-        PlayerData.instance.teleportingShip = false;
+        GameData.instance.teleportingShip = false;
 
         Destroy(meshTo.transform.parent.gameObject);
         Destroy(meshFrom.transform.parent.gameObject);

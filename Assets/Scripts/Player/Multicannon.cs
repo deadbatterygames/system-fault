@@ -101,7 +101,10 @@ public class Multicannon : MonoBehaviour, IWeapon {
     }
 
     public void ChangeType(GameTypes.DamageType type) {
-        if (PlayerData.instance.IsTypeUnlocked(type)) {
+        if (GameData.instance.IsTypeUnlocked(type)) {
+            WeaponSlot slot = GetComponentInParent<WeaponSlot>();
+            if (slot.GetCurrentWeaponType() != GameTypes.PlayerWeaponType.Multicannon) slot.ChangeEquipment();
+
             switch (type) {
                 case GameTypes.DamageType.Yellow:
                     weaponTypeIndicators[0].enabled = true;
@@ -134,17 +137,17 @@ public class Multicannon : MonoBehaviour, IWeapon {
     }
 
     void FireYellow() {
-        FireBullet(PlayerData.instance.GetBullet(GameTypes.DamageType.Yellow).GetComponent<Bullet>(), GetFireDirection(), bulletVelocities[0]);
+        FireBullet(GameData.instance.GetBullet(GameTypes.DamageType.Yellow).GetComponent<Bullet>(), GetFireDirection(), bulletVelocities[0]);
         particles[0].Play();
     }
 
     void FireBlue() {
-        FireBullet(PlayerData.instance.GetBullet(GameTypes.DamageType.Blue).GetComponent<Bullet>(), GetFireDirection(), bulletVelocities[1]);
+        FireBullet(GameData.instance.GetBullet(GameTypes.DamageType.Blue).GetComponent<Bullet>(), GetFireDirection(), bulletVelocities[1]);
         particles[1].Play();
     }
 
     void FireRed() {
-        FireBullet(PlayerData.instance.GetBullet(GameTypes.DamageType.Red).GetComponent<Bullet>(), GetFireDirection(), bulletVelocities[2], false);
+        FireBullet(GameData.instance.GetBullet(GameTypes.DamageType.Red).GetComponent<Bullet>(), GetFireDirection(), bulletVelocities[2], false);
         particles[2].Play();
     }
 

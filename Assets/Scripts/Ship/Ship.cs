@@ -87,13 +87,13 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable, IDamageab
 
     void OnCollisionEnter(Collision collision) {
         float collisionMagnitude = collision.relativeVelocity.magnitude;
-        if (PlayerData.instance.alive && PlayerControl.instance.GetControllingActor() == GetComponent<IControllable>()) {
-            if (collisionMagnitude > PlayerData.instance.shipDamageTolerance) {
+        if (GameData.instance.alive && PlayerControl.instance.GetControllingActor() == GetComponent<IControllable>()) {
+            if (collisionMagnitude > GameData.instance.shipDamageTolerance) {
                 IDamageable otherDamageable = collision.collider.GetComponentInParent<IDamageable>();
                 if (otherDamageable != null) otherDamageable.Damage(collision.relativeVelocity.magnitude, GameTypes.DamageType.Physical, -collision.relativeVelocity, Vector3.zero, Vector3.zero);
             }
 
-            if (collisionMagnitude > PlayerData.instance.shipDamageTolerance && !collision.gameObject.GetComponent<Rigidbody>())
+            if (collisionMagnitude > GameData.instance.shipDamageTolerance && !collision.gameObject.GetComponent<Rigidbody>())
                 Damage(collisionMagnitude / shipStrength, GameTypes.DamageType.Physical, Vector3.zero, Vector3.zero, Vector3.zero);
         }
     }
@@ -142,7 +142,7 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable, IDamageab
                 // Booster control
                 if (boosters) {
                     Vector3 torque;
-                    if (!freeLook) torque = new Vector3(-controlObject.verticalLook * PlayerData.instance.mouseForceSensitivity, controlObject.horizontalLook * PlayerData.instance.mouseForceSensitivity * yawMultiplier, controlObject.roll);
+                    if (!freeLook) torque = new Vector3(-controlObject.verticalLook * GameData.instance.mouseForceSensitivity, controlObject.horizontalLook * GameData.instance.mouseForceSensitivity * yawMultiplier, controlObject.roll);
                     else torque = new Vector3(0f, 0f, controlObject.roll);
 
                     switch (assistMode) {
@@ -257,8 +257,8 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable, IDamageab
     }
 
     void FreeLook(float horizontal, float vertical) {
-        cameraRig.Rotate(cameraRig.parent.up, horizontal * PlayerData.instance.lookSensitivity, Space.World);
-        cameraRig.Rotate(cameraRig.right, -vertical * PlayerData.instance.lookSensitivity, Space.World);
+        cameraRig.Rotate(cameraRig.parent.up, horizontal * GameData.instance.lookSensitivity, Space.World);
+        cameraRig.Rotate(cameraRig.right, -vertical * GameData.instance.lookSensitivity, Space.World);
     }
 
     void ResetCameraRig() {
@@ -412,7 +412,7 @@ public class Ship : MonoBehaviour, IControllable, IUsable, IPowerable, IDamageab
         if (PlayerCamera.instance.IsThirdPerson()) PlayerCamera.instance.transform.parent = null;
         PlayerControl.instance.RemoveControl();
 
-        PlayerData.instance.alive = false;
+        GameData.instance.alive = false;
 
         GameManager.instance.StartCoroutine("PlayerDeath");
 

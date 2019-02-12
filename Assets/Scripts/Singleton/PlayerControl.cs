@@ -33,9 +33,9 @@ public struct ControlObject {
 
     // Weapon types
     public bool changeEquipment;
-    public bool weapon0;
-    public bool weapon1;
-    public bool weapon2;
+    public bool yellow;
+    public bool blue;
+    public bool red;
 
     // UI
     public bool menuRight;
@@ -96,9 +96,9 @@ public class PlayerControl : MonoBehaviour {
             currentInput.light = Input.GetButtonDown("Light");
 
             currentInput.changeEquipment = Input.GetButtonDown("Change Equipment");
-            currentInput.weapon0 = Input.GetButtonDown("Multicannon Yellow");
-            currentInput.weapon1 = Input.GetButtonDown("Multicannon Blue");
-            currentInput.weapon2 = Input.GetButtonDown("Multicannon Red");
+            currentInput.yellow = Input.GetButtonDown("Multicannon Yellow");
+            currentInput.blue = Input.GetButtonDown("Multicannon Blue");
+            currentInput.red = Input.GetButtonDown("Multicannon Red");
 
             currentInput.menuRight = Input.GetButtonDown("Menu Right");
             currentInput.menuLeft = Input.GetButtonDown("Menu Left");
