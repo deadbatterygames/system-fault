@@ -112,6 +112,10 @@ public class GameManager : MonoBehaviour {
             GiveEquipment(PartPrinterData.instance.modulePrefabs[5 * PartPrinterData.MODULE_TIERS + equipmentTier], 25f);
             GiveEquipment(PartPrinterData.instance.modulePrefabs[5 * PartPrinterData.MODULE_TIERS + equipmentTier], 30f);
         } else {
+            GameData.instance.hasMatterManipulator = false;
+            GameData.instance.hasMulticannon = false;
+            GameData.instance.blueUnlocked = false;
+            GameData.instance.redUnlocked = false;
             PartPrinterData.instance.LockAllModules();
             GiveEquipment(startingZone);
             GiveEquipment(PartPrinterData.instance.modulePrefabs[0], 5f);
@@ -153,19 +157,19 @@ public class GameManager : MonoBehaviour {
     }
 
     public void SpawnBlueprints(List<GameObject> ipList, int tier) {
-        for (int i = 2; i < PartPrinterData.MODULE_TYPES + 2; i++) {
+        for (int i = 1; i < PartPrinterData.MODULE_TYPES + 1; i++) {
             Blueprint bp = Instantiate(blueprintPrefab, ipList[i].transform.position +
                 ipList[i].transform.up * 1.75f,
                 ipList[i].transform.rotation,
                 ipList[i].transform.parent).GetComponent<Blueprint>();
 
-            if (i == 2 && tier != 3) bp.SetBlueprintType((GameTypes.ModuleType)i-2, tier+1);
-            else bp.SetBlueprintType((GameTypes.ModuleType)i-2, tier);
+            if (i == 1 && tier != 3) bp.SetBlueprintType((GameTypes.ModuleType)i-1, tier+1);
+            else bp.SetBlueprintType((GameTypes.ModuleType)i-1, tier);
         }
     }
 
     public void SpawnEnergy(List<GameObject> ipList) {
-        for (int i = PartPrinterData.MODULE_TYPES+2; i < ipList.Count; i++) {
+        for (int i = PartPrinterData.MODULE_TYPES + 1; i < ipList.Count; i++) {
             Instantiate(crystalPrefab, ipList[i].transform.position, ipList[i].transform.rotation, ipList[i].transform.parent);
         }
     }

@@ -12,6 +12,8 @@ using UnityEngine;
 public class Xrom : Boid, IDamageable, IGroundable {
 
 	Animator animator;
+	public Rigidbody legsRB;
+	public Rigidbody torsoRB;
 	[SerializeField] XromGun gun;
 	[SerializeField] List<GameObject> targets;
 	[SerializeField] GameObject legs;
@@ -41,7 +43,7 @@ public class Xrom : Boid, IDamageable, IGroundable {
 
 		this.perceptiveDistance = (grounded) ? 15f : 100f;
 
-		GameManager.instance.AddGravityBody(GetComponent<Rigidbody>());
+		GameManager.instance.AddGravityBody(legsRB);
 	}
 
 	void Update(){
@@ -62,6 +64,10 @@ public class Xrom : Boid, IDamageable, IGroundable {
 		//Debug.Log("Update velocity: " + rb.velocity.magnitude);
 	}
 
+	public override Vector3 GetVelocity(){
+		return legsRB.velocity;
+	}
+
 	void OnDrawGizmos(){
 		//Gizmos.color = Color.cyan;
         //Gizmos.DrawWireSphere(GetPosition(), PerceptiveDistance());
@@ -78,7 +84,7 @@ public class Xrom : Boid, IDamageable, IGroundable {
 	public void Damage(float damage, GameTypes.DamageType damageType, Vector3 force, Vector3 pointOfImpact, Vector3 directionOfImpact){
 		Debug.Log("Xrom::Damage ~ Dealing " + damage.ToString() + " points of " + damageType + " damage to xrom");
 		health -= damage;
-		rb.AddForce(knockbackScale * force, ForceMode.Impulse);
+		legsRB.AddForce(knockbackScale * force, ForceMode.Impulse);
 
 		if(health <= 0){
 			DestroyXrom();
@@ -90,18 +96,18 @@ public class Xrom : Boid, IDamageable, IGroundable {
 		if(!flying){
             if (grounded) {
                 Vector3 input = Vector3.ClampMagnitude(Vector3.ProjectOnPlane(heading, transform.up) * Overmind.instance.movementScale, 1f);
-                Vector3 dv = Vector3.ClampMagnitude(input * flock.Speed(this) - rb.velocity, maxForce * flock.Speed(this));
+                Vector3 dv = Vector3.ClampMagnitude(input * flock.Speed(this) - legsRB.velocity, maxForce * flock.Speed(this));
 
-                if (input.sqrMagnitude > 0.5f && grounded) rb.AddForce(dv, ForceMode.VelocityChange);
+                if (input.sqrMagnitude > 0.5f && grounded) legsRB.AddForce(dv, ForceMode.VelocityChange);
 
-                animator.SetBool("IsMoving", rb.velocity.sqrMagnitude > 0.2f);
+                animator.SetBool("IsMoving", legsRB.velocity.sqrMagnitude > 0.2f);
 
-                if (rb.velocity.sqrMagnitude > 0.2f) {
-                    RotateLegs(rb.velocity.normalized);
-                    animator.speed = rb.velocity.magnitude * 0.2f;
+                if (legsRB.velocity.sqrMagnitude > 0.2f) {
+                    RotateLegs(legsRB.velocity.normalized);
+                    animator.speed = legsRB.velocity.magnitude * 0.2f;
                 } else {
                     animator.speed = 2f;
-                    rb.velocity = Vector3.zero;
+                    legsRB.velocity = Vector3.zero;
                 }
             }
 			else animator.SetBool("IsMoving", false);
@@ -116,14 +122,14 @@ public class Xrom : Boid, IDamageable, IGroundable {
 			else RotateTorso(transform.forward);
 		} else {
 			//if (debug) Debug.Log("Xrom::Move ~ Adding " + heading.ToString() + " to velocity");
-			Vector3 oldVelocity = rb.velocity;
-			rb.velocity += heading;//.normalized;
-			if(rb.velocity.magnitude > flock.Speed(this)) rb.velocity = rb.velocity.normalized * flock.Speed(this);
-			Quaternion targetRotation = Quaternion.FromToRotation(transform.forward, rb.velocity) * transform.rotation;
+			Vector3 oldVelocity = legsRB.velocity;
+			legsRB.velocity += heading;//.normalized;
+			if(legsRB.velocity.magnitude > flock.Speed(this)) legsRB.velocity = legsRB.velocity.normalized * flock.Speed(this);
+			Quaternion targetRotation = Quaternion.FromToRotation(transform.forward, legsRB.velocity) * transform.rotation;
 			transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.fixedDeltaTime * rotationSpeed);
 		}
 
-		if(debug) Debug.DrawLine(transform.position, transform.position + rb.velocity, Color.white);
+		if(debug) Debug.DrawLine(transform.position, transform.position + legsRB.velocity, Color.white);
 	}
 
 	public override void Rotate(Vector3 rotation){
@@ -197,7 +203,7 @@ public class Xrom : Boid, IDamageable, IGroundable {
 	}
 	public void DestroyXrom(){
 		Debug.Log("Xrom::DestroyXrom ~ Destroying xrom");
-		GameManager.instance.RemoveGravityBody(rb);
+		GameManager.instance.RemoveGravityBody(legsRB);
 		RemoveFromFlock();
 		Destroy(gameObject);
 	}

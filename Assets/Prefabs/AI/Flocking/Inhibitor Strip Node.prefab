@@ -57,6 +57,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 338b2a5612937714ca5d18f6a462f229, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cylinderMesh: {fileID: 4300000, guid: 650e031308af05b4caab06c0a0be431e, type: 3}
   collider: {fileID: 5631953884220679771}
   hasAttractor: 0
   attractorRadius: 0

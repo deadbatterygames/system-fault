@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
-using UnityEditor;
 
 public class FlockingObstacle : MonoBehaviour {
 
+	public Mesh cylinderMesh;
 	public SphereCollider collider;
 	public bool hasAttractor;
 	public Attractor attractor;
@@ -39,29 +39,32 @@ public class FlockingObstacle : MonoBehaviour {
 				transform.rotation = Quaternion.LookRotation(toNext, transform.up);
 				Vector3 previousPoint = Vector3.zero;
 				Vector3 pointAroundCenter = transform.right * inhibitorRadius;
-
 				
 				float theta = 360 / numberOfPoints;
 
 				Gizmos.color = Color.black;
-				Gizmos.DrawLine(transform.position, next.transform.position);
-				// collider.radius = inhibitorRadius;
+                Gizmos.DrawLine(transform.position, next.transform.position);
+
+                Gizmos.color = Color.red;
 				Gizmos.DrawWireSphere(transform.position, inhibitorRadius);
 				Gizmos.DrawWireSphere(next.transform.position, inhibitorRadius);
 
-				for(int i = 0; i < numberOfPoints + 1; i++){
-					if(previousPoint != Vector3.zero){
-						Gizmos.DrawLine(transform.position + previousPoint, transform.position + pointAroundCenter);
-						Gizmos.DrawLine(next.transform.position + previousPoint, next.transform.position + pointAroundCenter);
-					}
+                Gizmos.color = new Color(1f, 0f, 0f, 0.3f);
+                Gizmos.DrawMesh(cylinderMesh, transform.position, Quaternion.LookRotation(toNext, transform.up), new Vector3(inhibitorRadius, inhibitorRadius, toNext.magnitude));
 
-					Gizmos.DrawLine(transform.position + pointAroundCenter, next.transform.position + pointAroundCenter);
+				// for(int i = 0; i < numberOfPoints + 1; i++){
+				// 	if(previousPoint != Vector3.zero){
+				// 		Gizmos.DrawLine(transform.position + previousPoint, transform.position + pointAroundCenter);
+				// 		Gizmos.DrawLine(next.transform.position + previousPoint, next.transform.position + pointAroundCenter);
+				// 	}
 
-					previousPoint = pointAroundCenter;
-					transform.rotation = transform.rotation * Quaternion.AngleAxis(theta, transform.forward);
-					transform.rotation = Quaternion.LookRotation(toNext, transform.up);
-					pointAroundCenter = transform.right * inhibitorRadius;
-				}
+				// 	Gizmos.DrawLine(transform.position + pointAroundCenter, next.transform.position + pointAroundCenter);
+
+				// 	previousPoint = pointAroundCenter;
+				// 	transform.rotation = transform.rotation * Quaternion.AngleAxis(theta, transform.forward);
+				// 	transform.rotation = Quaternion.LookRotation(toNext, transform.up);
+				// 	pointAroundCenter = transform.right * inhibitorRadius;
+				// }
 			}
 		}
 		else{

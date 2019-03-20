@@ -38,10 +38,10 @@ public class GameData : MonoBehaviour {
     public GameObject laserParticles;
 
     [Header("Unlocks")]
-    public bool hasMatterManipulator;
-    public bool hasMulticannon;
-    public bool blueUnlocked;
-    public bool redUnlocked;
+    [HideInInspector] public bool hasMatterManipulator;
+    [HideInInspector] public bool hasMulticannon;
+    [HideInInspector] public bool blueUnlocked;
+    [HideInInspector] public bool redUnlocked;
 
     [HideInInspector] public bool alive;
     [HideInInspector] public bool teleportingShip;

@@ -119,6 +119,12 @@ public static class FlockingManager {
 								heading = Vector3.Project(heading, d.normalized);
 								if(debug) Debug.DrawLine(boidPosition, boidPosition + heading, Color.yellow);
 							}
+							float depth = inhibitors[j].radius - dp.magnitude;
+							Vector3 depthCorrection = dp.normalized * depth * Separate(depth, inhibitors[j].radius);
+
+							if(debug) Debug.DrawLine(boidPosition, boidPosition + depthCorrection, Color.magenta);
+
+							heading += depthCorrection;
 						}
 					} 
 				}
@@ -132,6 +138,13 @@ public static class FlockingManager {
 
 						// Project the heading onto the plane spanned by the difference vector and the difference of the difference vector and the heading
 						heading = Vector3.Project(heading, (heading.normalized - dif.normalized).normalized);
+
+						float depth = inhibitors[j].radius - dif.magnitude;
+						Vector3 depthCorrection = dif.normalized * depth * Separate(depth, inhibitors[j].radius);
+
+						if(debug) Debug.DrawLine(boidPosition, boidPosition + depthCorrection, Color.magenta);
+
+						heading += depthCorrection;
 					}
 				}
 			}

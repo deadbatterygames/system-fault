@@ -104,7 +104,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1545196223467270, guid: 117e8342b1b108346897543e39fe0239, type: 3}
       propertyPath: m_Name
-      value: MultiCannon
+      value: Multicannon
       objectReference: {fileID: 0}
     - target: {fileID: 4078353627629240, guid: 117e8342b1b108346897543e39fe0239, type: 3}
       propertyPath: m_LocalPosition.x
@@ -268,7 +268,7 @@ PrefabInstance:
     - target: {fileID: 2050923099111547581, guid: 24cb213c95f7d6f42bced73285430d0c,
         type: 3}
       propertyPath: m_Text
-      value: Use the Multicannon to shoot stuff - Press 1/2/3 to change weapon types
+      value: Use the Multicannon to shoot stuff
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 24cb213c95f7d6f42bced73285430d0c, type: 3}

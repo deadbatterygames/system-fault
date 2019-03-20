@@ -1,5 +1,5 @@
 
-=== Thu Jan 24 11:51:41 2019
+=== Tue Feb 12 12:37:07 2019
 
 Packages were changed.
 Update Mode: resetToDefaultDependencies
@@ -7,7 +7,7 @@ Update Mode: resetToDefaultDependencies
 The following packages were added:
   com.unity.analytics@3.2.2
   com.unity.purchasing@2.0.3
-  com.unity.ads@2.3.1
+  com.unity.ads@2.0.8
   com.unity.textmeshpro@1.3.0
   com.unity.package-manager-ui@2.0.3
   com.unity.collab-proxy@1.2.15

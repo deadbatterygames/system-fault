@@ -59,8 +59,8 @@ MonoBehaviour:
     type: 3}
   blueprintPrefab: {fileID: 1573300878066454, guid: f1dabf6892befca4eb71162e9c6a08ef,
     type: 3}
-  spawnLocation: 0
-  testMode: 0
+  spawnLocation: 1
+  testMode: 1
   equipmentTier: 2
   ship: {fileID: 0}
 --- !u!114 &114243553186129760
@@ -191,7 +191,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fd26bac8428bbb4d9790b41c16ac99c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementScale: 0.5
+  movementScale: 0.01
   xromFlockPrefab: {fileID: 1542343575561727086, guid: 063372812b00859469b9ecb2809dbc06,
     type: 3}
   flockingTest: 0

@@ -94,6 +94,8 @@ MonoBehaviour:
   flock: {fileID: 0}
   flocking: 1
   flying: 0
+  legsRB: {fileID: 783610398295162919}
+  torsoRB: {fileID: 783610398295162919}
   gun: {fileID: 6418504033120538783}
   targets: []
   legs: {fileID: 9021995272300126244}
@@ -5374,10 +5376,6 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 17
       objectReference: {fileID: 0}
-    - target: {fileID: 100066, guid: dabbb8d1e39a981429d9a57a7401c9b5, type: 3}
-      propertyPath: m_Layer
-      value: 17
-      objectReference: {fileID: 0}
     - target: {fileID: 400056, guid: dabbb8d1e39a981429d9a57a7401c9b5, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.053
@@ -5434,10 +5432,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 9500000, guid: dabbb8d1e39a981429d9a57a7401c9b5, type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: 911f979c5a7d6c549a6fc9ce955063b4, type: 2}
     - target: {fileID: 400072, guid: dabbb8d1e39a981429d9a57a7401c9b5, type: 3}
       propertyPath: m_LocalScale.y
       value: 1
@@ -5469,6 +5463,14 @@ PrefabInstance:
     - target: {fileID: 400020, guid: dabbb8d1e39a981429d9a57a7401c9b5, type: 3}
       propertyPath: m_LocalScale.z
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9500000, guid: dabbb8d1e39a981429d9a57a7401c9b5, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 911f979c5a7d6c549a6fc9ce955063b4, type: 2}
+    - target: {fileID: 100066, guid: dabbb8d1e39a981429d9a57a7401c9b5, type: 3}
+      propertyPath: m_Layer
+      value: 17
       objectReference: {fileID: 0}
     - target: {fileID: 100074, guid: dabbb8d1e39a981429d9a57a7401c9b5, type: 3}
       propertyPath: m_Layer
@@ -5910,6 +5912,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4954732176600174190, guid: 69167dedb9f5cf34f874608ddd93cd98,
+        type: 3}
+      propertyPath: characterRigidbody
+      value: 
+      objectReference: {fileID: 783610398295162919}
     - target: {fileID: 4951518641652082336, guid: 69167dedb9f5cf34f874608ddd93cd98,
         type: 3}
       propertyPath: m_IsTrigger
@@ -5920,11 +5927,6 @@ PrefabInstance:
       propertyPath: m_Radius
       value: 0.8
       objectReference: {fileID: 0}
-    - target: {fileID: 4954732176600174190, guid: 69167dedb9f5cf34f874608ddd93cd98,
-        type: 3}
-      propertyPath: characterRigidbody
-      value: 
-      objectReference: {fileID: 783610398295162919}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 69167dedb9f5cf34f874608ddd93cd98, type: 3}
 --- !u!4 &4271163678258996076 stripped

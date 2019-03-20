@@ -16,7 +16,7 @@ public class PropSnap : MonoBehaviour, ISnappable {
         transform.rotation = Quaternion.FromToRotation(transform.up, up) * transform.rotation;
     }
 
-    void Start () {
+    void Update () {
         #if UNITY_EDITOR
         if (!Application.isPlaying && transform.parent != null) SnapToPoint(transform.parent);
         #endif

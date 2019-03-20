@@ -39,7 +39,7 @@ public class Boid : MonoBehaviour {
 	public Vector3 GetRotation(){
 		return transform.rotation.eulerAngles;
 	}
-	public Vector3 GetVelocity(){
+	public virtual Vector3 GetVelocity(){
 		return rb.velocity;
 	}
 	public float PerceptiveDistance(){
